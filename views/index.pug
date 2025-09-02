@@ -1,0 +1,79 @@
+extends ./base/layout.pug
+
+block subnav 
+    ul
+        li
+
+block content
+    section.container
+        h1 Hello #{user.name}!
+        p This website contains the documentation for the node.js based stack of technologies and patterns I have used for applications I am involved with where able.
+        p The code running this site is itself part of the documentation intended to be a small idealistic example of the approaches I have taken, so it is easy for someone to familiarise themselves with any of the tools I have built for UQ.
+        p So make sure to ask James Baker (me) for access to a copy of the codebase for this program if you are trying to understand how I structure my applications.
+        blockquote.fs08 
+            span.bold important note:
+            span.pleft025 not every system has been able to use everything in this stack, for example grade is a system that was built with jquery, and the version of datatables that relies on jquery instead due to legacy.
+
+        if env
+            section
+                h2 current env is #{env}
+
+        section.grid
+            article
+                h5 For the frontend we use:
+                hr 
+                ul
+                    li.noliststyle.mbottom1
+                        | 🇭🇽 
+                        a(href="https://htmx.org/").bold htmx
+                    li.noliststyle.mbottom1
+                        | 🇭🇽 
+                        a(href="https://htmx.org/extensions/preload/").bold htmx-preload
+                    li.noliststyle.mbottom1
+                        | 🇭🇽 
+                        a(href="https://htmx.org/extensions/idiomorph/").bold htmx-idomorphic swaps 
+                    li.noliststyle.mbottom1
+                        | 🇭🇽 
+                        a(href="https://htmx.org/extensions/response-targets/").bold htmx-response-targets
+                    li.noliststyle.mbottom1
+                        | 📊
+                        a(href="https://www.chartjs.org/").bold chart.js
+                    li.noliststyle.mbottom1
+                        a(href="https://fiduswriter.github.io/simple-datatables/").bold simple datatables
+                    li.noliststyle.mbottom1
+                        a(href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components").bold web components
+                    li.noliststyle.mbottom1
+                        a(href="https://picocss.com/").bold pico.css 
+                        | for our starting defaults 
+                        a(href="/styles").bold (read more about how we do styling)
+
+            article
+                h5 For the backend we use: 
+                hr
+                ul
+                    li.noliststyle.mbottom1
+                        a(href="https://nodejs.org/docs/latest/api/").bold nodejs
+                    li.noliststyle.mbottom1
+                        | 🇪🇽 
+                        a(href="https://expressjs.com/en/4x/api.html").bold expressjs (v4)
+                    li.noliststyle.mbottom1
+                        | ✅
+                        a(href="https://www.npmjs.com/package/express-async-handler").bold asyncHandler for handling async errors
+                    li.noliststyle.mbottom1
+                        | ☑️
+                        a(href="https://express-validator.github.io/docs/").bold express validator for param and body validation
+                    li.noliststyle.mbottom1
+                        | ⬆️
+                        a(href="https://github.com/expressjs/multer").bold multer for files uploading
+                    li.noliststyle.mbottom1
+                        | 🐶
+                        a(href="https://pugjs.org/api/getting-started.html").bold pug for templating
+                    li.noliststyle.mbottom1
+                        | 🃏
+                        a(href="https://www.npmjs.com/package/jest").bold jest for unit testing
+                    li.noliststyle.mbottom1
+                        | 🪵
+                        a(href="https://www.npmjs.com/package/bunyan").bold bunyan for logging
+                    li.noliststyle.mbottom1
+                        | 🆔
+                        a(href="https://www.npmjs.com/package/nanoid").bold nanoid for generating uids/slugs

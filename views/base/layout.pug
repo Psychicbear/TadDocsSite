@@ -1,0 +1,121 @@
+doctype html
+html
+    head
+        block title
+            if title
+                title= title
+            else
+                title Demo | Default
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(href="/css/pico.min.css" rel="stylesheet" type="text/css")
+        link(href="/css/brand.config.css" rel="stylesheet" type="text/css")
+        link(href="/css/base.css" rel="stylesheet" type="text/css")
+        link(rel="shortcut icon" href="/images/favicon.ico" type="image/vnd.microsoft.icon")
+        block scripts
+            script(src="/js/dialog.min.js" defer)
+            script(src="/js/lib/htmx.js" defer)
+            script(src="/js/lib/htmx.preload.js" defer)
+        block styles
+            style.
+                html, body {
+                    scrollbar-gutter: stable;
+                }
+                .skip-link {
+                    background-color:var(--pico-primary);
+                }
+                #main_header {
+                    background-color:var(--pico-primary);
+                    padding-bottom:0.25rem;
+                }
+                #main_nav {
+                    padding:0.5rem;
+                    align-items:center;
+                    gap:1rem;
+                }
+                #main_nav ul {
+                    flex:8;
+                }
+                #main_nav a {
+                    color:white;
+                    text-transform:Capitalize;
+                }
+                #main_nav .dropdown li a { 
+                    color:black;
+                }
+
+                #main_nav .dropdown ul {
+                    margin-top:.5rem;
+                }
+
+                #main_nav .dropdown {
+                    margin:0;
+                    border:none;
+                    height:1rem;
+                    padding:0;
+                }
+                #main_nav .dropdown summary {
+                    border:none;
+                    background-color:var(--pico-primary-background);
+                    color:white;
+                    height:1rem;
+                    padding:0;
+                }
+                section:has(#sub_nav) {
+                    background-color:var(--pico-secondary-background);
+                    text-transform:Capitalize;
+                    font-size:0.8rem;
+                }
+                #sub_nav li {
+                    padding-top:0;
+                    padding-bottom:0;
+                }
+                #sub_nav a {
+                    color:white;
+                    padding-bottom:0rem;
+                }
+                .logo {
+                    flex:1;
+                }
+                #logo { 
+                    min-width:10rem;
+                }
+
+                .skip-link {
+                    position: absolute;
+                    left: -25rem;
+                    transition: 0.25s;
+                }
+
+                .skip-link:focus-visible {
+                    left:2rem;
+                }
+
+                .tbody {
+                    padding:1rem;
+                }
+    body(data-theme=light)
+        header(class="fluid-container" id="main_header")
+            a(class="skip-link" href="#main" role="link") go to main content
+            block nav
+                nav(id="main_nav" class="fluid-container")
+                    a(class="logo" src="#")
+                        img(src="/images/uq-logo.svg" id="logo")
+                    include main_nav.pug
+                section.p0.m0
+                    nav(role="breadcrumb" id="sub_nav" class="container")
+                        block subnav
+        main(class="fluid-container" id="main")
+            if errors
+                for error of errors
+                    pre= error
+            block content
+            dialog(id="system-dialog")
+                article
+                    header
+                        button(aria-label="Close" rel="prev" onclick="closeDialog(event)" autofocus )
+                        p Detail View
+                    section(id='dialog-content')
+        footer
+            block footer
+                section(class="container")
