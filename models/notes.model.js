@@ -2,10 +2,12 @@ import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./db/sqlConfig.js";
 
 class Note extends Model {
-
+    static async findTop() {
+        return await this.findAll({ limit: 5 });
+    }
 }
 
-export const noteModel = Note.init(
+const NoteModal = Note.init(
     {
         id: {
             type: DataTypes.UUID,
@@ -30,3 +32,7 @@ export const noteModel = Note.init(
         freezeTableName: true
     }
 );
+
+NoteModal.sync();
+
+export { NoteModal as Note}

@@ -1,4 +1,5 @@
 import utils from "../utils/utils.js";
+import { Note } from "../models/notes.model.js";
 
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
@@ -9,6 +10,8 @@ class Index {
     constructor() {} //generally the constructor is going to be empty since we don't really want our controller calls sharing state if we can avoid it.
 
     //we want the controller methods to be async so we can use async methods and await them, very common in db or file system touching stuff.
+
+
 
     /**
      *
@@ -22,7 +25,8 @@ class Index {
         const { user } = req; //get the user object from our req so we aren't typing req.user everywhere.
 
         res.render("./index.pug", {
-            user: user
+            user: user,
+            notes: await Note.findTop(),
         });
     }
 }

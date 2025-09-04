@@ -1,5 +1,5 @@
 import utils from "../utils/utils.js";
-import notes from "../models/notes.model.js";
+import { Note } from "../models/notes.model.js";
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
  * @typedef {import('../utils/types.mjs').ExpressResponse} Response
@@ -12,7 +12,7 @@ class Notes {
      * @param {Response} res
      */
     async list(req, res) {
-        const list = await notes.list();
+        const list = await Notes.findAll();
         return res.render("./notes/list.pug", {
             notes: list,
         });
