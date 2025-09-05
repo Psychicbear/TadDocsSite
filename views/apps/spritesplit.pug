@@ -1,0 +1,13 @@
+extends ./base/layout.pug
+
+block subnav 
+    ul
+        li
+
+block scripts
+    script(src="/js/jszip.js" defer)
+    script(src="/js/FileSaver.js" defer)
+    script(src="/js/spritesheetsplitter.js" type="module" defer)
+
+block content
+    spritesheet-slicer

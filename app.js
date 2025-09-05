@@ -6,6 +6,8 @@ import { dirname } from 'node:path';
 import util from './utils/utils.js';
 
 import index from './routes/index.routes.js';
+import notes from './routes/notes.routes.js';
+import apps from './routes/apps.routes.js';
 
 
 /* Old CommonJs style globals, because I'm a boomer */
@@ -27,9 +29,26 @@ app.set('view engine', 'pug');
 
 console.log(`Static files served from ${path.join(__dirname, 'public')}`);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use((_, res, next) => {
+    res.set({
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp",
+      "Cross-Origin-Resource-Policy": "cross-origin",
+      "Origin-Agent-Cluster": "?1",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Origin, X-Requested-With, Content-Type, Accept, Range",
+    });
+    next();
+  });
 
 // ------ BIND ROUTES ------
 app.use('/', index);
+app.use('/notes', notes);
+app.use('/apps', apps)
 
 //Alternate port for testing
 const PORT = process.env.PORT === 'production' ? process.env.PORT : 3000;

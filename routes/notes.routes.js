@@ -14,10 +14,10 @@ notes.get(
     "/create",
     expressAsyncHandler(controller.form)
 );
-notes.get("/:id", expressAsyncHandler(controller.read));
+notes.get("/:noteId", expressAsyncHandler(controller.read));
 notes.post("/", expressAsyncHandler(controller.create));
-notes.put("/:id", expressAsyncHandler(controller.update));
-notes.delete("/:id", expressAsyncHandler(controller.delete));
+notes.put("/:noteId", expressAsyncHandler(controller.update));
+notes.delete("/:noteId", expressAsyncHandler(controller.delete));
 
 Object.freeze(notes);
 export default notes;

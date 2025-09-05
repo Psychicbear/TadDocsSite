@@ -12,7 +12,7 @@ class Notes {
      * @param {Response} res
      */
     async list(req, res) {
-        const list = await Notes.findAll();
+        const list = await Note.findAll();
         return res.render("./notes/list.pug", {
             notes: list,
         });
@@ -41,9 +41,13 @@ class Notes {
      * @param {Response} res
      */
     async create(req, res) {
-        const { title, message } = req.body;
+        console.log(res)
+        const { title, content } = req.body;
 
-        await notes.create(title, message);
+        await Note.create({
+            title: title,
+            content: content,
+        });
         res.redirect("/notes");
     }
 
@@ -52,8 +56,11 @@ class Notes {
      * @param {Response} res
      */
     async update(req, res) {
-        const updated = await notes.update("0", { title: "new title" });
-        utils.assert.not_null(updated, "Failed to update note!");
+        const {title, content} = req.body;
+        const {noteId} = req.params;
+        console.log(`Updating note ${noteId} with title=${title} content=${content}`);
+        const updated = await Note.updateById(noteId, {title:title,content:content});
+        utils.assert.not_null(updated, `Failed to update note ${noteId}`);
     }
 
     /**
@@ -61,11 +68,13 @@ class Notes {
      * @param {Response} res
      */
     async delete(req, res) {
-        const result = await notes.delete(user, id + "");
+        const {noteId} = req.params;
+        const result = await Note.delete(noteId);
+        utils.assert.not_null(result, `Failed to delete note ${noteId}`);
         if (!result) {
             return utils.pages
                 .error(503)
-                .title(`Failed to delete ${id}`)
+                .title(`Failed to delete ${noteId}`)
                 .message(`Oh no!`)
                 .render(req, res);
         }
