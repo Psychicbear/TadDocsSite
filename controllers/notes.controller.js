@@ -24,7 +24,10 @@ class Notes {
      * @param {Response} res
      */
     async read(req, res) {
-        return res.render("./notes/note.pug", {});
+        const { noteId } = req.params;
+        const note = await Note.findByPk(noteId);
+        console.log(note)
+        return res.render("./notes/note.pug", {note: note});
     }
 
     /**
@@ -69,6 +72,7 @@ class Notes {
      */
     async delete(req, res) {
         const {noteId} = req.params;
+        const redirect = req.query.redirect || null;
         const result = await Note.delete(noteId);
         utils.assert.not_null(result, `Failed to delete note ${noteId}`);
         if (!result) {
@@ -78,6 +82,12 @@ class Notes {
                 .message(`Oh no!`)
                 .render(req, res);
         }
+
+        if (req.get('HX-Request') && redirect) {
+            res.setHeader('HX-Redirect', '/notes');
+            return res.status(200).end();
+        }
+
         return res.send("");
     }
 }
