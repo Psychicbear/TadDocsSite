@@ -11,8 +11,9 @@ block content
             section
                 h2 current env is #{env}
 
+        input#search(type="text" placeholder="search notes" hx-get="/notes/search" hx-target="#notes" hx-trigger="keyup changed delay:500ms" hx-swap="outerHTML" name="q")
         if notes
-            section.grid
+            section#notes.grid
                 article
                     h5 Top notes:
                     hr 

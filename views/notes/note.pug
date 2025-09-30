@@ -35,7 +35,7 @@ block append content
         div(class="note").p0.m0.flex1.fadein05
             article.grid.p0.relative
                 section.relative.p1
-                    section(class="date").top0.right0.absolute.fs06.p05 #{note.date}
+                    //- section(class="date").top0.right0.absolute.fs06.p05 #{note.date}
                     form(
                         hx-put=`/notes/${note.id}`
                         hx-target="closest .note"

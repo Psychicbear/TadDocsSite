@@ -18,6 +18,15 @@ class Notes {
         });
     }
 
+    async search(req, res) {
+        const { q } = req.query;
+        console.log({query: req.query});
+        const notes = await Note.findLikeTitle(q);
+
+        console.log(notes);
+        return res.render("./notes/search-results.pug", { notes: notes, q: q });
+    }
+
     /**
      *
      * @param {Request} req

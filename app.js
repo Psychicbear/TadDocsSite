@@ -4,10 +4,14 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import util from './utils/utils.js';
+import { sequelize } from './models/db/sqlConfig.js';
+// Import models (registers associations). Do not import a file that calls sync()
+import './models/index.models.js';
 
 import index from './routes/index.routes.js';
 import notes from './routes/notes.routes.js';
 import apps from './routes/apps.routes.js';
+import pages from './routes/pages.routes.js';
 
 
 /* Old CommonJs style globals, because I'm a boomer */
@@ -31,32 +35,38 @@ console.log(`Static files served from ${path.join(__dirname, 'public')}`);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use((_, res, next) => {
-    res.set({
-      "Cross-Origin-Opener-Policy": "same-origin",
-      "Cross-Origin-Embedder-Policy": "require-corp",
-      "Cross-Origin-Resource-Policy": "cross-origin",
-      "Origin-Agent-Cluster": "?1",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers":
-        "Origin, X-Requested-With, Content-Type, Accept, Range",
-    });
-    next();
-  });
 
 // ------ BIND ROUTES ------
 app.use('/', index);
 app.use('/notes', notes);
 app.use('/apps', apps)
+app.use('/tad', pages)
 
 //Alternate port for testing
 const PORT = process.env.PORT === 'production' ? process.env.PORT : 3000;
 
 // ------ START SERVER ------
-app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT} in ${process.env.NODE_ENV} mode`);
-});
+let server;
+
+async function start() {
+    // In development, keep schema in sync with models. Do NOT run alter/sync in production.
+    if (process.env.NODE_ENV !== 'production') {
+        console.log('Running sequelize.sync({ alter: true }) (development only)');
+        try {
+            await sequelize.sync({ alter: false });
+            console.log('Database synced (alter).');
+        } catch (err) {
+            console.error('Error syncing database:', err);
+            process.exit(1);
+        }
+    }
+
+    server = app.listen(PORT, () => {
+        console.log(`Server started on port ${PORT} in ${process.env.NODE_ENV} mode`);
+    });
+}
+
+start();
 
 // ------ CLOSE DOWN THE SERVER -------------
 /** @param {string} signal */
