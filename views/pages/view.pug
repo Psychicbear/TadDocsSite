@@ -3,17 +3,12 @@ extends ../base/layout
 block content
   h1= page.name
   p= page.long_description
+  //- p= JSON.stringify(page, null, 2)
 
-  if page.page_type === 'class' && page.SubClasses.length
-    h2 Subclasses
-    ul
-      each subclass in page.SubClasses
-        li
-          a(href=`/tad/${subclass.page_id}`)= subclass.MainPage.name
-          span - #{subclass.MainPage.short_description}
-    h2 Properties
-    ul
-      each prop in page.MainClass.Properties
-        li
-          a(href=`/tad/${prop.page_id}`)= prop.MainPage.name
-          span - #{prop.MainPage.short_description}
+  case page.page_type
+    when 'class'
+      include viewClass
+    when 'property'
+      include viewProperty
+    when 'method'
+      include viewMethod

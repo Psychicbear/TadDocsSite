@@ -1,0 +1,28 @@
+if page.SubClasses.length
+    h2 Modules
+    ul
+        each subclass in page.SubClasses
+            li
+                a(href=`/tad/${subclass.page_id}`)= subclass.MainPage.name
+                span=` - ${subclass.MainPage.short_description}`
+if page.MainClass.Properties.length
+    h2 Properties
+    ul
+        each prop in page.MainClass.Properties
+            li
+                a(href=`/tad/${prop.page_id}`)= prop.MainPage.name
+                span=` - ${prop.MainPage.short_description}`
+if page.MainClass.Methods.length
+    h2 Methods
+    ul
+        each method in page.MainClass.Methods
+            li
+                a(href=`/tad/${method.page_id}`)= method.MainPage.name 
+                |&#40; 
+                if method.Arguments.length
+                each arg, index in method.Arguments
+                    span(data-tooltip=`${arg.type}: ${arg.description}` data-placement="right" class="clickable")=`${arg.name}` 
+                    if index < method.Arguments.length - 1
+                        |, 
+                | &#41;
+                span=` - ${method.MainPage.short_description}`

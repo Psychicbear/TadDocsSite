@@ -30,7 +30,7 @@ class Index {
 
     async viewPage(req, res) {
         const page = await Page.findWithDetails(req.params.pageId);
-        console.log(page)
+        //console.log(page.MainClass.Methods[0].Arguments);
         if (!page) return res.status(404).send("Page not found");
         res.render("pages/view", { page });
     }

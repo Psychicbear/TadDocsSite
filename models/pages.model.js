@@ -2,6 +2,8 @@ import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./db/sqlConfig.js";
 import { Class } from "./classes.model.js";
 import { Property } from "./properties.model.js";
+import { Method } from "./methods.model.js";
+import { Argument } from "./arguments.model.js";
 
 class Page extends Model {
       // List all pages, optionally filtered by type
@@ -22,9 +24,9 @@ class Page extends Model {
 
     switch(page.page_type) {
       case "method":
-        // For methods, include the main class details
+        return await this.findMethodDetails(id)
       case "property":
-        // For properties, include the main class details
+        return await this.findPropertyDetails(id);
       case "class":
         return await this.findClassDetails(id);
     }
@@ -36,30 +38,48 @@ class Page extends Model {
     return await this.findByPk(id, {
       include: [
         {
-          model: Class, as: "SubClasses", include: [
-            { model: this, as: "MainPage" }
-          ]
+          model: Class,
+          as: "SubClasses",
+          include: [{ model: this, as: "MainPage" }]
         },
         {
-          model: Class, as: "MainClass", include: [
-            { model: Property, as: "Properties", include: [{ model: this, as: "MainPage" }] }
+          model: Class,
+          as: "MainClass",
+          include: [
+            { model: Property, as: "Properties", include: [{ model: this, as: "MainPage" }] },
+            {
+              model: Method,
+              as: "Methods",
+              include: [
+                { model: this, as: "MainPage" },
+                { model: Argument, as: "Arguments" }
+              ]
+            }
           ]
         }
+      ],
+      // Order nested Arguments by their arg_index. Use the nested path through associations.
+      order: [
+        [{ model: Class, as: "MainClass" }, { model: Method, as: "Methods" }, { model: Argument, as: "Arguments" }, "arg_index", "ASC"]
       ]
     });
   }
 
 
-  // Class-specific details (methods, properties, subclasses)
+  // Property-specific details 
   static async findPropertyDetails(id) {
     return await this.findByPk(id, {
       include: [
-        {
-          model: Class, as: "SubClasses", include: [{ model: this, as: "MainPage" }]
-        },
-        {
-          model: Class, as: "MainClass"
-        }
+        {model: Property, as: "MainProperty"}
+      ]
+    });
+  }
+
+  // Method-specific details 
+  static async findMethodDetails(id) {
+    return await this.findByPk(id, {
+      include: [
+        {model: Method, as: "MainMethod", include: [{model: Argument, as: "Arguments"}]}
       ]
     });
   }

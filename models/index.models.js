@@ -1,6 +1,8 @@
 import { Page } from "./pages.model.js";
 import { Class } from "./classes.model.js";
 import { Property } from "./properties.model.js";
+import { Method } from "./methods.model.js";
+import { Argument } from "./arguments.model.js";
 import { sequelize } from "./db/sqlConfig.js";
 // NOTE: Do not call `sequelize.sync()` here during module import.
 // Calling sync at import time (for example with `alter: true`) can
@@ -24,7 +26,17 @@ Property.belongsTo(Class, { foreignKey: "class_id", as: "ParentClass" });
 Class.hasMany(Property, { foreignKey: "class_id", as: "Properties" });
 Page.hasOne(Property, { foreignKey: "page_id", as: "MainProperty" });
 
+// Method <-> Page <-> Class
+Method.belongsTo(Page, { foreignKey: "page_id", as: "MainPage" });
+Method.belongsTo(Class, { foreignKey: "class_id", as: "ParentClass" });
+Class.hasMany(Method, { foreignKey: "class_id", as: "Methods" });
+Page.hasOne(Method, { foreignKey: "page_id", as: "MainMethod" });
+
+// Argument <-> Method
+Argument.belongsTo(Method, { foreignKey: "method_id", as: "ParentMethod" });
+Method.hasMany(Argument, { foreignKey: "method_id", as: "Arguments" });
+
 
 sequelize.sync({ alter: false });
 
-export { Page, Class, Property };
+export { Page, Class, Property, Method, Argument };
