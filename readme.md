@@ -21,3 +21,18 @@ Sequelize is configured and instantiated in a weird way. Initial configuration o
 `sqlConfig.js` exports the configured Sequelize instance, and each of the models in `models/` folder import this instance to configure themselves within the database.
 
 Each of the models export their configured instance, and are loaded into the `models/index.models.js` to configure relationships. This file then exports each of the configured models with their relationships. This means that when the models need to be used anywhere on the site, they should be imported from `models/index.models.js`.
+
+## Deploying with docker
+Configure the `docker-compose.yml` file for your host, providing a .env file for environmental variables and an nginx.conf file for the reverse proxy if you don't already have a reverse proxy setup.
+
+Examples are provided for the `.env` and `nginx.conf`, configure them for your host and domain.
+
+When you're ready to host, run `docker compose up --build` to build the Dockerfile and deploy the app. The app will then be accessible locally via the port set in your .`env`, and via http at the domain you configured in `nginx.conf`.
+
+Set the ADMIN_IPS to a comma separated list of IPs that you want to allow to modify the database and access admin routes. eg.
+
+```
+    ADMIN_IPS=127.0.0.1,192.168.1.5
+```
+
+Only the IPs provided will be able to access important routes and database editing front end UI.
