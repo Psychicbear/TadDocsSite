@@ -14,3 +14,24 @@ mixin mainEntry(item, edit=false)
             textarea(name="long_desc" onkeydown="augment_textarea(event)")= item.long_description
     else        
         div!= item.long_description
+
+mixin breadcrumbs(slug)
+    div
+        - const parts = slug.split('/').filter(part => part.length > 0);
+        - let path = '';
+        nav(aria-label="breadcrumb" style="--pico-nav-breadcrumb-divider: '.';")
+            ul.breadcrumb
+                li
+                    a(href="/tad")='$'
+                each part, index in parts
+                    - path += `${part}`;
+                    if index === parts.length - 1
+                        li=part
+                    else
+                        li
+                            a(href=`/tad/${path}`)= part
+
+mixin libPath(slug)
+    - let parts = slug.split('/').filter(part => part.length > 0).join('.');
+    if parts.length > 0
+        sub.lineh05="$." + parts
