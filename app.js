@@ -12,6 +12,7 @@ import index from './routes/index.routes.js';
 import notes from './routes/notes.routes.js';
 import apps from './routes/apps.routes.js';
 import pages from './routes/pages.routes.js';
+import examples from './routes/examples.routes.js';
 
 
 /* Old CommonJs style globals, because I'm a boomer */
@@ -41,6 +42,7 @@ app.use('/', index);
 app.use('/notes', notes);
 app.use('/apps', apps)
 app.use('/tad', pages)
+app.use('/examples', examples)
 
 //Alternate port for testing
 const PORT = process.env.PORT === 'production' ? process.env.PORT : 3000;
