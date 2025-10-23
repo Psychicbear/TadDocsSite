@@ -4,14 +4,14 @@ if page.SubClasses.length
         each subclass in page.SubClasses
             li
                 a(href=`/tad${subclass.MainPage.slug}`)= subclass.MainPage.slug
-                +pageEntry(subclass, true)
+                +pageEntry(subclass, admin)
 if page.MainClass.Properties.length
     h2 Properties
     ul
         each prop in page.MainClass.Properties
             li
                 a(href=`/tad${prop.MainPage.slug}`)= prop.MainPage.slug
-                +pageEntry(prop, true)
+                +pageEntry(prop, admin)
 if page.MainClass.Methods.length
     h2 Methods
     ul
@@ -25,5 +25,5 @@ if page.MainClass.Methods.length
                     if index < method.Arguments.length - 1
                         |, 
                 | &#41;
-                +pageEntry(method, true)
+                +pageEntry(method, admin)
                 

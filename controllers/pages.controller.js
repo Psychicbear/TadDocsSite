@@ -11,7 +11,12 @@ class Index {
     constructor() {} //generally the constructor is going to be empty since we don't really want our controller calls sharing state if we can avoid it.
 
     //we want the controller methods to be async so we can use async methods and await them, very common in db or file system touching stuff.
-
+    protectAdminRoutes(req,res){
+        if(!req.isAdmin){
+            res.status(403).send("Forbidden: You do not have access to this resource.");
+            return false;
+        } else return true
+    }
 
 
     /**
@@ -22,7 +27,7 @@ class Index {
      */
     async home(req, res) {
         const root = await Page.getRoot();
-        res.render("./pages/view.pug", { page: root });
+        res.render("./pages/view.pug", { page: root, admin: req.isAdmin });
     }
 
     /*
@@ -30,7 +35,7 @@ class Index {
     */
     async listPages(req, res) {
         const pages = await Page.listAll({ type: req.query.type });
-        res.render("./pages/list.pug", { pages });
+        res.render("./pages/list.pug", { pages, admin: req.isAdmin });
     }
 
     /*
@@ -39,13 +44,14 @@ class Index {
     async viewPage(req, res) {
         const page = await Page.findWithDetails(req.params.pageId);
         if (!page) return res.status(404).send("Page not found");
-        res.render("./pages/view.pug", { page });
+        res.render("./pages/view.pug", { page, admin: req.isAdmin });
     }
 
     /*
         * Serves the new page form which allows creating any type of page at any location in site. Will be changed to a more specific page type creation in future.
     */
     async createPageForm(req, res) {
+        if(!this.protectAdminRoutes(req,res)) return;
         const modules = await Page.listAll({ type: "class" });
         const parsed = modules.map(m => {
             let relName = ''
@@ -56,7 +62,7 @@ class Index {
             }
             return { name: m.name, slug: relName, id: m.id }
         })
-        res.render("./pages/createAny.pug", { pages: parsed });
+        res.render("./pages/createAny.pug", { pages: parsed, admin: req.isAdmin });
     }
     
 
@@ -66,6 +72,7 @@ class Index {
         * Validation to be switched to express middleware in future.
     */
     async createPage(req, res) {
+        if(!this.protectAdminRoutes(req,res)) return;
         let newPage = null;
         try {
             let {isValid, errors} = validatePageFromReq(req.body);
@@ -88,6 +95,7 @@ class Index {
         * Redirects to parent page of created pages on success.
     */
     async bulkCreatePages(req, res) {
+        if(!this.protectAdminRoutes(req,res)) return;
         console.log(req.body)
         let redir = await bulkCreatePages(req.body)
         return res.redirect(redir);
@@ -106,7 +114,7 @@ class Index {
 
         const page = await Page.getBySlug(slug);
         if (!page) return res.status(404).send("Page not found");
-        res.render("./pages/view.pug", { page });
+        res.render("./pages/view.pug", { page, admin: req.isAdmin });
     }
 
     /*
@@ -115,6 +123,7 @@ class Index {
         * Redirects to top level on site. THIS MUST BE CHANGED ASAP.
     */
     async editPage(req, res) {
+        if(!this.protectAdminRoutes(req,res)) return;
         const pageId = req.params.pageId;
         const data = req.body;
         console.log("Editing page:", pageId, "with data:", data);
@@ -130,6 +139,7 @@ class Index {
         * Redirects to top level of docs on success.
     */
     async deletePage(req, res) {
+        if(!this.protectAdminRoutes(req,res)) return;
         const pageId = req.params.pageId;
         await deletePageById(pageId);
         return res.redirect('/tad');
@@ -141,12 +151,13 @@ class Index {
         * Renders confirmation form with parsed data.
     */
     async upload(req, res){
+        if(!this.protectAdminRoutes(req,res)) return;
         const {parent_id, filecontent} = req.body
         if(!filecontent) return res.status(400).send("No file content provided");
         if(!parent_id) return res.status(400).send("No parent id provided");
         let data = parseCode(req.body.filecontent)
         console.log(data)
-        res.render("./pages/confirmBulk.pug", { data, parent_id });
+        res.render("./pages/confirmBulk.pug", { data, parent_id, admin: req.isAdmin });
     }
 }
 

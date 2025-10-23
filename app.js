@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import util from './utils/utils.js';
+import { UtilsString } from './utils/utils.string.js';
 import { sequelize } from './models/db/sqlConfig.js';
 // Import models (registers associations). Do not import a file that calls sync()
 import './models/index.models.js';
@@ -22,20 +23,34 @@ const __dirname = dirname(__filename);
 dotenv.config();
 
 const hasMissingEnvironmentVariables =
-    process.env.PORT === undefined || process.env.NODE_ENV === undefined;
+    process.env.PORT === undefined || process.env.NODE_ENV === undefined || process.env.ADMIN_IPS === undefined || process.env.PROXY_TRUSTED === undefined;
 if (hasMissingEnvironmentVariables) {
     throw new Error("MISSING ENVIRONMENT VARIABLES");
 }
+
+const ADMIN_IPS = process.env.ADMIN_IPS ? process.env.ADMIN_IPS.split(',').map(ip => ip.trim()) : [];
+console.log(ADMIN_IPS);
 
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.set('trust proxy', process.env.PROXY_TRUSTED === 'true');
 
 console.log(`Static files served from ${path.join(__dirname, 'public')}`);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// ------ ADMIN IPS MIDDLEWARE. WARNING: EXPERIMENTAL ------
+app.use((req, res, next) => {
+    let ipv4 = UtilsString.ipv4FromString(req.ip);
+    console.log(`Incoming request from IP: ${ipv4}`);
+    console.log(req.ip)
+    console.log(`X-Forwarded-For header: ${req.headers['x-forwarded-for']}`);
+    console.log(`Real IP: ${req.headers['x-real-ip']}`);
+  req.isAdmin = ADMIN_IPS.includes(ipv4) || ADMIN_IPS.includes(req.headers['x-forwarded-for']);
+  next();
+});
 
 // ------ BIND ROUTES ------
 app.use('/', index);
