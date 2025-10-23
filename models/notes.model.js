@@ -2,6 +2,10 @@ import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./db/sqlConfig.js";
 import {Op} from "sequelize";
 
+/*
+    * Note model representing notes in the database.
+    * THIS FILE IS UNNECESSARY FOR FINAL PRODUCT
+*/
 class Note extends Model {
     static async findTop() {
         return await this.findAll({ limit: 5 });

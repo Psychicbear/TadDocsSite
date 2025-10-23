@@ -5,7 +5,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Create a Sequelize instance with SQLite
+/*
+  * Sequelize instance configuration for SQLite database.
+  * Adjust logging settings as needed for development/production.
+*/
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: path.join(__dirname, 'database.sqlite'), // SQLite database file path

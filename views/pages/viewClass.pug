@@ -3,21 +3,21 @@ if page.SubClasses.length
     ul
         each subclass in page.SubClasses
             li
-                a(href=`/tad/${subclass.page_id}`)= subclass.MainPage.name
-                span=` - ${subclass.MainPage.short_description}`
+                a(href=`/tad${subclass.MainPage.slug}`)= subclass.MainPage.slug
+                +pageEntry(subclass, true)
 if page.MainClass.Properties.length
     h2 Properties
     ul
         each prop in page.MainClass.Properties
             li
-                a(href=`/tad/${prop.page_id}`)= prop.MainPage.name
+                a(href=`/tad${prop.MainPage.slug}`)= prop.MainPage.slug
                 span=` - ${prop.MainPage.short_description}`
 if page.MainClass.Methods.length
     h2 Methods
     ul
         each method in page.MainClass.Methods
             li
-                a(href=`/tad/${method.page_id}`)= method.MainPage.name 
+                a(href=`/tad${method.MainPage.slug}`)= method.MainPage.slug
                 |&#40; 
                 if method.Arguments.length
                 each arg, index in method.Arguments
@@ -26,3 +26,4 @@ if page.MainClass.Methods.length
                         |, 
                 | &#41;
                 span=` - ${method.MainPage.short_description}`
+                

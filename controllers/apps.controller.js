@@ -8,7 +8,6 @@ import utils from "../utils/utils.js";
 class Apps {
     constructor() {} //generally the constructor is going to be empty since we don't really want our controller calls sharing state if we can avoid it.
 
-    //we want the controller methods to be async so we can use async methods and await them, very common in db or file system touching stuff.
     /**
      *
      * @param {Request} req

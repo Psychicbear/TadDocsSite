@@ -1,8 +1,21 @@
 extends ../base/layout
+include mixins.pug
 
-block content
-  h1= page.name
-  p= page.long_description
+block append content
+  div.flex.justify-between.items-center.mb-4
+    div
+      h1= page.name
+      p= page.long_description
+    div
+      fieldset(role="group")
+        button(hx-get=`/tad/create` hx-target="#dialog-container" hx-swap="innerHTML" class="btn") New Page
+        button(hx-put=`/tad/${page.id}` hx-target="#dialog-container" hx-swap="innerHTML" class="btn") Edit
+        button(hx-delete=`/tad/${page.id}` hx-confirm="Are you sure you want to delete" class="btn") Delete
+        label.btn(for="fileinput") Upload File
+        input#fileinput(type="file" name="file" style="display:none")
+        form(id="upload" method="POST" action="/tad/upload"  hx-post="/tad/upload" hx-target="#dialog-container" hx-swap="innerHTML" style="display:inline")
+          input(type="hidden" name="parent_id" value=page.id)
+          input(type="hidden" name="filecontent" value="")
   //- p= JSON.stringify(page, null, 2)
 
   case page.page_type
@@ -12,3 +25,34 @@ block content
       include viewProperty
     when 'method'
       include viewMethod
+
+  h2 Examples
+
+  div#dialog-container
+  script.
+    let uploadForm = document.querySelector('#fileinput');
+    uploadForm.addEventListener('change', (event) => {
+      console.log('file selected, submitting form');
+      const file = event.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const content = e.target.result;
+          document.querySelector('input[name="filecontent"]').value = content;
+          document.querySelector('#upload').requestSubmit();
+        };
+      
+        reader.readAsText(file);
+      }
+    });
+
+    function augment_textarea(event) { 
+        const target = event.target || event.srcElement;
+        const form = target.closest && target.closest('form') || document.querySelector("#notes_form");
+        if (event.key === 'Enter' && !event.shiftKey) {
+            console.log("Submitting form via augment_textarea");
+            event.preventDefault();
+            form.requestSubmit();  
+            //we give a touch of time for the form to have pulled data.
+        }
+    }

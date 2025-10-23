@@ -1,0 +1,86 @@
+dialog(open)  
+    article
+        form(
+            id="page_form"
+            action="/tad/create?redirect=true"
+            method="POST"
+        )
+            section
+                label(for="type") Page Type
+                select(name="page_type" required)
+                    option(value="class") Class
+                    option(value="property") Property
+                    option(value="method") Method
+                label(for="parent_id") Parent Page
+                select(name="parent_id" required)
+                    if pages
+                        each page in pages
+                            option(value=page.id)=`${page.name} (${page.slug})`
+                label(for="name") Page Name
+                input(type="text" pattern="^[a-zA-Z_$][a-zA-Z0-9_$]*$" name="name" placeholder="Name of page" value="Pixel" required)
+                label(for="slug") Slug
+                input(type="text" name="slug" placeholder="Slug (defaults to name)")
+                label(for="short_desc") Short Description
+                input(type="text" name="short_desc" placeholder="Short description" value="pixel short desc" required)
+                label(for="long_desc") Long Description
+                textarea(name="long_desc" placeholder="Long description" rows="4" value="pixel long desc" required)
+
+            section.additional-input.property-inputs.hidden
+                //- these will be shown/hidden based on type
+                //- Property inputs
+                div.property-inputs
+                    label(for="prop_type") Property Type
+                    input(type="text" name="prop_type" placeholder="Type of the property (e.g., String, Number)" )
+                    label(for="default_value") Default Value
+                    input(type="text" name="default_value" placeholder="Default value of the property" )
+                //- Method inputs
+            section.additional-input.method-inputs.hidden
+                div.method-inputs
+                    label(for="return_type") Return Type
+                    input(type="text" name="return_type" placeholder="String, Int etc (can be blank)" )
+                    label(for="arguments") Arguments
+                    button(type="button" onclick="addArg()") Add Argument
+                    div#arguments-container
+                        fieldset.argument-input
+                            h3 Arguments
+                        //- Argument inputs will be added here dynamically
+            footer
+                filedset(role="group")
+                button(type="submit") Create
+                button(type="button" onclick="closeDialog()") Cancel
+            hr
+script.
+    function showAdditionalInputs(event){
+        const type = event.target.value;
+        const showInputs = document.querySelectorAll('.additional-input');
+        showInputs.forEach(section => {
+            if(section.classList.contains(`${type}-inputs`)){
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        })
+    }
+
+    function addArg(){
+        const container = document.getElementById('arguments-container');
+        const argDiv = document.createElement('div');
+        argDiv.classList.add('argument-input');
+        argDiv.innerHTML = `
+            <fieldset role="group">
+                <input type="text" name="arg_name[]" placeholder="Name" required />
+                <input type="text" name="arg_type[]" placeholder="Type" required />
+                <button type="button" class="secondary" onclick="this.closest('.argument-input').remove()">Remove</button>
+            </fieldset>
+            <input type="text" name="arg_desc[]" placeholder="Description" />
+        `;
+        container.appendChild(argDiv);
+    }
+
+    function closeDialog(event){
+        let dialog = document.querySelector('dialog')
+        dialog.close();
+        dialog.parentElement.innerHTML = '';
+    }
+
+    document.querySelector('select[name="page_type"]').addEventListener('change', showAdditionalInputs)

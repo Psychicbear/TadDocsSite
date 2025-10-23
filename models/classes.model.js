@@ -1,6 +1,13 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./db/sqlConfig.js";
 
+/*
+    * Class model representing classes in the database.
+    * THIS FILE ONLY DEFINES THE MODEL AND ITS SCHEMA.
+    * INTERACTIONS WITH THE MODEL SHOULD BE HANDLED IN INTERFACE FILES.
+    * ASSOCIATIONS ARE DEFINED IN INDEX MODEL FILE.
+*/
+
 class Class extends Model {}
 
 const ClassModel = Class.init(

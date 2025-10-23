@@ -1,0 +1,29 @@
+dialog(open)  
+    article
+        form(
+            id="page_form"
+            action="/tad/bulkCreate"
+            method="POST"
+        )
+            section
+                h3 Confirm Bulk Create for #{parent_id}
+            section
+                    each item in data
+                        fieldset(class="grid grid-3col241")
+                            input(type="hidden" name="parent_id" value=parent_id)
+                            select(name="type[]" required)
+                                option(value="method" selected=item.type==='method') Method
+                                option(value="property" selected=item.type==='property') Property
+                            input(type="text" name="name[]" placeholder="Name" value=item.name required)
+                            button(type="button" onClick="event.target.parentElement.remove()") X
+                        //- Argument inputs will be added here dynamically
+            footer
+                button(type="submit") Create
+                button(type="button" onclick="closeDialog()") Cancel
+            hr
+script.
+    function closeDialog(event){
+        let dialog = document.querySelector('dialog')
+        dialog.close();
+        dialog.parentElement.innerHTML = '';
+    }

@@ -6,6 +6,12 @@ import { Method } from "./methods.model.js";
 import { Argument } from "./arguments.model.js";
 
 class Page extends Model {
+
+  /* 
+    #####################
+    # Find page queries #
+    #####################
+  */
       // List all pages, optionally filtered by type
   static async listAll({ type } = {}) {
     const where = type ? { page_type: type } : {};
@@ -14,26 +20,33 @@ class Page extends Model {
 
   // Get the root "$." page
   static async getRoot() {
-    return await this.findOne({ where: { name: "$.", page_type: "class" } }, { include: [{ model: Class, as: "SubClasses" }] });
+    let page = await this.findOne({ where: { name: "$.", page_type: "class" } });
+    return await this.findWithDetails(page);
+  }
+
+  static async getBySlug(slug) {
+    let page = await this.findOne({ where: { slug: slug } });
+    return await this.findWithDetails(page);
   }
 
   // Get a page with subtype-specific details
-  static async findWithDetails(id) {
-    const page = await this.findByPk(id);
-    if (!page) return null;
-
+  static async findWithDetails(page) {
     switch(page.page_type) {
       case "method":
-        return await this.findMethodDetails(id)
+        return await this.findMethodDetails(page.id)
       case "property":
-        return await this.findPropertyDetails(id);
+        return await this.findPropertyDetails(page.id);
       case "class":
-        return await this.findClassDetails(id);
+        return await this.findClassDetails(page.id);
     }
     return page;
   }
 
-  // Class-specific details (methods, properties, subclasses)
+  /*
+    * Class-specific details
+    * This returns a Page eagerly loaded with its Class details
+    * Used for rendering Class pages
+  */
   static async findClassDetails(id) {
     return await this.findByPk(id, {
       include: [
@@ -66,7 +79,11 @@ class Page extends Model {
   }
 
 
-  // Property-specific details 
+  /*
+    * Property-specific details
+    * This returns a Page eagerly loaded with its Property details
+    * Used for rendering Property pages
+  */
   static async findPropertyDetails(id) {
     return await this.findByPk(id, {
       include: [
@@ -75,7 +92,11 @@ class Page extends Model {
     });
   }
 
-  // Method-specific details 
+  /*
+    * Method-specific details
+    * This returns a Page eagerly loaded with its Method details and Arguments
+    * Used for rendering Method pages
+  */
   static async findMethodDetails(id) {
     return await this.findByPk(id, {
       include: [
@@ -83,8 +104,13 @@ class Page extends Model {
       ]
     });
   }
+
 }
 
+
+/*
+  * Page model representing documentation pages in the database.
+*/
 const PageModel = Page.init(
   {
     id: {
@@ -95,6 +121,11 @@ const PageModel = Page.init(
     name: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     },
     short_description: DataTypes.TEXT,
     long_description: DataTypes.TEXT,

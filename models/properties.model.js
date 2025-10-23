@@ -1,6 +1,13 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./db/sqlConfig.js";
 
+/*
+    * Property model representing class properties in the database.
+    * THIS FILE ONLY DEFINES THE MODEL AND ITS SCHEMA.
+    * INTERACTIONS WITH THE MODEL SHOULD BE HANDLED IN INTERFACE FILES.
+    * ASSOCIATIONS ARE DEFINED IN INDEX MODEL FILE.
+*/
+
 class Property extends Model {}
 
 const PropertyModel = Property.init(

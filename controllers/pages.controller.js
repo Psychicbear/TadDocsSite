@@ -1,5 +1,6 @@
-import utils from "../utils/utils.js";
+import { parseCode } from "../utils/utils.parse-lib.mjs";
 import { Page } from "../models/index.models.js";
+import { validatePageFromReq, createPageFromReq, deletePageById, bulkCreatePages, editPageById } from "../models/interfaces/pages.interface.js";
 
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
@@ -17,22 +18,135 @@ class Index {
      *
      * @param {Request} req
      * @param {Response} res
+     * Renders the top level of the Tad documentation
      */
     async home(req, res) {
         const root = await Page.getRoot();
-        res.redirect(`/tad/${root.id}`);
+        res.render("./pages/view.pug", { page: root });
     }
 
+    /*
+        * Lists pages. I don't think this is currently used anywhere.
+    */
     async listPages(req, res) {
         const pages = await Page.listAll({ type: req.query.type });
-        res.render("pages/list", { pages });
+        res.render("./pages/list.pug", { pages });
     }
 
+    /*
+        * Views a page by its ID. Renders 404 if not found. Backup method for viewing pages.
+    */
     async viewPage(req, res) {
         const page = await Page.findWithDetails(req.params.pageId);
-        //console.log(page.MainClass.Methods[0].Arguments);
         if (!page) return res.status(404).send("Page not found");
-        res.render("pages/view", { page });
+        res.render("./pages/view.pug", { page });
+    }
+
+    /*
+        * Serves the new page form which allows creating any type of page at any location in site. Will be changed to a more specific page type creation in future.
+    */
+    async createPageForm(req, res) {
+        const modules = await Page.listAll({ type: "class" });
+        const parsed = modules.map(m => {
+            let relName = ''
+            if(m.slug == '/'){
+                relName = '$'
+            } else {
+                relName = '$' + m.slug.replace(/\//g, '.')
+            }
+            return { name: m.name, slug: relName, id: m.id }
+        })
+        res.render("./pages/createAny.pug", { pages: parsed });
+    }
+    
+
+    /*
+        * Handles creating a new page of any type at any location in site. 
+        * Validates input and redirects to created page on success. 
+        * Validation to be switched to express middleware in future.
+    */
+    async createPage(req, res) {
+        let newPage = null;
+        try {
+            let {isValid, errors} = validatePageFromReq(req.body);
+            if(!isValid) {
+                throw Error("Validation failed due to the following errors: " + JSON.stringify(errors));
+            } else{
+                newPage = await createPageFromReq(req.body);
+                if(!newPage) throw Error("Failed to create page");;
+            }
+        } catch (err) {
+            console.error("Error creating page:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        return res.redirect(`/tad${newPage.slug}`);
+    }
+
+    /*
+        * Handles bulk creation of pages from parsed code structure. 
+        * Expects data in req.body in specific format.
+        * Redirects to parent page of created pages on success.
+    */
+    async bulkCreatePages(req, res) {
+        console.log(req.body)
+        let redir = await bulkCreatePages(req.body)
+        return res.redirect(redir);
+    }
+
+    /*
+        * Views a page by its slug, supporting up to 4 levels of slugs. 
+        * Renders 404 if page not found.
+    */
+    async viewPageBySlug(req, res) {
+        let slug = ''
+        slug += req.params.slug1 ? `/${req.params.slug1}` : ''
+        slug += req.params.slug2 ? `/${req.params.slug2}` : ''
+        slug += req.params.slug3 ? `/${req.params.slug3}` : ''
+        slug += req.params.slug4 ? `/${req.params.slug4}` : ''
+
+        const page = await Page.getBySlug(slug);
+        if (!page) return res.status(404).send("Page not found");
+        res.render("./pages/view.pug", { page });
+    }
+
+    /*
+        * Handles editing an existing page. 
+        * Expects pageId in req.params and updated data in req.body.
+        * Redirects to top level on site. THIS MUST BE CHANGED ASAP.
+    */
+    async editPage(req, res) {
+        const pageId = req.params.pageId;
+        const data = req.body;
+        console.log("Editing page:", pageId, "with data:", data);
+        await editPageById(pageId, data);
+        // return res.redirect(`/tad/${data.slug}`);
+        res.status(200).set('HX-Redirect', './');
+        return res.send()
+    }
+
+    /*
+        * Handles deleting a page by its ID. 
+        * Expects pageId in req.params.
+        * Redirects to top level of docs on success.
+    */
+    async deletePage(req, res) {
+        const pageId = req.params.pageId;
+        await deletePageById(pageId);
+        return res.redirect('/tad');
+    }
+
+    /*
+        * Handles uploading and parsing bulk page data from file content.
+        * Expects parent_id and filecontent in req.body.
+        * Renders confirmation form with parsed data.
+    */
+    async upload(req, res){
+        const {parent_id, filecontent} = req.body
+        if(!filecontent) return res.status(400).send("No file content provided");
+        if(!parent_id) return res.status(400).send("No parent id provided");
+        let data = parseCode(req.body.filecontent)
+        console.log(data)
+        res.render("./pages/confirmBulk.pug", { data, parent_id });
     }
 }
 

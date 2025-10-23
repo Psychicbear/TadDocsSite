@@ -1,0 +1,16 @@
+
+//- Draws editable description for linked page entry if in edit mode
+mixin pageEntry(item, edit=false)
+    if edit
+        form(method="PUT" hx-put=`/tad/${item.MainPage.id}` hx-target=".content" hx-swap="outerHTML")
+            input(type="text" name="short_description" value=item.MainPage.short_description onkeydown="augment_textarea(event)")
+    else        
+        span=` - ${item.MainPage.short_description}`
+
+//- WIP: Draws main description for linked page entry if in edit mode
+mixin mainEntry(item, edit=false)
+    if edit
+        form(method="PUT" hx-put=`/tad/${item.id}` hx-target="body" hx-swap="outerHTML")
+            textarea(name="long_desc" onkeydown="augment_textarea(event)")= item.long_description
+    else        
+        div!= item.long_description

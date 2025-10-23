@@ -14,26 +14,30 @@ async function seed() {
   // Create a class page
   const classPage = await Page.create({
     name: "$.",
+    slug: "/",
     short_description: "$ is the core of Teach and Draw. Through the $ we can access all of the libraries functionality.",
     long_description: "$ is the core of Teach and Draw. Through the $ we can access all of the libraries functionality.",
     page_type: "class"
   });
 
+  console.log(classPage.slug)
+
   await classPage.createMainClass({
     parent_class_id: null
   });
 
-  const loadImageMethod = await Method.create({
-    page_id: (
-      await Page.create({
-        name: "loadImage",
-        short_description: "Loads an image from the specified file path and draws it at the given coordinates.",
-        long_description: "The loadImage method loads an image from the specified file path and draws it at the given (x, y) coordinates on the canvas. The image is drawn with its top-left corner at the specified coordinates.",
-        page_type: "method"
+  const loadImagePage = await Page.create({
+          name: "loadImage",
+          slug: classPage.slug + "loadimage",
+          short_description: "Loads an image from the specified file path and draws it at the given coordinates.",
+          long_description: "The loadImage method loads an image from the specified file path and draws it at the given (x, y) coordinates on the canvas. The image is drawn with its top-left corner at the specified coordinates.",
+          page_type: "method"
       })
-    ).id,
-    class_id: classPage.id,
-    is_static: true
+  console.log(loadImagePage.slug);
+  
+  const loadImageMethod = await loadImagePage.createMainMethod({
+              class_id: classPage.id,
+              is_static: true
   });
 
   await Argument.bulkCreate([
@@ -68,8 +72,11 @@ async function seed() {
       - rectangle(x, y, w, h) method
   */
 
+  console.log(classPage.slug + "shape")
+
   const shapePage = await Page.create({
     name: "shape",
+    slug: classPage.slug + "shape",
     short_description: "The shape class contains methods and properties for drawing shapes.",
     long_description: "The shape class contains methods and properties for drawing shapes.",
     page_type: "class"
@@ -79,9 +86,12 @@ async function seed() {
     parent_class_id: classPage.id
   });
 
+  console.log(shapePage.slug + "/strokewidth")
+
   // shape.strokeWidth property
   await Page.create({
     name: "strokeWidth",
+    slug: shapePage.slug + "/strokewidth",
     short_description: "Line thickness of shape.",
     long_description: "Controls the width of the stroke of the shape. This essentially controls the thickness of the lines that draw the shape.",
     page_type: "property"
@@ -92,16 +102,22 @@ async function seed() {
     })
   )
 
+  console.log(classPage.slug + "image")
+
   await Page.create({
     name: "image",
+    slug: classPage.slug + "image",
     short_description: "The image class contains methods and properties for handling images.",
     long_description: "The image class contains methods and properties for handling images.",
     page_type: "class"
   }).then((pg) => pg.createMainClass({ parent_class_id: classPage.id }));
 
+
+  console.log(shapePage.slug + "/rectangle")
   // shape.rect class
   await Page.create({
       name: "rect",
+      slug: shapePage.slug + "/rectangle",
       short_description: "The rect class contains methods and properties for drawing rectangular shapes.",
       long_description: "The rect class contains methods and properties for drawing rectangular shapes.",
       page_type: "class"

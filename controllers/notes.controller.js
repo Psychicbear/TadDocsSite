@@ -4,6 +4,10 @@ import { Note } from "../models/notes.model.js";
  * @typedef {import('../utils/types.mjs').OurRequest} Request
  * @typedef {import('../utils/types.mjs').ExpressResponse} Response
  */
+
+/*
+    * WARNING: THIS CONTROLLER IS UNNECESSARY FOR FINAL PRODUCT
+*/
 class Notes {
     constructor() {}
     /**
