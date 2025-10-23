@@ -27,6 +27,14 @@ block append content
       include viewMethod
 
   h2 Examples
+  if page.CodeExample
+      div.border.rounded.p-4.mb-4
+        h3= page.CodeExample.name
+        pre.bg-gray-100.p-2.rounded
+          code= page.CodeExample.public
+  else
+    p No examples available.
+
 
   div#dialog-container
   script.

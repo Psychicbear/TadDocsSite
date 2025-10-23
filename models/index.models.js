@@ -3,6 +3,7 @@ import { Class } from "./classes.model.js";
 import { Property } from "./properties.model.js";
 import { Method } from "./methods.model.js";
 import { Argument } from "./arguments.model.js";
+import { Example } from "./examples.model.js";
 import { sequelize } from "./db/sqlConfig.js";
 
 
@@ -29,7 +30,11 @@ Page.hasOne(Method, { foreignKey: "page_id", as: "MainMethod"});
 Argument.belongsTo(Method, { foreignKey: "method_id", as: "ParentMethod" });
 Method.hasMany(Argument, { foreignKey: "method_id", as: "Arguments"});
 
+// Example <-> Page
+Example.hasMany(Page, { foreignKey: "code_example_id", as: "CodeExample" });
+Page.belongsTo(Example, { foreignKey: "code_example_id", as: "CodeExample" });
+
 
 sequelize.sync({ alter: false });
 
-export { Page, Class, Property, Method, Argument };
+export { Page, Class, Property, Method, Argument, Example };

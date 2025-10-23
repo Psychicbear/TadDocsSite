@@ -1,5 +1,5 @@
 import { sequelize } from "./sqlConfig.js";
-import { Page, Class, Property, Method, Argument } from "../index.models.js";
+import { Page, Class, Property, Method, Argument, Example } from "../index.models.js";
 
 async function seed() {
   await sequelize.sync({ force: true }); // Reset DB
@@ -84,6 +84,14 @@ async function seed() {
 
   await shapePage.createMainClass({
     parent_class_id: classPage.id
+  });
+
+  await shapePage.createCodeExample({
+    name: "Shape Example",
+    public: `// Create a rectangle shape with a stroke width of 5
+$.shape.strokeWidth = 5;
+$.shape.rectangle(50, 50, 200, 100);`,
+    private: `// Private example code can go here`
   });
 
   console.log(shapePage.slug + "/strokewidth")
