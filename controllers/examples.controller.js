@@ -1,5 +1,5 @@
 import utils from "../utils/utils.js";
-import { Example } from "../models/index.model.js";
+import { Example } from "../models/index.models.js";
 
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
