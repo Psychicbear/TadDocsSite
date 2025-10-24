@@ -1,0 +1,9 @@
+
+body(style="overflow:hidden;")
+    link(href="/css/lib/jshighlight-atom-one-dark-min.css" type="text/css" rel="stylesheet")
+    script(src="/js/highlight.min.js")
+    pre
+        code.hljs.language-javascript= snippet.public
+    iframe(src="/examples/1/run")
+    script(defer).
+        hljs.highlightAll();

@@ -8,8 +8,19 @@ const examples = express.Router();
  */
 examples.get(
     "/",
-    expressAsyncHandler(controller.index)
+    expressAsyncHandler(controller.read)
 );
+
+examples.get(
+    "/:snippetId",
+    expressAsyncHandler(controller.read)
+);
+
+examples.get(
+    "/:snippetId/run",
+    expressAsyncHandler(controller.run)
+);
+
 
 Object.freeze(examples);
 export default examples;

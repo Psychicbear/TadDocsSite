@@ -1,5 +1,5 @@
 doctype html
-html
+html(lang="en" style="background:#13171f;" data-theme='dark')
     head
         block title
             if title
@@ -8,9 +8,16 @@ html
                 title Demo | Default
         meta(charset="utf-8")
         meta(name="viewport" content="width=device-width, initial-scale=1")
-        link(href="/css/pico.min.css" rel="stylesheet" type="text/css")
+        meta(name="description" content="Learn to code with TaD, a javascript library designed from the ground up for learning.")
+        meta(name="keywords" content="learn, teaching, education, coding, programming, javascript, canvas, learn JavaScript, TaD, programming for beginners, getting started with code")
+
+        meta(property="og:title" content="Learn to Code with TaD")
+        meta(property="og:description" content="Learn to code with TaD, a JavaScript library designed from the ground up for learning.")
+        meta(property="og:type" content="website")
+        link(href="/css/learntad_pico.css" rel="stylesheet" type="text/css")
         link(href="/css/brand.config.css" rel="stylesheet" type="text/css")
-        link(href="/css/base.css" rel="stylesheet" type="text/css")
+        link(href="/css/base.css" rel="stylesheet" type="text/css")    
+        link(href="/css/lib/jshighlight-atom-one-dark-min.css" type="text/css" rel="stylesheet")
         link(rel="shortcut icon" href="/images/favicon.ico" type="image/vnd.microsoft.icon")
         block scripts
             script(src="/js/dialog.min.js" defer)
