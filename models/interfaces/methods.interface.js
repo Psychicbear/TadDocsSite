@@ -24,7 +24,7 @@ export async function listMethodsById(parentId){
                 attributes: ['id', 'name', 'type', 'description', 'arg_index'],
                 order: [['arg_index', 'ASC']],
                 raw: true,
-                rejectOnEmpty: true,
+                rejectOnEmpty: false,
             })
             let newMethod = {
                 page_id: method.page_id,
@@ -40,6 +40,48 @@ export async function listMethodsById(parentId){
         return methods;
     } catch (error) {
         console.error("Error in listSubclasses:", error);
+        return null;
+    }
+}
+
+export async function getMethodDetails(methodId){
+    try {
+        const args = await Argument.findAll({
+            where: { method_id: methodId },
+            attributes: ['id', 'name', 'type', 'description', 'arg_index'],
+            order: [['arg_index', 'ASC']],
+            raw: true,
+            rejectOnEmpty: false,
+        });
+        console.log(args)
+        const returns = await Method.findByPk(methodId, {
+            attributes: ['return_type'],
+            raw: true,
+            rejectOnEmpty: false,
+        });
+        return { args, returns: returns.return_type };
+    } catch (error) {
+        console.error("Error in getArgsByMethodId:", error);
+        return null;
+    }
+}
+
+export async function editMethodArgById(argId, data){
+    const t = await sequelize.transaction();
+    try {
+        const arg = await Argument.findByPk(argId,{
+            rejectOnEmpty: true,
+            transaction: t
+        });
+        if(data.name) arg.name = data.name;
+        if(data.type) arg.type = data.type;
+        if(data.description) arg.description = data.description;
+        await arg.save({transaction: t});
+        await t.commit();
+        return arg;
+    } catch (error) {
+        await t.rollback();
+        console.error("Error in editMethodArgById:", error);
         return null;
     }
 }

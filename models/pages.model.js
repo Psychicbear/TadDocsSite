@@ -13,21 +13,16 @@ class Page extends Model {
     # Find page queries #
     #####################
   */
-      // List all pages, optionally filtered by type
-  static async listAll({ type } = {}) {
-    const where = type ? { page_type: type } : {};
-    return await this.findAll({ where, order: [["name", "ASC"]] });
-  }
 
   // Get the root "$." page
   static async getRoot() {
-    let page = await this.findOne({ where: { name: "$.", page_type: "class" } });
-    return await this.findWithDetails(page);
+    let page = await this.findOne({ where: { name: "$.", page_type: "class" }, raw: true });
+    return page
   }
 
   static async getBySlug(slug) {
-    let page = await this.findOne({ where: { slug: slug } });
-    return await this.findWithDetails(page);
+    let page = await this.findOne({ where: { slug: slug }, raw: true });
+    return page
   }
 
   // Get a page with subtype-specific details
@@ -81,37 +76,6 @@ class Page extends Model {
               ]
       }
     }
-  // static async findClassDetails(id) {
-  //   return await this.findByPk(id, {
-  //     include: [
-  //       {
-  //         model: Class,
-  //         as: "SubClasses",
-  //         include: [{ model: this, as: "MainPage" }]
-  //       },
-  //       {
-  //         model: Class,
-  //         as: "MainClass",
-  //         include: [
-  //           { model: Property, as: "Properties", include: [{ model: this, as: "MainPage" }] },
-  //           {
-  //             model: Method,
-  //             as: "Methods",
-  //             include: [
-  //               { model: this, as: "MainPage" },
-  //               { model: Argument, as: "Arguments" }
-  //             ]
-  //           }
-  //         ]
-  //       }
-  //     ],
-  //     // Order nested Arguments by their arg_index. Use the nested path through associations.
-  //     order: [
-  //       [{ model: Class, as: "MainClass" }, { model: Method, as: "Methods" }, { model: Argument, as: "Arguments" }, "arg_index", "ASC"]
-  //     ]
-  //   });
-  // }
-
 
   /*
     * Property-specific details
@@ -122,13 +86,6 @@ class Page extends Model {
   static includePropertyDetails() {
     return { include: [{model: Property, as: "MainProperty"}] }
   }
-//   static async findPropertyDetails(id) {
-//     return await this.findByPk(id, {
-      // include: [
-      //   {model: Property, as: "MainProperty"}
-      // ]
-//     });
-//   }
 
   /*
     * Method-specific details
@@ -138,13 +95,6 @@ class Page extends Model {
   static includeMethodDetails() {
     return { include: [{model: Method, as: "MainMethod", include: [{model: Argument, as: "Arguments"}]}] }
   }
-//   static async findMethodDetails(id) {
-//     return await this.findByPk(id, {
-//       include: [
-//         {model: Method, as: "MainMethod", include: [{model: Argument, as: "Arguments"}]}
-//       ]
-//     });
-//   }
 
 }
 

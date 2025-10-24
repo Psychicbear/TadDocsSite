@@ -121,7 +121,8 @@ class Index {
         await editPageById(pageId, data);
         // return res.redirect(`/tad/${data.slug}`);
         if(req.query.refertype == 'class' && req.query.id){
-            return res.status(200).set('HX-Redirect',`/classes/view/${req.query.id}`);
+            // return res.status(200).set('HX-Redirect',`/classes/view/${req.query.id}`);
+            return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
         } else{
             res.status(200).set('HX-Refresh', true);
             return res.send()

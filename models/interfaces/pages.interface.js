@@ -167,6 +167,8 @@ export async function bulkCreatePages(pagesData){
     * Returns the updated Page instance on success, or null on failure.
 */
 export async function editPageById(id, data) {
+    console.log("Editing page:", id, "with the following data:");
+    console.log(data);
     const t = await sequelize.transaction();
     try {
         const page = await Page.findByPk(id, { transaction: t });

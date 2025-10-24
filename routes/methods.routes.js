@@ -17,8 +17,8 @@ methods.get(
 )
 
 methods.put(
-    "/addArg/:methodId",
-    expressAsyncHandler(controller.addArgument)
+    "/:methodId/args/:argId",
+    expressAsyncHandler(controller.editMethodArg)
 )
 
 Object.freeze(methods);

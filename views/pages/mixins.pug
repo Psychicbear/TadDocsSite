@@ -16,7 +16,7 @@ mixin mainEntry(item, edit=false)
         div!= item.long_description
 
 mixin breadcrumbs(slug)
-    div
+    div.flex2
         - const parts = slug.split('/').filter(part => part.length > 0);
         - let path = '';
         nav(aria-label="breadcrumb" style="--pico-nav-breadcrumb-divider: '.';")

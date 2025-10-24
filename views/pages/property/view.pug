@@ -1,8 +1,8 @@
-- 
-    pageProp =  loadProp ? loadProp :
-                page.MainProperty ? page.MainProperty : null;
-    console.log(pageProp);
-
-h4=`Type: ${pageProp.type}`
-if pageProp.default_value
-    h4=`Default Value: ${pageProp.default_value}`
+if admin
+    form(method="PUT" hx-put=`/properties/${propId}?refertype=property` hx-target=".type-details" hx-swap="outerHTML")
+        fieldset(class="grid grid-3col113")
+            input(type="text" name="type" value=prop.type onkeydown="augment_textarea(event)")
+            input(type="text" name="default_value" value=prop.default_value onkeydown="augment_textarea(event)")
+h4=`Type: ${prop.type}`
+if prop.default_value
+    h4=`Default Value: ${prop.default_value}`

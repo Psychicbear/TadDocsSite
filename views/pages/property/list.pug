@@ -1,9 +1,15 @@
--
-    if (subProps === undefined)
-        subProps = page.MainClass.Properties ? page.MainClass.Properties : [];
-if subProps.length
+if props.length
+    h3 Properties
     ul
-        each prop in subProps
+        each prop in props
             li
                 a(href=`/tad${prop.slug}`)= prop.slug
-                +pageEntry(prop, admin)
+                if admin
+                    form(method="PUT" hx-put=`/tad/${prop.id}?refertype=class&id=${parentId}` hx-target=".content" hx-swap="outerHTML")
+                        input(type="text" name="short_description" value=prop.short_description onkeydown="augment_textarea(event)")
+                else        
+                    span=` - ${prop.short_description}`
+else
+    if admin
+        h3 Properties
+        p No properties found.

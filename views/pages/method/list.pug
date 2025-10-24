@@ -1,4 +1,5 @@
 if methods.length
+    h3 Methods
     ul
         each method in methods
             li
@@ -17,6 +18,5 @@ if methods.length
                     span=` - ${method.short_description}`
 else
     if admin
+        h3 Methods
         p No methods found. You can add methods to this class.
-    else
-        p No methods available.

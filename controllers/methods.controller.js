@@ -1,5 +1,6 @@
 import utils from "../utils/utils.js";
-import { listMethodsById } from "../models/interfaces/methods.interface.js";
+import { listMethodsById, getMethodDetails, editMethodArgById } from "../models/interfaces/methods.interface.js";
+import { authCheck } from "../utils/utils.auth.js";
 
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
@@ -16,7 +17,10 @@ class Methods {
      */
     async viewMethod(req, res) {
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
-        res.render("./pages/method/view.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+        let details = await getMethodDetails(req.params.methodId);
+        if (!details) return res.status(404).send("Method not found");
+        const {args, returns} = details;
+        res.render("./pages/method/view.pug", { methodId: req.params.methodId, args, returns, admin: req.isAdmin });
     }
 
     async listMethods(req, res) {
@@ -27,11 +31,22 @@ class Methods {
     }
 
     async editMethod(req, res) {
+        if(!authCheck(req,res)) return;
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
         res.render("./pages/method/edit.pug", { methodId: req.params.methodId, admin: req.isAdmin });
     }
 
+    async editMethodArg(req, res){
+        if(!authCheck(req,res)) return;
+        const { methodId, argId } = req.params;
+        if (!methodId || !argId) return res.status(404).send("No methodId or argId provided");
+        let edit = await editMethodArgById(argId, req.body)
+        if(!edit) return res.status(500).send("Error editing argument");
+        return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
+    }
+
     async addArgument(req, res) {
+        if(!authCheck(req,res)) return;
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
         res.render("./pages/method/add_argument.pug", { methodId: req.params.methodId, admin: req.isAdmin });
     }

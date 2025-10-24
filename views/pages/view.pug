@@ -8,10 +8,10 @@ block append styles
     rel="stylesheet")
 
 block append content
-  div(style="display:flex;justify-content:between;").flex.center_content.mb-4
+  div(class="flex" style="justify-content: space-between; align-items: center;")
     +breadcrumbs(page.slug)
     if(admin)
-      div(role="group" class="flex" style="flex:1,1;")
+      div(role="group" class="flex3" aria-label="Admin Actions")
         i(role="button" hx-get=`/tad/create` hx-target="#dialog-container" hx-swap="innerHTML" class="material-symbols-outlined")="add_circle"
         i(role="button" hx-delete=`/tad/${page.id}` hx-confirm="Are you sure you want to delete" class="material-symbols-outlined")="delete"
         label.btn(for="fileinput" role="button") Upload JS
@@ -21,12 +21,13 @@ block append content
           input(type="hidden" name="filecontent" value="")
   if admin
     form(id="page_edit" method="PUT" hx-put=`/tad/${page.id}` hx-target="body" hx-swap="outerHTML" class="mb-4")
-      h2 Edit Notes (press Shift+Enter for newline, Enter to save)
-      input(type="hidden" name="id" value=page.id)
-      input(type="text" name="name" value=page.name)
-      input(type="text" name="short_desc" value=page.short_description)
-
-      textarea#notes(name="long_desc" onkeydown="augment_textarea(event)" rows="4")= page.long_description
+      h2.mbottom0 Edit Page
+      small.mbottom10 (press Shift+Enter for newline, Enter to save)
+      div.grid.grid-2col13.mtop1
+        input(type="hidden" name="id" value=page.id)
+        input(type="text" name="name" value=page.name onkeydown="augment_textarea(event)")
+        input(type="text" name="short_description" value=page.short_description onkeydown="augment_textarea(event)")
+        textarea#notes(name="long_description" onkeydown="augment_textarea(event)" rows="4" style="grid-column: span 2;")= page.long_description
 
   else
     div.flex.justify-between.mb-4
@@ -39,11 +40,11 @@ block append content
   block typeDetails 
     case page.page_type
       when 'class'
-        div(class="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML")="Loading..."
+        div(class="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML")="Loading module details..."
       when 'property'
-        include property/view
+        div(class="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML")="Loading property details..."
       when 'method'
-        include method/view
+        div(class="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML")="Loading method details..."
 
   h2 Examples
   if page.CodeExample

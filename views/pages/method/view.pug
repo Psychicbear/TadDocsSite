@@ -1,18 +1,20 @@
-- 
-    pageMethod =  loadMethod ? loadMethod :
-                page.MainMethod ? page.MainMethod : null;
-        
-
-h2 Arguments:
-each arg in pageMethod.Arguments
-    if arg.type 
-        span= arg.name
-        |  - 
-        span= arg.type
-        if arg.description
-            |  : 
-            span= arg.description
-    br
-if pageMethod.return_type
+h2 Arguments
+each arg in args
+    if admin
+        form(method="PUT" hx-put=`/methods/${methodId}/args/${arg.id}?refertype=method` hx-target=".type-details" hx-swap="outerHTML")
+            fieldset(class="grid grid-3col113")
+                input(type="text" name="name" value=arg.name onkeydown="augment_textarea(event)")
+                input(type="text" name="type" value=arg.type onkeydown="augment_textarea(event)")
+                input(type="text" name="description" value=arg.description onkeydown="augment_textarea(event)")
+    else
+        if arg.type 
+            span= arg.name
+            |  - 
+            span= arg.type
+            if arg.description
+                |  : 
+                span= arg.description
+        br
+if !(returns === undefined || returns === null)
     h2 Returns:
     span= pageMethod.return_type
