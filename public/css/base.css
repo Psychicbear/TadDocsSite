@@ -1214,7 +1214,7 @@ html body .hover-wiggle:focus-within,
     padding: 0.15rem;
 }
 
-.pill.uqThemed {
+.pill.primary {
     background-color: var(--pico-primary);
     color: white;
 }
