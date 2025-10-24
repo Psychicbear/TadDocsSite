@@ -40,9 +40,9 @@ const singleton = new ExampleInterface([
 
         tad.use(update);
         console.log(tad, document.querySelector("#myCanvas"));
-        tad.w=200;
-        tad.h=200;
-        function update() {shape.colour="#282c34";shape.rectangle(tad.w/2,tad.h/2,tad.w,tad.h);shape.colour="blue";shape.rectangle(50,50,50,tad.h);}`,
+        tad.w=280;
+        tad.h=280;
+        function update() {shape.border="#282c34";shape.colour="#282c34";shape.rectangle(tad.w/2,tad.h/2,tad.w,tad.h);shape.colour="blue";shape.rectangle(50,50,50,tad.h);}`,
     },
 ]);
 export default singleton;
