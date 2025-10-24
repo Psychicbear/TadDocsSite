@@ -15,7 +15,7 @@ html(lang="en" style="background:#13171f;" data-theme='dark')
         meta(property="og:description" content="Learn to code with TaD, a JavaScript library designed from the ground up for learning.")
         meta(property="og:type" content="website")
         link(href="/css/learntad_pico.css" rel="stylesheet" type="text/css")
-        link(href="/css/brand.config.css" rel="stylesheet" type="text/css")
+        //- link(href="/css/brand.config.css" rel="stylesheet" type="text/css")
         link(href="/css/base.css" rel="stylesheet" type="text/css")    
         link(href="/css/lib/jshighlight-atom-one-dark-min.css" type="text/css" rel="stylesheet")
         link(rel="shortcut icon" href="/images/favicon.ico" type="image/vnd.microsoft.icon")
@@ -23,7 +23,8 @@ html(lang="en" style="background:#13171f;" data-theme='dark')
             script(src="/js/dialog.min.js" defer)
             script(src="/js/lib/htmx.js" defer)
             script(src="/js/lib/htmx.preload.js" defer)
-            script(src="/js/wasm_exec.js")
+            script(src="/js/wasm_exec.js" defer)
+            script(src="/js/layout.js" defer)
         block styles
             style.
                 html, body {

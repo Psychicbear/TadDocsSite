@@ -6,22 +6,40 @@ block subnav
 
 block content
     section.container
-        h1 Hello #{user.name}!
-        if env
-            section
-                h2 current env is #{env}
 
-        input#search(type="text" placeholder="search notes" hx-get="/notes/search" hx-target="#notes" hx-trigger="keyup changed delay:500ms" hx-swap="outerHTML" name="q")
-        iframe(src="/examples/0" width="280" height="280")
-        iframe(src="/examples/1" width="280" height="280")
-        iframe(src="/examples/1/run" width="280" height="280")
-        if notes
-            section#notes.grid
-                article
-                    h5 Top notes:
-                    hr 
-                    ul
-                        each note in notes
-                            li.noliststyle.mbottom1
-                                a(href=`/notes/${note.id}`).bold #{note.title} 
-                                |  - #{note.content} 
+        h1 Teach and Draw
+        p Teach and Draw (TaD for short) is a open-source javascript library for learning to code. It is written by a small team of developers and academics with extensive experience teaching introductory programming courses for various universities.
+        p The best way to learn to code is by writing code, making mistakes, and learning from those mistakes. This library is built with a strong focus on feedback to help a learner understand, when things go wrong, what has gone wrong and how to fix it. TAD offers high quality error messages close to the source of the problem, with video micro-lessons to address common mistakes. 
+            em (videos coming with alpha release). 
+        a(href="/data/starter.zip?id=1" role="button") 
+            img(src="./images/zip.svg")
+            | &nbsp; Download the starter zip!
+        <p> We recommending using <a href="https://code.visualstudio.com/"> visual studio code</a> as your code editor with this project along with the live server extension by ritwick dey.</p>
+        blockquote This .js library is under active construction and is not yet at its alpha stage. Use at your own risk :). 
+            | You can find the license and repo for this project 
+            a.button(href="https://github.com/JamesBakerMM/TeachAndDraw/")
+                span at GitHub
+            | . You can find a very rough draft of the library reference 
+            a.button(href="/core/")
+                span here
+        section
+            iframe(src="/examples/0" width="280" height="280")
+            iframe(src="/examples/1" width="280" height="280")
+            iframe(src="/examples/1/run" width="280" height="280")
+
+            //- h1 Hello #{user.name}!
+            //- if env
+            //-     section
+            //-         h2 current env is #{env}
+
+            //- input#search(type="text" placeholder="search notes" hx-get="/notes/search" hx-target="#notes" hx-trigger="keyup changed delay:500ms" hx-swap="outerHTML" name="q")
+            //- if notes
+            //-     section#notes.grid
+            //-         article
+            //-             h5 Top notes:
+            //-             hr 
+            //-             ul
+            //-                 each note in notes
+            //-                     li.noliststyle.mbottom1
+            //-                         a(href=`/notes/${note.id}`).bold #{note.title} 
+            //-                         |  - #{note.content} 

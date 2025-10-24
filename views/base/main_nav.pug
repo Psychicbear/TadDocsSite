@@ -1,9 +1,120 @@
-//- main.nav.pug  –  Tailwind version
-ul(class="flex items-center text-sm uppercase divide-x divide-white/25")
-    // simple links -------------------------------------------------------------
-    li
-        a(href="/" class="px-3 py-2 hover:text-brand/80") Home
-    li
-        a(href="/notes" class="px-3 py-2 hover:text-brand/80") All notes
-    li
-        a(href="/tad" class="px-3 py-2 hover:text-brand/80") Tad Library
+//- Mobile Navigation Button
+style.
+    canvas {
+        cursor: none;
+    }
+    .menu-toggle {
+        scale:1.25;
+        text-decoration:none;
+    }
+
+    #side-menu {
+        padding:1rem;
+        position: fixed;
+        top:0;
+        left: -1000dvw;
+        width: 100dvw;
+        height: 100dvh;
+        background-color: var(--pico-muted-border-color);
+        overflow-y: auto;
+        transition: left 0.3s ease;
+        visbility:hidden;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+        z-index:100;
+    }
+
+    #side-menu.open {
+        top:0;
+        left: 0;
+    }
+
+    #side-menu .close {
+        visbility:visible;
+        position:absolute;
+        display: block;
+        text-align: right;
+        top:-.5rem;
+        right:.5rem;
+        font-size: 3rem;
+        text-decoration: none;
+    }
+
+    .menu-toggle {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        text-decoration: none;
+    }
+
+    /* Hide the side menu on larger screens */
+    @media (min-width: 768px) {
+        #side-menu {
+        //     display: none;
+        }
+        .menu-toggle {
+            //   display: none;
+        }
+    }
+
+    @media (max-width: 350px) {
+        .notes { display:none; }
+
+    }
+
+    /* Breadcrumb Navigation */
+    nav.breadcrumb ul {
+        list-style: none;
+        display: flex;
+        align-items: center;
+    }
+
+    nav.breadcrumb li {
+        flex:1;
+    }
+
+    nav.breadcrumb li + li::before {
+        content: ">";
+        margin: 0 8px;
+        color: #666;
+    }
+
+    nav.breadcrumb a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+header
+    //- Breadcrumb Navigation
+    nav(aria-label="breadcrumb" style="display:flex; justify-content:space-between;")
+        block nav
+            ul
+                li
+                    a(href="/") 🐸
+                        //- img(src="/images/logo.svg")
+        ul
+            li
+                a(href="#" class="secondary menu-toggle") ☰
+
+//- Side Navigation
+aside#side-menu
+    a.close(href="#" aria-label="Close Menu") ×
+    nav
+        ul
+            li
+                a(href="/") Home
+                a(href="/tad") Reference
+                a(href="/notes") Notes
+                //- a(href="/download") Download
+                //- a(href="/start") Get Started!
+                //- a(href="/lessons") Lesson Plan
+                //- a(href="/about") Lesson Plan
+
+//- ul(class="flex items-center text-sm uppercase divide-x divide-white/25")
+//- // simple links -------------------------------------------------------------
+//- li
+//-     a(href="/" class="px-3 py-2 hover:text-brand/80") Home
+//- li
+//-     a(href="/notes" class="px-3 py-2 hover:text-brand/80") All notes
+//- li
+//-     a(href="/tad" class="px-3 py-2 hover:text-brand/80") Tad Library
