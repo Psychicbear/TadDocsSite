@@ -935,6 +935,18 @@ html body .minh15 {
 .flex-col-reverse {
     flex-direction: column-reverse;
 }
+
+.flex1 {
+    flex:1;
+}
+
+.flex2 {
+    flex:2
+}
+
+.flex3 {
+    flex:3;
+}
 /** general gap */
 .gap0 {
     gap: 0rem;

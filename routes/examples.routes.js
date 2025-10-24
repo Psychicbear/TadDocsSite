@@ -21,6 +21,10 @@ examples.get(
     expressAsyncHandler(controller.run)
 );
 
+examples.get(
+    "/:snippetId/fiddle",
+    expressAsyncHandler(controller.fiddle)
+);
 
 Object.freeze(examples);
 export default examples;

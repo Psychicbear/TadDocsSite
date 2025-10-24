@@ -30,10 +30,10 @@ class Examples {
      */
     async read(req, res) {
         const { snippetId } = req.params;
-        console.log({snippetId});
+        console.log({ snippetId });
 
         const target = await examples.getById(snippetId);
-        if(!target) {
+        if (!target) {
             res.send(`404 ${snippetId} not found!`);
             return;
         }
@@ -52,7 +52,7 @@ class Examples {
         const { snippetId } = req.params;
 
         const target = await examples.getById(snippetId);
-        if(!target) {
+        if (!target) {
             res.send(`404 ${snippetId} not found!`);
             return;
         }
@@ -61,6 +61,20 @@ class Examples {
             snippet: target,
         });
         return;
+    }
+
+    async fiddle(req, res) {
+        const { snippetId } = req.params;
+
+        const target = await examples.getById(snippetId);
+        if (!target) {
+            res.send(`404 ${snippetId} not found!`);
+            return;
+        }
+
+        res.render("./snippets/fiddle.pug", {
+            snippet: target,
+        });
     }
 }
 

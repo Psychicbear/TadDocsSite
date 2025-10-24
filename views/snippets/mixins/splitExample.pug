@@ -1,0 +1,21 @@
+//- splitExample.pug
+mixin splitExample(blockId, tab1Label, tab2Label)
+    article.mockup.border.example(class=blockId)
+        header
+            form.flex.gap05
+                label(role="button").flex1
+                    | #{tab1Label}
+                    input(
+                        type="radio"
+                        name=`tabs-${blockId}`
+                        checked
+                    ).hidden(class=`${blockId}_tab1_tab`)
+                label(role="button").flex1
+                    | #{tab2Label}
+                    input(
+                        type="radio"
+                        name=`tabs-${blockId}`
+                    ).hidden(class=`${blockId}_tab2_tab`)
+        //- caller must provide the tabs
+        main.minw10 
+            block
