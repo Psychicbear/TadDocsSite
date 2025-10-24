@@ -32,7 +32,6 @@ class Page extends Model {
 
   // Get a page with subtype-specific details
   static async findWithDetails(page) {
-    console.log(page)
     let query = {};
     switch(page.page_type) {
       case "method":
@@ -42,7 +41,6 @@ class Page extends Model {
       case "class":
         query = this.includeClassDetails();
     }
-    console.log(query)
     query.include.push({ model: Example, as: "CodeExample" });
     let hydratedPage = await this.findByPk(page.id, query);
     return hydratedPage;

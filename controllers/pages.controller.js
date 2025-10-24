@@ -1,6 +1,7 @@
 import { parseCode } from "../utils/utils.parse-lib.mjs";
 import { Page } from "../models/index.models.js";
 import { validatePageFromReq, createPageFromReq, deletePageById, bulkCreatePages, editPageById } from "../models/interfaces/pages.interface.js";
+import { authCheck } from "../utils/utils.auth.js";
 
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
@@ -9,14 +10,6 @@ import { validatePageFromReq, createPageFromReq, deletePageById, bulkCreatePages
 
 class Index {
     constructor() {} //generally the constructor is going to be empty since we don't really want our controller calls sharing state if we can avoid it.
-
-    //we want the controller methods to be async so we can use async methods and await them, very common in db or file system touching stuff.
-    protectAdminRoutes(req,res){
-        if(!req.isAdmin){
-            res.status(403).send("Forbidden: You do not have access to this resource.");
-            return false;
-        } else return true
-    }
 
 
     /**
@@ -51,7 +44,7 @@ class Index {
         * Serves the new page form which allows creating any type of page at any location in site. Will be changed to a more specific page type creation in future.
     */
     async createPageForm(req, res) {
-        if(!this.protectAdminRoutes(req,res)) return;
+        if(!authCheck(req,res)) return;
         const modules = await Page.listAll({ type: "class" });
         const parsed = modules.map(m => {
             let relName = ''
@@ -72,7 +65,7 @@ class Index {
         * Validation to be switched to express middleware in future.
     */
     async createPage(req, res) {
-        if(!this.protectAdminRoutes(req,res)) return;
+        if(!authCheck(req,res)) return;
         let newPage = null;
         try {
             let {isValid, errors} = validatePageFromReq(req.body);
@@ -95,8 +88,7 @@ class Index {
         * Redirects to parent page of created pages on success.
     */
     async bulkCreatePages(req, res) {
-        if(!this.protectAdminRoutes(req,res)) return;
-        console.log(req.body)
+        if(!authCheck(req,res)) return;
         let redir = await bulkCreatePages(req.body)
         return res.redirect(redir);
     }
@@ -123,14 +115,17 @@ class Index {
         * Redirects to top level on site. THIS MUST BE CHANGED ASAP.
     */
     async editPage(req, res) {
-        if(!this.protectAdminRoutes(req,res)) return;
+        if(!authCheck(req,res)) return;
         const pageId = req.params.pageId;
         const data = req.body;
-        console.log("Editing page:", pageId, "with data:", data);
         await editPageById(pageId, data);
         // return res.redirect(`/tad/${data.slug}`);
-        res.status(200).set('HX-Redirect', './');
-        return res.send()
+        if(req.query.refertype == 'class' && req.query.id){
+            return res.status(200).set('HX-Redirect',`/classes/view/${req.query.id}`);
+        } else{
+            res.status(200).set('HX-Refresh', true);
+            return res.send()
+        }
     }
 
     /*
@@ -139,7 +134,7 @@ class Index {
         * Redirects to top level of docs on success.
     */
     async deletePage(req, res) {
-        if(!this.protectAdminRoutes(req,res)) return;
+        if(!authCheck(req,res)) return;
         const pageId = req.params.pageId;
         await deletePageById(pageId);
         return res.redirect('/tad');
@@ -151,7 +146,7 @@ class Index {
         * Renders confirmation form with parsed data.
     */
     async upload(req, res){
-        if(!this.protectAdminRoutes(req,res)) return;
+        if(!authCheck(req,res)) return;
         const {parent_id, filecontent} = req.body
         if(!filecontent) return res.status(400).send("No file content provided");
         if(!parent_id) return res.status(400).send("No parent id provided");

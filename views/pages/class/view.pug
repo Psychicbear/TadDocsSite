@@ -1,10 +1,8 @@
-- 
-    if (pageClass === undefined)
-        pageClass = page.MainClass ? page.MainClass : {Properties: [], Methods: []};
-h2 Modules
-    include list
+div(class="modules", hx-trigger="load" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".modules")="Loading..."
+    h2 Modules
+    p="Loading modules..."
 h2 Methods
-    include ../property/list
-h2 Properties
-    include ../method/list
+div(class="methods", hx-trigger="load" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".methods")="Loading methods..."
+//- h2 Properties
+//-     include ../method/list
                 

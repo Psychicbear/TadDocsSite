@@ -1,9 +1,15 @@
--   
-    if (subClasses === undefined)
-        subClasses = page.SubClasses ? page.SubClasses : [];
 if subClasses.length
+    h2 Modules
     ul
         each sub in subClasses
             li
                 a(href=`/tad${sub.slug}`)= sub.slug
-                +pageEntry(sub, admin)
+                if admin
+                    form(method="PUT" hx-put=`/tad/${sub.id}?refertype=class&id=${parentId}` hx-target=".type-details" hx-swap="outerHTML")
+                        input(type="text" name="short_description" value=sub.short_description onkeydown="augment_textarea(event)")
+                else        
+                    span=` - ${sub.short_description}`
+else
+    if admin
+        h2 Modules
+        p No methods found. You can add methods to this class.
