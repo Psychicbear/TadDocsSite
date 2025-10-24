@@ -13,27 +13,36 @@ block append content
     if(admin)
       div(role="group" class="flex" style="flex:1,1;")
         i(role="button" hx-get=`/tad/create` hx-target="#dialog-container" hx-swap="innerHTML" class="material-symbols-outlined")="add_circle"
-        i(role="button" hx-put=`/tad/${page.id}` hx-target="#dialog-container" hx-swap="innerHTML" class="material-symbols-outlined")="edit"
         i(role="button" hx-delete=`/tad/${page.id}` hx-confirm="Are you sure you want to delete" class="material-symbols-outlined")="delete"
         label.btn(for="fileinput") Upload File
         input#fileinput(type="file" role="button" name="file" style="display:none;" class="clickable" accept=".js,.ts")
         form(id="upload" method="POST" action="/tad/upload"  hx-post="/tad/upload" hx-target="#dialog-container" hx-swap="innerHTML" style="display:inline")
           input(type="hidden" name="parent_id" value=page.id)
           input(type="hidden" name="filecontent" value="")
-  div.flex.justify-between.mb-4
-    div.lineh05.pbottom1
-      h1.lineh05= page.name
-      +libPath(page.slug)
+  if admin
+    form(id="page_edit" method="PUT" hx-put=`/tad/${page.id}` hx-target="body" hx-swap="outerHTML" class="mb-4")
+      h2 Edit Notes (press Shift+Enter for newline, Enter to save)
+      input(type="hidden" name="id" value=page.id)
+      input(type="text" name="name" value=page.name)
+      input(type="text" name="short_desc" value=page.short_description)
 
-  p= page.long_description
+      textarea#notes(name="long_desc" onkeydown="augment_textarea(event)" rows="4")= page.long_description
 
+  else
+    div.flex.justify-between.mb-4
+      div.lineh05.pbottom1
+        h1.lineh05= page.name
+        +libPath(page.slug)
+
+    p= page.long_description
+  - console.log(page.page_type)
   case page.page_type
     when 'class'
-      include viewClass
+      include class/view
     when 'property'
-      include viewProperty
+      include property/view
     when 'method'
-      include viewMethod
+      include method/view
 
   h2 Examples
   if page.CodeExample

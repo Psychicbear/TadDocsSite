@@ -1,0 +1,8 @@
+- 
+    pageProp =  loadProp ? loadProp :
+                page.MainProperty ? page.MainProperty : null;
+    console.log(pageProp);
+
+h4=`Type: ${pageProp.type}`
+if pageProp.default_value
+    h4=`Default Value: ${pageProp.default_value}`

@@ -1,0 +1,9 @@
+-   
+    if (subClasses === undefined)
+        subClasses = page.SubClasses ? page.SubClasses : [];
+if subClasses.length
+    ul
+        each sub in subClasses
+            li
+                a(href=`/tad${sub.slug}`)= sub.slug
+                +pageEntry(sub, admin)

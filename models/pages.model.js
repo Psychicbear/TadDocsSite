@@ -32,6 +32,7 @@ class Page extends Model {
 
   // Get a page with subtype-specific details
   static async findWithDetails(page) {
+    console.log(page)
     let query = {};
     switch(page.page_type) {
       case "method":

@@ -1,0 +1,18 @@
+- 
+    pageMethod =  loadMethod ? loadMethod :
+                page.MainMethod ? page.MainMethod : null;
+        
+
+h2 Arguments:
+each arg in pageMethod.Arguments
+    if arg.type 
+        span= arg.name
+        |  - 
+        span= arg.type
+        if arg.description
+            |  : 
+            span= arg.description
+    br
+if pageMethod.return_type
+    h2 Returns:
+    span= pageMethod.return_type

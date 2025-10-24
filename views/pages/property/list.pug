@@ -1,0 +1,9 @@
+-
+    if (subProps === undefined)
+        subProps = page.MainClass.Properties ? page.MainClass.Properties : [];
+if subProps.length
+    ul
+        each prop in subProps
+            li
+                a(href=`/tad${prop.slug}`)= prop.slug
+                +pageEntry(prop, admin)
