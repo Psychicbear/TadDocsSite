@@ -6,7 +6,7 @@ if subClasses.length
                 a(href=`/tad${sub.slug}`)= sub.slug
                 if admin
                     form(method="PUT" hx-put=`/tad/${sub.id}?refertype=class&id=${parentId}` hx-target=".type-details" hx-swap="outerHTML")
-                        input(type="text" name="short_description" value=sub.short_description onkeydown="augment_textarea(event)")
+                        input(type="text" placeholder="Short Description" name="short_description" value=sub.short_description onkeydown="augment_textarea(event)")
                 else        
                     span=` - ${sub.short_description}`
 else

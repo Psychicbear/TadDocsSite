@@ -19,8 +19,10 @@ class Index {
      * Renders the top level of the Tad documentation
      */
     async home(req, res) {
+        let edit = false
+        if(req.isAdmin && req.query.editmode) edit = true
         const root = await Page.getRoot();
-        res.render("./pages/view.pug", { page: root, admin: req.isAdmin });
+        res.render("./pages/view.pug", { page: root, admin: req.isAdmin, edit });
     }
 
     /*
@@ -98,6 +100,8 @@ class Index {
         * Renders 404 if page not found.
     */
     async viewPageBySlug(req, res) {
+        let edit = false
+        if(req.isAdmin && req.query.editmode) edit = true
         let slug = ''
         slug += req.params.slug1 ? `/${req.params.slug1}` : ''
         slug += req.params.slug2 ? `/${req.params.slug2}` : ''
@@ -106,7 +110,7 @@ class Index {
 
         const page = await Page.getBySlug(slug);
         if (!page) return res.status(404).send("Page not found");
-        res.render("./pages/view.pug", { page, admin: req.isAdmin });
+        res.render("./pages/view.pug", { page, admin: req.isAdmin, edit });
     }
 
     /*

@@ -1,5 +1,5 @@
 import utils from "../utils/utils.js";
-import { listMethodsById, getMethodDetails, editMethodArgById } from "../models/interfaces/methods.interface.js";
+import { listMethodsById, getMethodDetails, editMethodArgById, editMethodById } from "../models/interfaces/methods.interface.js";
 import { authCheck } from "../utils/utils.auth.js";
 
 /**
@@ -33,9 +33,10 @@ class Methods {
     async editMethod(req, res) {
         if(!authCheck(req,res)) return;
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
-        res.render("./pages/method/edit.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+        let edit = await editMethodById(req.params.methodId, req.body)
+        if(!edit) return res.status(500).send("Error editing method");
+        return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
     }
-
     async editMethodArg(req, res){
         if(!authCheck(req,res)) return;
         const { methodId, argId } = req.params;
@@ -49,6 +50,28 @@ class Methods {
         if(!authCheck(req,res)) return;
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
         res.render("./pages/method/add_argument.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+    }
+
+    // PLACEHOLDER - implement createMethod in models/interfaces/methods.interface.js
+    async createMethod(req, res) {
+        if(!authCheck(req,res)) return;
+        if (!req.params.methodId) return res.status(404).send("No methodId provided");
+        res.render("./pages/method/create_method.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+    }
+
+    // PLACEHOLDER - implement deleteMethod in models/interfaces/methods.interface.js
+    async deleteMethod(req, res) {
+        if(!authCheck(req,res)) return;
+        if (!req.params.methodId) return res.status(404).send("No methodId provided");
+        res.render("./pages/method/delete_method.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+    }
+
+    // PLACEHOLDER - implement deleteMethodArg in models/interfaces/methods.interface.js
+    async deleteMethodArg(req, res) {
+        if(!authCheck(req,res)) return;
+        const { methodId, argId } = req.params;
+        if (!methodId || !argId) return res.status(404).send("No methodId or argId provided");
+        res.render("./pages/method/delete_argument.pug")
     }
 }
 

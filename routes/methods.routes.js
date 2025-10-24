@@ -16,10 +16,36 @@ methods.get(
     expressAsyncHandler(controller.viewMethod)
 )
 
+
+methods.post(
+    "/:methodId",
+    expressAsyncHandler(controller.createMethod)
+)
+
+methods.post(
+    "/:methodId/args/add",
+    expressAsyncHandler(controller.addArgument)
+)
+
+methods.put(
+    "/:methodId",
+    expressAsyncHandler(controller.editMethod)
+)
 methods.put(
     "/:methodId/args/:argId",
     expressAsyncHandler(controller.editMethodArg)
 )
+
+methods.delete(
+    "/:methodId",
+    expressAsyncHandler(controller.deleteMethod)
+);
+methods.delete(
+    "/:methodId/args/:argId",
+    expressAsyncHandler(controller.deleteMethodArg)
+);
+
+
 
 Object.freeze(methods);
 export default methods;

@@ -66,6 +66,24 @@ export async function getMethodDetails(methodId){
     }
 }
 
+export async function editMethodById(methodId, data){
+    const t = await sequelize.transaction();
+    try {
+        const method = await Method.findByPk(methodId,{
+            rejectOnEmpty: true,
+            transaction: t
+        });
+        if(data.return_type) method.return_type = data.return_type;
+        await method.save({transaction: t});
+        await t.commit();
+        return method;
+    } catch (error) {
+        await t.rollback();
+        console.error("Error in editMethodById:", error);
+        return null;
+    }
+}
+
 export async function editMethodArgById(argId, data){
     const t = await sequelize.transaction();
     try {

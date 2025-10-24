@@ -1,11 +1,11 @@
-h2 Arguments
+h3 Arguments
 each arg in args
     if admin
         form(method="PUT" hx-put=`/methods/${methodId}/args/${arg.id}?refertype=method` hx-target=".type-details" hx-swap="outerHTML")
             fieldset(class="grid grid-3col113")
-                input(type="text" name="name" value=arg.name onkeydown="augment_textarea(event)")
-                input(type="text" name="type" value=arg.type onkeydown="augment_textarea(event)")
-                input(type="text" name="description" value=arg.description onkeydown="augment_textarea(event)")
+                input(type="text" placeholder="Name" name="name" value=arg.name onkeydown="augment_textarea(event)")
+                input(type="text" placeholder="Type" name="type" value=arg.type onkeydown="augment_textarea(event)")
+                input(type="text" placeholder="Description" name="description" value=arg.description onkeydown="augment_textarea(event)")
     else
         if arg.type 
             span= arg.name
@@ -15,6 +15,10 @@ each arg in args
                 |  : 
                 span= arg.description
         br
-if !(returns === undefined || returns === null)
-    h2 Returns:
-    span= pageMethod.return_type
+if admin
+    form(method="PUT" hx-put=`/methods/${methodId}?refertype=method` hx-target=".type-details" hx-swap="outerHTML")
+        input(type="text" placeholder="Return Type" name="return_type" value=`${returns ? returns : ""}` onkeydown="augment_textarea(event)")
+else
+    if !(returns === undefined || returns === null)
+        h5 Returns:
+        span= pageMethod.return_type
