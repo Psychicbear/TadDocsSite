@@ -35,3 +35,13 @@ mixin libPath(slug)
     - let parts = slug.split('/').filter(part => part.length > 0).join('.');
     if parts.length > 0
         sub.lineh05="$." + parts
+
+mixin editableField(heading, route, edit=false)
+    div(class=`${heading}` hx-trigger="click[event.target.matches('i')] from:find .toggle-edit" hx-get=`${route}?edit=${!edit}` hx-target=`.${heading}` hx-swap="outerHTML")
+        h4 heading
+        |i(class="material-icons material-icon-button toggle-edit" role="button")= edit ? "check" : "edit"
+        if block
+            block
+
+mixin materialIconButton(iconName, onClick)
+    i(class=`material-icons material-icon-button` role="button" onClick=`${onClick}`)= iconName

@@ -37,7 +37,7 @@ class Index {
         * Views a page by its ID. Renders 404 if not found. Backup method for viewing pages.
     */
     async viewPage(req, res) {
-        const page = await Page.findWithDetails(req.params.pageId);
+        const page = await Page.findByPk(req.params.pageId);
         if (!page) return res.status(404).send("Page not found");
         res.render("./pages/view.pug", { page, admin: req.isAdmin });
     }
@@ -110,7 +110,7 @@ class Index {
 
         const page = await Page.getBySlug(slug);
         if (!page) return res.status(404).send("Page not found");
-        res.render("./pages/view.pug", { page, admin: req.isAdmin, edit });
+        res.render("./pages/layout.pug", { page, admin: req.isAdmin, edit });
     }
 
     /*
@@ -122,14 +122,13 @@ class Index {
         if(!authCheck(req,res)) return;
         const pageId = req.params.pageId;
         const data = req.body;
-        await editPageById(pageId, data);
+        let newdata = await editPageById(pageId, data);
         // return res.redirect(`/tad/${data.slug}`);
         if(req.query.refertype == 'class' && req.query.id){
             // return res.status(200).set('HX-Redirect',`/classes/view/${req.query.id}`);
             return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
         } else{
-            res.status(200).set('HX-Refresh', true);
-            return res.send()
+            return res.render("./pages/view.pug", { page: newdata, admin: req.isAdmin });
         }
     }
 

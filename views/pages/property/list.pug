@@ -1,15 +1,28 @@
 if props.length
-    h3 Properties
-    ul
-        each prop in props
-            li
-                a(href=`/tad${prop.slug}`)= prop.slug
-                if admin
-                    form(method="PUT" hx-put=`/tad/${prop.id}?refertype=class&id=${parentId}` hx-target=".content" hx-swap="outerHTML")
-                        input(type="text" name="short_description" value=prop.short_description onkeydown="augment_textarea(event)")
-                else        
-                    span=` - ${prop.short_description}`
+    div(class="props" hx-trigger="htmx:afterRequest" hx-get=`/properties/list/${parentId}` hx-target=".props" hx-swap="outerHTML")
+        h3 Properties
+        | +materialIconButton('add', 'togglePropForm()')
+        ul
+            each prop in props
+                li
+                    a(href=`/tad${prop.slug}`)= prop.slug
+                    if admin
+                        form(method="PUT" hx-put=`/tad/${prop.id}?refertype=class&id=${parentId}`)
+                            input(type="text" name="short_description" value=prop.short_description onkeydown="augment_textarea(event)")
+                    else        
+                        span=` - ${prop.short_description}`
 else
     if admin
         h3 Properties
         p No properties found.
+
+if admin
+    script.
+        function togglePropForm() {
+            const form = document.getElementById('add-prop-form');
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        }

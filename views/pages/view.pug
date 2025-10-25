@@ -1,87 +1,17 @@
-extends ../base/layout
-include mixins.pug
+if admin
+  form(id="page-edit" method="PUT" hx-put=`/tad/${page.id}` hx-target="#page-edit" hx-swap="outerHTML" class="mb-4")
+    h2.mbottom0 Edit Page
+    small.mbottom10 (press Shift+Enter for newline, Enter to save)
+    div.grid.grid-2col13.mtop1
+      input(type="hidden" name="id" value=page.id)
+      input(type="text" placeholder="Name" name="name" value=page.name onkeydown="augment_textarea(event)")
+      input(type="text" placeholder="Short Description" name="short_description" value=page.short_description onkeydown="augment_textarea(event)")
+      textarea#notes(name="long_description" placeholder="Long Description" onkeydown="augment_textarea(event)" rows="4" style="grid-column: span 2;")= page.long_description
 
-block append styles
-  - icons = ['delete','edit','add_circle','file_upload', 'check'].sort()
-  link(
-    href=`https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,100,1,200&icon_names=${icons.join(',')}&display=swap` 
-    rel="stylesheet")
+else
+  div.flex.justify-between.mb-4
+    div.lineh05.pbottom1
+      h1.lineh05= page.name
+      +libPath(page.slug)
 
-block content
-  div(class="flex" style="justify-content: space-between; align-items: center;")
-    +breadcrumbs(page.slug)
-    if(admin)
-      div(role="group" class="flex3" aria-label="Admin Actions")
-        i(role="button" hx-get=`/tad/create` hx-target="#dialog-container" hx-swap="innerHTML" class="material-symbols-outlined")="add_circle"
-        i(role="button" hx-get=`${(page.name == "$." ? "/tad" : "/tad" + page.slug) + "?editmode=" + !edit }` hx-target=".container" hx-swap="innerHTML" class="material-symbols-outlined")=`${!edit ? "edit" : "check"}`
-        i(role="button" hx-delete=`/tad/${page.id}` hx-confirm="Are you sure you want to delete" class="material-symbols-outlined")="delete"
-        label.btn(for="fileinput" role="button") Upload JS
-        input#fileinput(type="file" role="button" name="file" style="display:none;" class="clickable" accept=".js,.ts")
-        form(id="upload" method="POST" action="/tad/upload"  hx-post="/tad/upload" hx-target="#dialog-container" hx-swap="innerHTML" style="display:inline")
-          input(type="hidden" name="parent_id" value=page.id)
-          input(type="hidden" name="filecontent" value="")
-  if admin
-    form(id="page_edit" method="PUT" hx-put=`/tad/${page.id}` hx-target="body" hx-swap="outerHTML" class="mb-4")
-      h2.mbottom0 Edit Page
-      small.mbottom10 (press Shift+Enter for newline, Enter to save)
-      div.grid.grid-2col13.mtop1
-        input(type="hidden" name="id" value=page.id)
-        input(type="text" placeholder="Name" name="name" value=page.name onkeydown="augment_textarea(event)")
-        input(type="text" placeholder="Short Description" name="short_description" value=page.short_description onkeydown="augment_textarea(event)")
-        textarea#notes(name="long_description" placeholder="Long Description" onkeydown="augment_textarea(event)" rows="4" style="grid-column: span 2;")= page.long_description
-
-  else
-    div.flex.justify-between.mb-4
-      div.lineh05.pbottom1
-        h1.lineh05= page.name
-        +libPath(page.slug)
-
-    p= page.long_description
-
-  block typeDetails 
-    case page.page_type
-      when 'class'
-        div(class="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML")="Loading module details..."
-      when 'property'
-        div(class="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML")="Loading property details..."
-      when 'method'
-        div(class="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML")="Loading method details..."
-
-  h2 Examples
-  if page.CodeExample
-      div.border.rounded.p-4.mb-4
-        h3= page.CodeExample.name
-        pre.bg-gray-100.p-2.rounded
-          code= page.CodeExample.public
-  else
-    p No examples available.
-
-
-  div#dialog-container
-  script.
-    let uploadForm = document.querySelector('#fileinput');
-    uploadForm.addEventListener('change', (event) => {
-      console.log('file selected, submitting form');
-      const file = event.target.files[0];
-      if(file){
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const content = e.target.result;
-          document.querySelector('input[name="filecontent"]').value = content;
-          document.querySelector('#upload').requestSubmit();
-        };
-      
-        reader.readAsText(file);
-      }
-    });
-
-    function augment_textarea(event) { 
-        const target = event.target || event.srcElement;
-        const form = target.closest && target.closest('form') || document.querySelector("#notes_form");
-        if (event.key === 'Enter' && !event.shiftKey) {
-            console.log("Submitting form via augment_textarea");
-            event.preventDefault();
-            form.requestSubmit();  
-            //we give a touch of time for the form to have pulled data.
-        }
-    }
+  p= page.long_description

@@ -8,6 +8,7 @@ const pages = express.Router();
  */
 
 pages.get("/", expressAsyncHandler(controller.home));
+pages.get("/view/:pageId", expressAsyncHandler(controller.viewPage));
 pages.post("/upload", expressAsyncHandler(controller.upload));
 pages.put("/:pageId", expressAsyncHandler(controller.editPage));
 pages.delete("/:pageId", expressAsyncHandler(controller.deletePage));
