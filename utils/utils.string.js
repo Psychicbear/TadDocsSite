@@ -7,6 +7,13 @@ export class UtilsString {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    static lowerFirstLetter(str) {
+        if (typeof str !== 'string' || str.length === 0) {
+            return str;
+        }
+        return str.charAt(0).toLowerCase() + str.slice(1);
+    }
+
     static ipv4FromString(text) {
         // Regular expression to match an IPv4 address
         // It looks for four sets of numbers (0-255) separated by dots.

@@ -9,26 +9,26 @@ import { sequelize } from "./db/sqlConfig.js";
 
 // Associations
 // Page <-> Class (1-to-1 and 1-to-many)
-Page.hasOne(Class, { as: "MainClass", foreignKey: "page_id"});
-Page.hasMany(Class, { as: "SubClasses", foreignKey: "parent_class_id"});
+Page.hasOne(Class, { as: "MainClass", foreignKey: "page_id", onDelete: "CASCADE" });
+Page.hasMany(Class, { as: "SubClasses", foreignKey: "parent_class_id", onDelete: "CASCADE"});
 Class.belongsTo(Page, { as: "MainPage", foreignKey: "page_id" });
 Class.belongsTo(Page, { as: "ParentClass", foreignKey: "parent_class_id" });
 
 // Property <-> Page <-> Class
 Property.belongsTo(Page, { foreignKey: "page_id", as: "MainPage" });
 Property.belongsTo(Class, { foreignKey: "class_id", as: "ParentClass" });
-Class.hasMany(Property, { foreignKey: "class_id", as: "Properties"});
-Page.hasOne(Property, { foreignKey: "page_id", as: "MainProperty"});
+Class.hasMany(Property, { foreignKey: "class_id", as: "Properties", onDelete: "CASCADE"});
+Page.hasOne(Property, { foreignKey: "page_id", as: "MainProperty", onDelete: "CASCADE"});
 
 // Method <-> Page <-> Class
 Method.belongsTo(Page, { foreignKey: "page_id", as: "MainPage" });
 Method.belongsTo(Class, { foreignKey: "class_id", as: "ParentClass" });
-Class.hasMany(Method, { foreignKey: "class_id", as: "Methods"});
-Page.hasOne(Method, { foreignKey: "page_id", as: "MainMethod"});
+Class.hasMany(Method, { foreignKey: "class_id", as: "Methods", onDelete: "CASCADE"});
+Page.hasOne(Method, { foreignKey: "page_id", as: "MainMethod", onDelete: "CASCADE"});
 
 // Argument <-> Method
 Argument.belongsTo(Method, { foreignKey: "method_id", as: "ParentMethod" });
-Method.hasMany(Argument, { foreignKey: "method_id", as: "Arguments"});
+Method.hasMany(Argument, { foreignKey: "method_id", as: "Arguments", onDelete: "CASCADE"});
 
 // Example <-> Page
 Example.hasMany(Page, { foreignKey: "code_example_id", as: "CodeExample" });

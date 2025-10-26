@@ -1,5 +1,6 @@
-import { Class, Method, Argument } from '../index.models.js';
+import { Class, Method, Argument, Page } from '../index.models.js';
 import { sequelize } from '../db/sqlConfig.js';
+import { parseSlug } from './pages.interface.js';
 
 export async function listMethodsById(parentId){
     try {
@@ -100,6 +101,41 @@ export async function editMethodArgById(argId, data){
     } catch (error) {
         await t.rollback();
         console.error("Error in editMethodArgById:", error);
+        return null;
+    }
+}
+
+export async function createMethod(data) {
+    const t = await sequelize.transaction();
+    try {
+        const { name, page_type, parent_id } = data
+
+        const page = await Page.create({
+            name: name,
+            page_type: page_type,
+        }, { transaction: t });
+        if(!page) throw new Error("Failed to create page");
+
+        if(data.slug) page.slug = data.slug;
+        else page.slug = parseSlug(name, name, parent);
+
+        if(data.short_desc) page.short_description = data.short_desc;
+        if(data.long_desc) page.long_description = data.long_desc;
+
+        await page.save({ transaction: t });
+
+        const model = await page.createMainMethod({ class_id: parent_id }, { transaction: t });
+        if(data.return_type) {
+            model.return_type = data.return_type;
+            await model.save({ transaction: t });
+        }
+
+        if(!model) { throw new Error("Failed to create main " + page_type);}
+        await t.commit()
+        return page;
+    } catch (err) {
+        console.error(`Error in creating method ${data.name}:  ${err}`);
+        await t.rollback();
         return null;
     }
 }

@@ -16,7 +16,7 @@ class Page extends Model {
 
   // Get the root "$." page
   static async getRoot() {
-    let page = await this.findOne({ where: { name: "$.", page_type: "class" }, raw: true });
+    let page = await this.findOne({ where: { name: "$", page_type: "class" }, raw: true });
     return page
   }
 
@@ -107,7 +107,7 @@ const PageModel = Page.init(
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+      primaryKey: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -115,7 +115,7 @@ const PageModel = Page.init(
     },
     slug: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true
     },
     short_description: DataTypes.TEXT,
@@ -133,7 +133,7 @@ const PageModel = Page.init(
   {
     sequelize,
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
     freezeTableName: true
   }
 );

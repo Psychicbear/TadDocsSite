@@ -1,5 +1,6 @@
 import { Page, Property, Class } from '../index.models.js';
 import { sequelize } from '../db/sqlConfig.js'
+import { parseSlug } from './pages.interface.js';
 
 export async function getPropDetails(propId) {
     try {
@@ -112,6 +113,41 @@ export async function createPropForModule(pageId, data) {
         return prop;
     } catch (err) {
         console.error("Error in createPropForModule:", err);
+        await t.rollback();
+        return null;
+    }
+}
+
+export async function createProp(data) {
+    const t = await sequelize.transaction();
+    try {
+        const { name, page_type, parent_id } = data
+
+
+        const page = await Page.create({
+            name: name,
+            page_type: page_type,
+        }, { transaction: t });
+        if(!page) throw new Error("Failed to create page");
+
+        if(data.slug) page.slug = data.slug;
+        else page.slug = parseSlug(name, name, parent);
+
+        if(data.short_desc) page.short_description = data.short_desc;
+        if(data.long_desc) page.long_description = data.long_desc;
+
+        await page.save({ transaction: t });
+
+        const model = await page.createMainProperty({ class_id: parent_id }, { transaction: t });
+        if(data.type) model.type = data.type;
+        if(data.default_value) model.default_value = data.default_value;
+        await model.save({ transaction: t });
+
+        if(!model) { throw new Error("Failed to create main " + page_type);}
+        await t.commit()
+        return page;
+    } catch (err) {
+        console.error(`Error in creating prop ${data.name}:  ${err}`);
         await t.rollback();
         return null;
     }

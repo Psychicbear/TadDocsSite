@@ -15,7 +15,8 @@ class Classes {
      * @param {Response} res
      */
     async listSubclasses(req, res) {
-        const subClasses = await listSubById(req.params.parentId)
+        let subClasses = await listSubById(req.params.parentId)
+        subClasses = subClasses || []
         res.render("./pages/class/list.pug", { subClasses: subClasses, admin: req.isAdmin, parentId: req.params.parentId });
     }
 

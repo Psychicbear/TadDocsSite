@@ -5,7 +5,7 @@ import { sequelize } from '../db/sqlConfig.js';
 /*
     * Helper function to parse and generate slug based on input and parent page
 */
-function parseSlug(slug, name, parent){
+export function parseSlug(slug, name, parent){
     let newSlug = slug && slug.trim() !== '' ? slug.trim() : name.trim();
     newSlug = parent.slug === "/" ? parent.slug + newSlug : parent.slug + '/' + newSlug;
 

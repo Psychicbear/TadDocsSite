@@ -22,14 +22,16 @@ mixin breadcrumbs(slug)
         nav(aria-label="breadcrumb" style="--pico-nav-breadcrumb-divider: '.';")
             ul.breadcrumb
                 li
-                    a(href="/tad")='$'
+                    - let parentClass = parts.length === 1 ? "parent" : "";
+                    a(href="/tad" class=`${parentClass}`)='$'
                 each part, index in parts
                     - path += `${part}`;
                     if index === parts.length - 1
                         li=part
                     else
                         li
-                            a(href=`/tad/${path}`)= part
+                            - parentClass = index === parts.length - 2 ? "parent" : "";
+                            a(href=`/tad/${path}` class=`${parentClass}`)= part
 
 mixin libPath(slug)
     - let parts = slug.split('/').filter(part => part.length > 0).join('.');

@@ -3,7 +3,8 @@ if subClasses.length
     ul
         each sub in subClasses
             li
-                a(href=`/tad${sub.slug}`)= sub.slug
+                - console.log(sub)
+                a(href=`/tad${sub.slug}`)= sub.name
                 if admin
                     form(method="PUT" hx-put=`/tad/${sub.id}?refertype=class&id=${parentId}` hx-target=".type-details" hx-swap="outerHTML")
                         input(type="text" placeholder="Short Description" name="short_description" value=sub.short_description onkeydown="augment_textarea(event)")

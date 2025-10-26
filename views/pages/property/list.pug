@@ -5,7 +5,7 @@ if props.length
         ul
             each prop in props
                 li
-                    a(href=`/tad${prop.slug}`)= prop.slug
+                    a(href=`/tad${prop.slug}`)= prop.name
                     if admin
                         form(method="PUT" hx-put=`/tad/${prop.id}?refertype=class&id=${parentId}`)
                             input(type="text" name="short_description" value=prop.short_description onkeydown="augment_textarea(event)")

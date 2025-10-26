@@ -22,7 +22,7 @@ class Index {
         let edit = false
         if(req.isAdmin && req.query.editmode) edit = true
         const root = await Page.getRoot();
-        res.render("./pages/view.pug", { page: root, admin: req.isAdmin, edit });
+        res.render("./pages/layout.pug", { page: root, admin: req.isAdmin, edit });
     }
 
     /*
@@ -139,9 +139,13 @@ class Index {
     */
     async deletePage(req, res) {
         if(!authCheck(req,res)) return;
+        console.log("Deleting page with ID:", req.params.pageId);
         const pageId = req.params.pageId;
-        await deletePageById(pageId);
-        return res.redirect('/tad');
+        let deleted = await deletePageById(pageId);
+        if(!deleted) {
+            return res.status(500).send("Failed to delete page");
+        }
+        return res.status(200).set('HX-Trigger', 'loadParent')
     }
 
     /*

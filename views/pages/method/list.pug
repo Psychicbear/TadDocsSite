@@ -3,7 +3,7 @@ if methods.length
     ul
         each method in methods
             li
-                a(href=`/tad${method.slug}`)= method.slug
+                a(href=`/tad${method.slug}`)= method.name
                 |&#40; 
                 if method.args.length
                 each arg, index in method.args
