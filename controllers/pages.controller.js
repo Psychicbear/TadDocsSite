@@ -1,4 +1,5 @@
 import { parseCode } from "../utils/utils.parse-lib.mjs";
+import { sequelize } from "../models/db/sqlConfig.js";
 import { Page } from "../models/index.models.js";
 import { validatePageFromReq, createPageFromReq, deletePageById, bulkCreatePages, editPageById } from "../models/interfaces/pages.interface.js";
 import { authCheck } from "../utils/utils.auth.js";
@@ -22,7 +23,12 @@ class Index {
         let edit = false
         if(req.isAdmin && req.query.editmode) edit = true
         const root = await Page.getRoot();
-        res.render("./pages/layout.pug", { page: root, admin: req.isAdmin, edit });
+
+        if(req.get('HX-Request')) {
+            return res.render("./pages/view.pug", { page: root, admin: req.isAdmin, edit, loadPageType: true });
+        } else {
+            res.render("./pages/layout.pug", { page: root, admin: req.isAdmin, edit, loadPageType: false } );
+        }
     }
 
     /*
@@ -110,7 +116,11 @@ class Index {
 
         const page = await Page.getBySlug(slug);
         if (!page) return res.status(404).send("Page not found");
-        res.render("./pages/layout.pug", { page, admin: req.isAdmin, edit });
+        if(req.get('HX-Request')) {
+            return res.render("./pages/view.pug", { page, admin: req.isAdmin, edit, loadPageType: true });
+        } else {
+            res.render("./pages/layout.pug", { page, admin: req.isAdmin, edit, loadPageType: false } );
+        }
     }
 
     /*

@@ -49,17 +49,21 @@ block content
             input(type="hidden" name="parent_id" value=page.id)
             input(type="hidden" name="filecontent" value="")
     
+    if !(raw === undefined)
+        ul
+            each item in raw
+                li= JSON.stringify(item.toJSON())
     div(class="page-details" hx-trigger="load" hx-get=`/tad/view/${page.id}` hx-target=".page-details" hx-swap="outerHTML" preload)
         Loading page details...
 
     block typeDetails 
         case page.page_type
             when 'class'
-                div(class="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML" preload)="Loading module details..."
+                div(id="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" preload)="Loading module details..."
             when 'property'
-                div(class="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML" preload)="Loading property details..."
+                div(id="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" preload)="Loading property details..."
             when 'method'
-                div(class="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target=".type-details" hx-swap="innerHTML" preload)="Loading method details..."
+                div(id="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" preload)="Loading method details..."
 
     h2 Examples
     if page.CodeExample

@@ -30,6 +30,7 @@ const MethodModel = Method.init(
   },
   {
     sequelize,
+    paranoid: false,
     timestamps: false,
     freezeTableName: true
   }

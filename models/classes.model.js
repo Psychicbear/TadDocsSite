@@ -25,6 +25,7 @@ const ClassModel = Class.init(
   },
   {
     sequelize,
+    paranoid: false,
     timestamps: false,
     freezeTableName: true
   }

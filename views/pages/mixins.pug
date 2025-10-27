@@ -15,15 +15,15 @@ mixin mainEntry(item, edit=false)
     else        
         div!= item.long_description
 
-mixin breadcrumbs(slug)
-    div.flex2
+mixin breadcrumbs(slug, oob="false")
+    div(id="docs-breadcrumb" class="flex2" hx-swap-oob=`${oob}`)
         - const parts = slug.split('/').filter(part => part.length > 0);
         - let path = '';
         nav(aria-label="breadcrumb" style="--pico-nav-breadcrumb-divider: '.';")
             ul.breadcrumb
                 li
                     - let parentClass = parts.length === 1 ? "parent" : "";
-                    a(href="/tad" class=`${parentClass}`)='$'
+                    a(href="/tad" class=`${parentClass}` hx-get=`/tad` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")='$'
                 each part, index in parts
                     - path += `${part}`;
                     if index === parts.length - 1
@@ -31,7 +31,7 @@ mixin breadcrumbs(slug)
                     else
                         li
                             - parentClass = index === parts.length - 2 ? "parent" : "";
-                            a(href=`/tad/${path}` class=`${parentClass}`)= part
+                            a(href=`/tad/${path}` class=`${parentClass}` hx-get=`/tad/${path}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= part
 
 mixin libPath(slug)
     - let parts = slug.split('/').filter(part => part.length > 0).join('.');

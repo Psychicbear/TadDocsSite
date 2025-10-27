@@ -199,7 +199,7 @@ export async function deletePageById(id) {
         const page = await Page.findByPk(id, { transaction: t });
         if(!page) throw new Error("Page not found");
 
-        const destroy = await page.destroy({ transaction: t });
+        const destroy = await page.destroy({ transaction: t, force: true });
         if(!destroy) throw new Error("Failed to delete page");
 
         await t.commit();

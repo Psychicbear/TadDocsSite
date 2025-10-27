@@ -34,6 +34,7 @@ const ArgumentModel = Argument.init(
   },
   {
     sequelize,
+    paranoid: false,
     timestamps: false,
     freezeTableName: true
   }

@@ -28,6 +28,7 @@ const PropertyModel = Property.init(
   {
     sequelize,
     timestamps: false,
+    paranoid: false,
     freezeTableName: true
   }
 );

@@ -54,7 +54,7 @@ const NoteModal = Note.init(
     {
         sequelize,
         timestamps: true,
-        paranoid: true,
+        paranoid: false,
         hooks: {},
         freezeTableName: true
     }

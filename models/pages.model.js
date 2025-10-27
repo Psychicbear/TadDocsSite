@@ -17,12 +17,12 @@ class Page extends Model {
   // Get the root "$." page
   static async getRoot() {
     let page = await this.findOne({ where: { name: "$", page_type: "class" }, raw: true });
-    return page
+    return await this.findWithDetails(page);
   }
 
   static async getBySlug(slug) {
     let page = await this.findOne({ where: { slug: slug }, raw: true });
-    return page
+    return await this.findWithDetails(page);
   }
 
   // Get a page with subtype-specific details
