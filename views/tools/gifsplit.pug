@@ -1,0 +1,46 @@
+extends ../base/layout.pug
+
+block append styles
+    - icons = ['delete','edit','add_circle','file_upload', 'check'].sort()
+    link(
+        href=`https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,100,1,200&icon_names=${icons.join(',')}&display=swap` 
+        rel="stylesheet")
+    style.
+        .material-icon-button {
+        display: inline-flex; /* Align icon and text if present */
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0; /* Example background color */
+        color: #333; /* Example icon color */
+        border: none;
+        border-radius: 50%; /* For a circular button */
+        width: 48px; /* Example size */
+        height: 48px; /* Example size */
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.3s ease; /* Smooth hover effect */
+        }
+
+        .material-icon-button:hover {
+        background-color: #e0e0e0; /* Hover background color */
+        }
+
+        .material-icon-button:active {
+        background-color: #d0d0d0; /* Active background color */
+        }
+
+        .material-icon-button .material-icons {
+        font-size: 24px; /* Icon size */
+        }
+//- block subnav 
+//-     ul
+//-         li
+
+block scripts
+    script(src="/js/jszip.js" defer)
+    script(src="/js/FileSaver.js" defer)
+    script(src="/js/gifsplitter.js" defer)
+       
+
+block append content
+    gif-splitter

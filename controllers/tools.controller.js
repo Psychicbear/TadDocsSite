@@ -5,7 +5,7 @@ import utils from "../utils/utils.js";
  * @typedef {import('../utils/types.mjs').ExpressResponse} Response
  */
 
-class Apps {
+class Tools {
     constructor() {} //generally the constructor is going to be empty since we don't really want our controller calls sharing state if we can avoid it.
 
     /**
@@ -14,15 +14,15 @@ class Apps {
      * @param {Response} res
      */
     async gifsplit(req, res) {
-        res.render("./apps/gifsplit.pug");
+        res.render("./tools/gifsplit.pug");
     }
 
     async spritesplit(req, res) {
-        res.render("./apps/spritesplit.pug");
+        res.render("./tools/spritesplit.pug");
     }
 }
 
 //instantiate our one instance of app controller
-const app_controller = new Apps();
+const tool_controller = new Tools();
 
-export default app_controller;
+export default tool_controller;

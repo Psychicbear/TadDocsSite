@@ -11,7 +11,7 @@ import './models/index.models.js';
 
 import index from './routes/index.routes.js';
 import notes from './routes/notes.routes.js';
-import apps from './routes/apps.routes.js';
+import tools from './routes/tools.routes.js';
 import pages from './routes/pages.routes.js';
 import examples from './routes/examples.routes.js';
 import classes from './routes/classes.routes.js';
@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 // ------ BIND ROUTES ------
 app.use('/', index);
 app.use('/notes', notes);
-app.use('/apps', apps)
+app.use('/tools', tools)
 app.use('/tad', pages)
 app.use('/examples', examples)
 app.use('/classes', classes)
