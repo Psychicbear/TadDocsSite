@@ -39,21 +39,15 @@ block content
     div(class="flex" style="justify-content: space-between; align-items: center;")
         +breadcrumbs(page.slug)
         if admin
-        div(role="group" class="flex3" aria-label="Admin Actions")
-            i(role="button" hx-get=`/tad/create` hx-target="#dialog-container" hx-swap="innerHTML" class="material-symbols-outlined")="add_circle"
-            i(role="button" hx-get=`${(page.name == "$." ? "/tad" : "/tad" + page.slug) + "?editmode=" + !edit }` hx-target=".container" class="material-symbols-outlined")=`${!edit ? "edit" : "check"}`
-            i(role="button" hx-delete=`/tad/${page.id}` hx-confirm="Are you sure you want to delete" class="material-symbols-outlined" hx-on:loadParent="document.querySelector('.parent').click()")="delete"
+        div(class="flex1" aria-label="Admin Actions")
             label.btn(for="fileinput" role="button") Upload JS
             input#fileinput(type="file" role="button" name="file" style="display:none;" class="clickable" accept=".js,.ts")
             form(id="upload" method="POST" action="/tad/upload"  hx-post="/tad/upload" hx-target="#dialog-container" hx-swap="innerHTML" style="display:inline")
-            input(type="hidden" name="parent_id" value=page.id)
-            input(type="hidden" name="filecontent" value="")
+                input(type="hidden" name="parent_id" value=page.id)
+                input(type="hidden" name="filecontent" value="")
     
-    if !(raw === undefined)
-        ul
-            each item in raw
-                li= JSON.stringify(item.toJSON())
-    div(class="page-details" hx-trigger="load" hx-get=`/tad/view/${page.id}` hx-target=".page-details" hx-swap="outerHTML" preload)
+
+    div(id="page-details" hx-trigger="load" hx-get=`/tad/view/${page.id}` hx-target="#page-details" hx-swap="outerHTML" preload)
         Loading page details...
 
     block typeDetails 

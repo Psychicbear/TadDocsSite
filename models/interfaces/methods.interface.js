@@ -139,3 +139,20 @@ export async function createMethod(data) {
         return null;
     }
 }
+
+export async function deleteMethodById(methodId) {
+    const t = await sequelize.transaction();
+    try {
+        const method = await Method.findOne({ where: { page_id: methodId }, transaction: t });
+        if(!method) throw new Error("Method not found");
+
+        await method.destroy({ transaction: t, force: true });
+
+        await t.commit();
+        return true;
+    } catch (error) {
+        await t.rollback();
+        console.error("Error in deleteMethodById:", error);
+        return false;
+    }
+}

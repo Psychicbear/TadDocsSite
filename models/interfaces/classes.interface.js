@@ -66,3 +66,21 @@ export async function createClass(data) {
         return null;
     }
 }
+
+
+export async function deleteClassById(classId) {
+    const t = await sequelize.transaction();
+    try {
+        const cls = await Class.findOne({ where: { page_id: classId }, transaction: t });
+        if(!cls) throw new Error("Class not found");
+
+        await cls.destroy({ transaction: t, force: true });
+
+        await t.commit();
+        return true;
+    } catch (error) {
+        await t.rollback();
+        console.error("Error in deleteClassById:", error);
+        return false;
+    }
+}

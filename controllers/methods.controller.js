@@ -1,5 +1,5 @@
 import utils from "../utils/utils.js";
-import { listMethodsById, getMethodDetails, editMethodArgById, editMethodById } from "../models/interfaces/methods.interface.js";
+import { listMethodsById, getMethodDetails, editMethodArgById, editMethodById, deleteMethodById } from "../models/interfaces/methods.interface.js";
 import { authCheck } from "../utils/utils.auth.js";
 
 /**
@@ -63,7 +63,19 @@ class Methods {
     async deleteMethod(req, res) {
         if(!authCheck(req,res)) return;
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
-        res.render("./pages/method/delete_method.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+
+        const result = await deleteMethodById(req.params.methodId);
+        if(result){
+
+            let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
+            if(!(req.query.referrer === undefined) && req.query.referrer === "page"){
+                console.log("Redirecting to:", redir);
+                if(req.get("HX-Request")) {
+                    res.status(204).set('HX-Redirect', redir).send();
+                } else return res.status(200).redirect(redir);
+            }
+
+        } else return res.status(500).send("Failed to delete method");
     }
 
     // PLACEHOLDER - implement deleteMethodArg in models/interfaces/methods.interface.js
@@ -71,7 +83,6 @@ class Methods {
         if(!authCheck(req,res)) return;
         const { methodId, argId } = req.params;
         if (!methodId || !argId) return res.status(404).send("No methodId or argId provided");
-        res.render("./pages/method/delete_argument.pug")
     }
 }
 

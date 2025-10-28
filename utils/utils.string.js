@@ -14,6 +14,12 @@ export class UtilsString {
         return str.charAt(0).toLowerCase() + str.slice(1);
     }
 
+    static getPrevUrl(url) {
+        let parts = url.split("/");
+        parts.pop(); // Remove last part
+        return parts.join("/");
+    }
+
     static ipv4FromString(text) {
         // Regular expression to match an IPv4 address
         // It looks for four sets of numbers (0-255) separated by dots.

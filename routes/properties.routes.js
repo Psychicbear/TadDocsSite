@@ -9,7 +9,7 @@ const props = express.Router();
 props.get("/view/:propId", expressAsyncHandler(controller.viewProp));
 props.get("/list/:parentId", expressAsyncHandler(controller.listProps));
 props.put("/:propId", expressAsyncHandler(controller.editProp));
-props.post("/", expressAsyncHandler(controller.createProp));
+props.post("/:parentId", expressAsyncHandler(controller.createProp));
 props.delete("/:propId", expressAsyncHandler(controller.deleteProp));
 
 Object.freeze(props);

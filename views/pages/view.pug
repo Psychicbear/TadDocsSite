@@ -1,14 +1,24 @@
 include mixins.pug
 div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-target="#page-details" hx-swap="outerHTML" preload)
   if admin
-    form(id="page-edit" method="PUT" hx-put=`/tad/${page.id}` hx-target="#page-edit" hx-swap="outerHTML" class="mb-4")
-      h2.mbottom0 Edit Page
-      small.mbottom10 (press Shift+Enter for newline, Enter to save)
-      div.grid.grid-2col13.mtop1
-        input(type="hidden" name="id" value=page.id)
-        input(type="text" placeholder="Name" name="name" value=page.name onkeydown="augment_textarea(event)")
-        input(type="text" placeholder="Short Description" name="short_description" value=page.short_description onkeydown="augment_textarea(event)")
-        textarea#notes(name="long_description" placeholder="Long Description" onkeydown="augment_textarea(event)" rows="4" style="grid-column: span 2;")= page.long_description
+    - let delSlug = "/"
+    case page.page_type
+      when 'class': - delSlug += "classes/"
+      when 'method': - delSlug += "methods/"
+      when 'property': - delSlug += "properties/"
+    div.flex.justify-between.mb-4
+      div.flex3
+        h2.mbottom0 Edit Page
+        small.mbottom10 (press Shift+Enter for newline, Enter to save)
+      div(role="group").flex1
+        i(role="button" hx-get=`/tad/create` hx-target="#dialog-container" hx-swap="innerHTML" class="material-symbols-outlined")="add_circle"
+        i(role="button" hx-get=`${(page.name == "$." ? "/tad" : "/tad" + page.slug) + "?editmode=" + !edit }` hx-target=".container" class="material-symbols-outlined")=`${!edit ? "edit" : "check"}`
+        i(role="button" id="page-delete" hx-delete=delSlug+page.id+"?referrer=page" hx-confirm="Are you sure you want to delete" class="material-symbols-outlined" hx-swap="outerHTML")="delete"
+    form(id="page-edit" method="PUT" hx-put=`/tad/${page.id}` hx-target="#page-edit" hx-swap="outerHTML" class="mb-4").grid.grid-2col13.mtop1
+      input(type="hidden" name="id" value=page.id)
+      input(type="text" placeholder="Name" name="name" value=page.name onkeydown="augment_textarea(event)")
+      input(type="text" placeholder="Short Description" name="short_description" value=page.short_description onkeydown="augment_textarea(event)")
+      textarea#notes(name="long_description" placeholder="Long Description" onkeydown="augment_textarea(event)" rows="4" style="grid-column: span 2;")= page.long_description
 
   else
     div.flex.justify-between.mb-4

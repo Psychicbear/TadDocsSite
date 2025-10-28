@@ -51,9 +51,18 @@ class Properties {
     async deleteProp(req, res) {
         if(!authCheck(req,res)) return;
         if (!req.params.propId) return res.status(404).send("No propId provided");
-        let del = await deletePropById(req.params.propId);
-        if(!del) return res.status(500).send("Error deleting property");
-        return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
+        
+        const result = await deletePropById(req.params.propId);
+        if(result){
+            let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
+            if(!(req.query.referrer === undefined) && req.query.referrer === "page"){
+                console.log("Redirecting to:", redir);
+                if(req.get("HX-Request")) {
+                    res.status(204).set('HX-Redirect', redir).send();
+                } else return res.status(200).redirect(redir);
+            }
+
+        } else return res.status(500).send("Failed to delete method");
     }
 }
 

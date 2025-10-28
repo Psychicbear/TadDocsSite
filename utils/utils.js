@@ -2,6 +2,7 @@ import nanoid from "./utils.nanoid.js";
 import assert from "./utils.assert.js";
 import log from "./utils.log.js";
 import pages from "./utils.pages.js";
+import { UtilsString } from "./utils.string.js";
 
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -18,6 +19,7 @@ class Util {
         this.log = log;
         this.assert = assert;
         this.nano = nanoid;
+        this.str = UtilsString
     }
 }
 

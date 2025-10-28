@@ -22,6 +22,7 @@ class Page extends Model {
 
   static async getBySlug(slug) {
     let page = await this.findOne({ where: { slug: slug }, raw: true });
+    if(!page) return null;
     return await this.findWithDetails(page);
   }
 
