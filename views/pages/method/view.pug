@@ -15,15 +15,16 @@ div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/methods/view/${
         button(type="submit") Add Argument
     if args.length
         each arg in args
-            if arg.type 
-                span= arg.name
-                | "-"
-                span= arg.type
-                |  : 
-                span= arg.description
+            div.argument-item
+                h5
+                    span= arg.name
+                    | : 
+                    span= arg.type
+                    |  -  
+                    span= arg.description
     if !(returns === undefined || returns === null)
-        h5 Returns:
-        span= pageMethod.return_type
+        h5 Returns: 
+            span= returns
     
     div.editTypeDetails.hidden
         h4 Arguments

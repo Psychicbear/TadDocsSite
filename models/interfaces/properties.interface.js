@@ -88,7 +88,7 @@ export async function deletePropById(id) {
     }
 }
 
-export async function createPropForModule(pageId, data) {
+export async function createPropForModule(data) {
     const t = await sequelize.transaction();
     try {
         const { name, page_type, parent_id } = data

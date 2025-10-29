@@ -1,9 +1,14 @@
-div(id="type-details" hx-trigger="typeReload" hx-get=`/properties/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML")
-    if admin
-        form(method="PUT" hx-put=`/properties/${propId}?refertype=property` hx-target=".type-details" hx-swap="outerHTML")
+div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/properties/view/${propId}` hx-target="#type-details" hx-swap="outerHTML")
+    div.editTypeDetails.hidden
+        h4 Type Details
+            i(role="button" class="material-symbols-outlined" onclick="toggleEditTypeDetails(event)") cancel    
+        form(method="PUT" hx-put=`/properties/${propId}?refertype=page` hx-target="#type-details" hx-swap="outerHTML")
             fieldset(class="grid grid-3col113")
                 input(type="text" placeholder="Type" name="type" value=prop.type onkeydown="augment_textarea(event)")
                 input(type="text" placeholder="Default Value" name="default_value" value=prop.default_value onkeydown="augment_textarea(event)")
-    h5=`Type: ${prop.type}`
-    if prop.default_value
-        h5=`Default Value: ${prop.default_value}`
+    div.viewTypeDetails
+        if admin 
+            i(role="button" class="material-symbols-outlined" onclick="toggleEditTypeDetails(event)") edit
+        h5=`Type: ${prop.type}`
+        if prop.default_value
+            h5=`Default Value: ${prop.default_value}`

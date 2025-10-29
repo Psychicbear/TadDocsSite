@@ -41,7 +41,7 @@ class Methods {
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
         let edit = await editMethodById(req.params.methodId, req.body)
         if(!edit) return res.status(500).send("Error editing method");
-        return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
+        return res.status(200).set('HX-Refresh', 'true').send()
     }
     async editMethodArg(req, res){
         if(!authCheck(req,res)) return;
@@ -49,7 +49,7 @@ class Methods {
         if (!methodId || !argId) return res.status(404).send("No methodId or argId provided");
         let edit = await editMethodArgById(argId, req.body)
         if(!edit) return res.status(500).send("Error editing argument");
-        return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
+        return res.status(200).set('HX-Refresh', 'true').send()
     }
 
     async addArgument(req, res) {

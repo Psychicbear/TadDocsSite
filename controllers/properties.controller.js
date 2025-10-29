@@ -37,7 +37,7 @@ class Properties {
         if (!req.params.propId) return res.status(404).send("No propId provided");
         let edit = await editPropById(req.params.propId, req.body)
         if(!edit) return res.status(500).send("Error editing property");
-        return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
+        return res.status(206).set('HX-Refresh', 'true').send()
     }
 
     async addPropForm(req, res) {
@@ -61,7 +61,8 @@ class Properties {
         const result = await deletePropById(req.params.propId);
         if(result){
             if(req.query.referrer === "parent"){
-                res.status(200).set("HX-Trigger", "methodReload").send();
+                return res.status(206).set('HX-Refresh', 'true').send()
+                // res.status(200).set("HX-Trigger", "methodReload").send();
             }else if(req.query.referrer === "page"){
                 let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
                 console.log("Redirecting to:", redir);

@@ -1,6 +1,7 @@
 node_modules/
 .env
 models/db/database.sqlite
-models/db/backups/
+models/db/backup/
+models/db/tad/
 .github/
 license.key

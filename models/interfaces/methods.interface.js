@@ -161,6 +161,14 @@ export async function createMethodFromReq(data) {
             await model.save({ transaction: t });
         }
 
+        if(data.arg_name && data.arg_type) {
+            let arg = null
+            for(let i = 0; i < data.arg_name.length; i++) {
+                arg = await model.createArgument({ name: data.arg_name[i].trim(), type: data.arg_type[i].trim(), arg_index: i , description: data.arg_desc[i] }, { transaction: t });
+                if(!arg) throw new Error("Failed to create argument");
+            }
+        }
+
         if(!model) { throw new Error("Failed to create main " + page_type);}
         await t.commit()
         return page;
