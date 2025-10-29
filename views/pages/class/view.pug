@@ -1,5 +1,5 @@
-div(id="type-details" hx-trigger="typeReload" hx-get=`/classes/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML" preload)
-    div(class="modules", hx-trigger="load" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".modules" preload)
+div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/classes/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML" preload)
+    div(class="modules", hx-trigger="load, classReload from:body" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".modules" preload)
         h3 Modules
         p="Loading modules..."
     div(class="methods", hx-trigger="load" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".methods" preload)

@@ -11,7 +11,7 @@ export async function listMethodsById(parentId){
                     attributes: ['page_id', 'return_type'],
                     include: [{
                         association: "MainPage", 
-                        attributes: ['name', 'short_description', 'slug']
+                        attributes: ['name', 'page_type', 'short_description', 'slug']
                     }]
                 },
             ],

@@ -26,7 +26,7 @@ export async function listPropsById(classId) {
             transaction: t, 
             include: [{
                 model: Page, as: 'MainPage',
-                attributes: ['id', 'name', 'short_description', 'slug']
+                attributes: ['id', 'page_type', 'name', 'short_description', 'slug']
             }],
             raw: true,
             nest: true 

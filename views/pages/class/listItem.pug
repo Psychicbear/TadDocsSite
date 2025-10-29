@@ -1,0 +1,21 @@
+li.item
+    if admin
+        div.viewItem.flex
+            div.flex3
+                a(href=`/tad${sub.slug}` hx-get=`/tad${sub.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= sub.name
+                span=` - ${sub.short_description}`
+            div(role="group").flex1.text-right
+                i(role="button" title="Edit Module" onclick=`toggleEdit(event)`).material-symbols-outlined edit
+                i(role="button" title="Delete Module" onclick="cancelEdit(event)").material-symbols-outlined delete 
+        div.editItem.hidden
+            form(id="edit-item" method="PUT" hx-put=`/tad/${sub.id}?referrer=class` hx-on:htmx:before-send="event.target.closest('.item').remove()" hx-target="#type-details" hx-swap="outerHTML")
+                div.grid.grid12.grid-gap0.m-bottom1   
+                    input(style="grid-column: 1/3;" type="text" placeholder="Name" name="Name" value=sub.name onkeydown="augment_textarea(event)")
+                    input(style="grid-column: 3/12;" type="text" placeholder="Short Description" name="short_description" value=sub.short_description onkeydown="augment_textarea(event)")
+                    fieldset(style="grid-column: 12;").flex
+                        i(role="button" type="submit" title="Confirm Edit").material-symbols-outlined.flex1 check
+                        i(role="button" title="Cancel Edit" onclick="toggleEdit(event)").material-symbols-outlined.flex1 cancel
+    else
+        div.flex
+            a(href=`/tad${sub.slug}` hx-get=`/tad${sub.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= sub.name
+            span=` - ${sub.short_description}`

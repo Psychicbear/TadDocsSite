@@ -21,12 +21,33 @@ async function seed() {
     console.log(files);
     await sequelize.sync({ force: true }); // Reset DB
 
+    await Example.create(
+    {
+        name: "one",
+        public: "print('hi')",
+        private: "console.log('hi')",
+    })
+
+    const exampleItem = await Example.create(
+    {
+        name: "two",
+        public: "shape.rectangle(20,20,20,20)",
+        private: `import { tad, shape } from "/js/lib/TeachAndDraw.js";
+
+        tad.use(update);
+        console.log(tad, document.querySelector("#myCanvas"));
+        tad.w=280;
+        tad.h=280;
+        function update() {shape.border="#282c34";shape.colour="#282c34";shape.rectangle(tad.w/2,tad.h/2,tad.w,tad.h);shape.colour="blue";shape.rectangle(50,50,50,tad.h);}`,
+    })
+
     const classPage = await Page.create({
         name: "$",
         slug: "/",
         short_description: "$ is the core of Teach and Draw. Through the $ we can access all of the libraries functionality.",
         long_description: "$ is the core of Teach and Draw. Through the $ we can access all of the libraries functionality.",
-        page_type: "class"
+        page_type: "class",
+        code_example_id: exampleItem.id,
     });
 
     await classPage.createMainClass({

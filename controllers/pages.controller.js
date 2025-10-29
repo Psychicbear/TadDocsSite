@@ -134,9 +134,8 @@ class Index {
         const data = req.body;
         let newdata = await editPageById(pageId, data);
         // return res.redirect(`/tad/${data.slug}`);
-        if(req.query.refertype == 'class' && req.query.id){
-            // return res.status(200).set('HX-Redirect',`/classes/view/${req.query.id}`);
-            return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
+        if(req.query.refertype == 'class'){
+            return res.status(200).set('HX-Location', {"typeReload": {"target": ".modules"}})
         } else{
             return res.render("./pages/view.pug", { page: newdata, admin: req.isAdmin });
         }

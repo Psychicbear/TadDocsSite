@@ -1026,6 +1026,10 @@ html body .minh15 {
     grid-gap: 1rem;
 }
 
+.grid12 {
+    grid-template-columns: repeat(12, 1fr);
+}
+
 /** row gap */
 
 .rowgap0 {

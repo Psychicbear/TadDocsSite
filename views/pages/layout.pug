@@ -2,7 +2,7 @@ extends ../base/layout
 include mixins.pug
 
 block append styles
-    - icons = ['delete','edit','add_circle','file_upload', 'check'].sort()
+    - icons = ['delete','edit','add_circle','file_upload', 'check', 'add', 'cancel'].sort()
     link(
         href=`https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,100,1,200&icon_names=${icons.join(',')}&display=swap` 
         rel="stylesheet")
@@ -33,6 +33,11 @@ block append styles
         .material-icon-button .material-icons {
         font-size: 24px; /* Icon size */
         }
+
+        ul .item {
+            list-style-type: none;
+        }
+
 
 
 block content
@@ -69,6 +74,7 @@ block content
         p No examples available.
 
 
+
     div#dialog-container
     script.
         let uploadForm = document.querySelector('#fileinput');
@@ -97,3 +103,19 @@ block content
                 //we give a touch of time for the form to have pulled data.
             }
         }
+
+        function toggleEdit(event){
+            event.preventDefault();
+            console.log(event.target)
+            const item = event.target.closest('.item')
+            console.log(item)
+            item.querySelector('.viewItem').classList.toggle('hidden');
+            item.querySelector('.editItem').classList.toggle('hidden');
+        }
+
+        function submitEdit(event){
+            event.preventDefault();
+            const form = event.target.closest('form');
+            form.requestSubmit();
+        }
+

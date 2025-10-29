@@ -11,7 +11,7 @@ export async function listSubById(parentClassId){
             transaction: t, 
             include: [{
                 model: Page, as: 'MainPage',
-                attributes: ['id', 'name', 'short_description', 'slug'],
+                attributes: ['id', 'name', 'page_type', 'short_description', 'slug'],
             }],
             raw: true,
             nest: true 
