@@ -178,7 +178,7 @@ export async function editPageById(id, data) {
         if(!update) throw new Error("Failed to update page");
 
         await t.commit();
-        console.log("Updated page:", update);
+        console.log("Page updated successfully with new data: ", data);
         return update;
 
     } catch (err) {
@@ -189,7 +189,7 @@ export async function editPageById(id, data) {
 }
 
 /*
-    * Deletes a page by its ID. NOT YET WORKING.
+    * Deletes a page by its ID.
     * Uses sequelize transactions to ensure data integrity, rolling back on failure.
     * Returns the destroyed Page instance on success, or null on failure.
 */

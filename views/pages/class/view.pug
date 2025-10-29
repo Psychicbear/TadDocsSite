@@ -1,11 +1,11 @@
 div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/classes/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML" preload)
-    div(class="modules", hx-trigger="load, classReload from:body" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".modules" preload)
+    div(class="class-list", hx-trigger="load, classReload from:body" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".class-list" )
         h3 Modules
         p="Loading modules..."
-    div(class="methods", hx-trigger="load" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".methods" preload)
+    div(class="method-list", hx-trigger="load, methodReload from:body" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".method-list" )
         h3 Methods
         p="Loading methods..."
-    div(class="properties", hx-trigger="load" hx-get=`/properties/list/${parentId}` hx-swap="innerHTML" hx-target=".properties" preload)
+    div(class="property-list", hx-trigger="load, propertyReload from:body" hx-get=`/properties/list/${parentId}` hx-swap="innerHTML" hx-target=".property-list" )
         h3 Properties
         p="Loading methods..."
                 

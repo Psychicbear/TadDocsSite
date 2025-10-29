@@ -16,14 +16,7 @@ export async function listSubById(parentClassId){
             raw: true,
             nest: true 
         });
-        console.log(subclasses)
-        /*
-            Expected result format:
-            [
-                { "Page": { "id": 11, "name": "Subclass A Page", "short_description": "...", slug: "/parent/subclass-a" },
-                { "Page": { "id": 12, "name": "Subclass B Page", "short_description": "...", slug: "/parent/subclass-b" },
-            ]
-        */
+
         let flattened = subclasses.map(subclass => subclass.MainPage)
         await t.commit();
         return flattened;
@@ -38,6 +31,7 @@ export async function createClass(data) {
     const t = await sequelize.transaction();
     try {
         const { name, page_type, parent_id } = data
+        console.log("Creating class with data:", data);
 
 
         const page = await Page.create({
@@ -47,7 +41,12 @@ export async function createClass(data) {
         if(!page) throw new Error("Failed to create page");
 
         if(data.slug) page.slug = data.slug;
-        else page.slug = parseSlug(name, name, parent);
+        else { 
+            let parent = await Page.findByPk(parent_id);
+            if(!parent) throw new Error("Parent page not found");
+            
+            page.slug = parseSlug(name, name, parent);
+        }
 
         console.log("Creating class page with slug:", page.slug);
         if(data.short_desc) page.short_description = data.short_desc;

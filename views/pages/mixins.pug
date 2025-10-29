@@ -1,20 +1,4 @@
 
-//- Draws editable description for linked page entry if in edit mode
-mixin pageEntry(item, edit=false)
-    if edit
-        form(method="PUT" hx-put=`/tad/${item.MainPage.id}` hx-target=".content" hx-swap="outerHTML")
-            input(type="text" name="short_description" value=item.MainPage.short_description onkeydown="augment_textarea(event)")
-    else        
-        span=` - ${item.MainPage.short_description}`
-
-//- WIP: Draws main description for linked page entry if in edit mode
-mixin mainEntry(item, edit=false)
-    if edit
-        form(method="PUT" hx-put=`/tad/${item.id}` hx-target="body" hx-swap="outerHTML")
-            textarea(name="long_desc" onkeydown="augment_textarea(event)")= item.long_description
-    else        
-        div!= item.long_description
-
 mixin breadcrumbs(slug, oob="false")
     div(id="docs-breadcrumb" class="flex2" hx-swap-oob=`${oob}`)
         - const parts = slug.split('/').filter(part => part.length > 0);
@@ -23,9 +7,9 @@ mixin breadcrumbs(slug, oob="false")
             ul.breadcrumb
                 li
                     if (parts.length === 1)
-                        a(href="/tad" id="parent" hx-trigger="click, deletePageSuccess from:body" hx-get=`/tad` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")='$'
+                        a(href="/tad" id="parent" hx-trigger="click, deletePageSuccess from:body" hx-get=`/tad` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")='tad'
                     else
-                        a(href="/tad" hx-get=`/tad` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")='$'
+                        a(href="/tad" hx-get=`/tad` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")='tad'
                 each part, index in parts
                     - path += `${part}`;
                     if index === parts.length - 1
@@ -50,3 +34,33 @@ mixin editableField(heading, route, edit=false)
 
 mixin materialIconButton(iconName, onClick)
     i(class=`material-icons material-icon-button` role="button" onClick=`${onClick}`)= iconName
+
+
+mixin editableLi(page)
+    li(id=page.id hx-swap="innerHTML").item
+        if admin
+            - let delSlug = "/"
+            case page.page_type
+                when 'class': - delSlug += "classes/"
+                when 'method': - delSlug += "methods/"
+                when 'property': - delSlug += "properties/"
+            - delSlug += page.id + "?referrer=parent"
+            div.viewItem.flex
+                div.flex3
+                    a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= page.name
+                    span=` - ${page.short_description}`
+                div(role="group").flex1.text-right
+                    i(role="button" title="Edit Module" onclick=`toggleEditItem(event)`).material-symbols-outlined edit
+                    i(role="button" title="Delete Module" hx-delete=delSlug hx-confirm=`Are you sure you want to delete ${page.name}`).material-symbols-outlined delete 
+            div.editItem.hidden
+                form(id="edit-item" method="PUT" hx-put=`/tad/${page.id}?referrer=class&type=${page.page_type}` hx-on:htmx:before-send="toggleEditItem(event)")
+                    div.grid.grid12.grid-gap0.m-bottom1   
+                        input(style="grid-column: 1/3;" type="text" placeholder="Name" name="Name" value=page.name onkeydown="augment_textarea(event)")
+                        input(style="grid-column: 3/12;" type="text" placeholder="Short Description" name="short_description" value=page.short_description onkeydown="augment_textarea(event)")
+                        //- fieldset(style="grid-column: 12;").flex
+                            //- i(role="button" type="submit" title="Confirm Edit").material-symbols-outlined.flex1 check
+                        i(style="grid-column: 12;" role="button" title="Cancel Edit" onclick="toggleEditItem(event)").material-symbols-outlined.flex1 cancel
+        else
+            div.flex
+                a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= page.name
+                span=` - ${page.short_description}`

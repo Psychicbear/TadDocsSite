@@ -1,4 +1,4 @@
-div(id="type-details" hx-trigger="typeReload" hx-get=`/properties/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML" preload)
+div(id="type-details" hx-trigger="typeReload" hx-get=`/properties/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML")
     if admin
         form(method="PUT" hx-put=`/properties/${propId}?refertype=property` hx-target=".type-details" hx-swap="outerHTML")
             fieldset(class="grid grid-3col113")

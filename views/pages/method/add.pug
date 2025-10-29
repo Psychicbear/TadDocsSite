@@ -1,0 +1,47 @@
+article
+    form(
+        id="method_form"
+        hx-post="/methods"
+        hx-on::after-request="if(event.detail.successful) this.reset(); this.closest('.add-item').classList.toggle('hidden'); this.closest('section').querySelector('.add-button').classList.toggle('hidden');"
+    )
+        section
+            input(type="hidden" name="page_type" value="method")
+            input(type="hidden" name="parent_id" value=parentId)
+            label(for="name") Page Name
+            input(type="text" pattern="^[a-zA-Z_$][a-zA-Z0-9_$]*$" name="name" placeholder="Name of page" value="Pixel" required)
+            label(for="short_desc") Short Description
+            input(type="text" name="short_desc" placeholder="Short description" value="pixel short desc" required)
+            label(for="long_desc") Long Description
+            textarea(name="long_desc" placeholder="Long description" rows="4" value="pixel long desc" required)
+        section.method-inputs
+            label(for="return_type") Return Type
+            input(type="text" name="return_type" placeholder="String, Int etc (can be blank)" )
+            label(for="arguments") Arguments
+            button(type="button" onclick="addArg()") Add Argument
+            div#arguments-container
+                fieldset.argument-input
+                    h3 Arguments
+                //- Argument inputs will be added here dynamically
+        footer
+            fieldset(role="group")
+                button(type="submit") Create
+                button(type="button" onClick="toggleAddItem(event)") Cancel
+        hr
+
+script.
+    function addArg(){
+        const container = document.getElementById('arguments-container');
+        const argDiv = document.createElement('div');
+        argDiv.classList.add('argument-input');
+        argDiv.innerHTML = `
+            <fieldset role="group">
+                <input type="text" name="arg_name[]" placeholder="Name" required />
+                <input type="text" name="arg_type[]" placeholder="Type" required />
+                <button type="button" class="secondary" onclick="this.closest('.argument-input').remove()">Remove</button>
+            </fieldset>
+            <input type="text" name="arg_desc[]" placeholder="Description" />
+        `;
+        container.appendChild(argDiv);
+    }
+
+    addArg()

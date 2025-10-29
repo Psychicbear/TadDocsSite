@@ -1,5 +1,5 @@
 import utils from "../utils/utils.js";
-import { listMethodsById, getMethodDetails, editMethodArgById, editMethodById, deleteMethodById } from "../models/interfaces/methods.interface.js";
+import { listMethodsById, getMethodDetails, editMethodArgById, editMethodById, deleteMethodById, createMethodFromReq, createArgFromReq } from "../models/interfaces/methods.interface.js";
 import { authCheck } from "../utils/utils.auth.js";
 
 /**
@@ -30,6 +30,12 @@ class Methods {
         res.render("./pages/method/list.pug", { methods: methods, admin: req.isAdmin, parentId: req.params.parentId  });
     }
 
+    async addMethodForm(req, res) {
+        if(!authCheck(req,res)) return;
+        if(!req.params.parentId) return res.status(404).send("No classId provided");
+        res.render("./pages/method/add.pug", {  admin: req.isAdmin, parentId: req.params.parentId });
+    }
+
     async editMethod(req, res) {
         if(!authCheck(req,res)) return;
         if (!req.params.methodId) return res.status(404).send("No methodId provided");
@@ -48,15 +54,19 @@ class Methods {
 
     async addArgument(req, res) {
         if(!authCheck(req,res)) return;
-        if (!req.params.methodId) return res.status(404).send("No methodId provided");
-        res.render("./pages/method/add_argument.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+        if (!req.body.method_id) return res.status(404).send("No methodId provided");
+
+        let arg = await createArgFromReq(req.body)
+        if(!arg) return res.status(500).send("Error creating argument");
+        return res.status(200).set('HX-Trigger', 'typeReload').send()
     }
 
-    // PLACEHOLDER - implement createMethod in models/interfaces/methods.interface.js
     async createMethod(req, res) {
         if(!authCheck(req,res)) return;
-        if (!req.params.methodId) return res.status(404).send("No methodId provided");
-        res.render("./pages/method/create_method.pug", { methodId: req.params.methodId, admin: req.isAdmin });
+        if (!req.body.parent_id) return res.status(404).send("No parent_id provided");
+        let added = await createMethodFromReq(req.body);
+        if(!added) return res.status(500).send("Error creating method");
+        return res.status(200).set('HX-Trigger', "methodReload").send()
     }
 
     // PLACEHOLDER - implement deleteMethod in models/interfaces/methods.interface.js
@@ -66,9 +76,10 @@ class Methods {
 
         const result = await deleteMethodById(req.params.methodId);
         if(result){
-
-            let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
-            if(!(req.query.referrer === undefined) && req.query.referrer === "page"){
+            if(req.query.referrer === "parent"){
+                res.status(200).set("HX-Trigger", "methodReload").send();
+            }else if(req.query.referrer === "page"){
+                let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
                 console.log("Redirecting to:", redir);
                 if(req.get("HX-Request")) {
                     res.status(204).set('HX-Redirect', redir).send();

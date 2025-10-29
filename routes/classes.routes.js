@@ -8,8 +8,8 @@ const classes = express.Router();
  */
 classes.get("/view/:classId", expressAsyncHandler(controller.viewClass))
 classes.get("/list/:parentId", expressAsyncHandler(controller.listSubclasses));
-classes.post("/:parentId", expressAsyncHandler(controller.createClass));
-classes.put("/:classId", expressAsyncHandler(controller.editClass));
+classes.get("/add/:parentId", expressAsyncHandler(controller.addClassForm));
+classes.post("/", expressAsyncHandler(controller.createClass));
 classes.delete("/:classId", expressAsyncHandler(controller.deleteClass));
 
 Object.freeze(classes);

@@ -1,28 +1,15 @@
+include ../mixins.pug
 if props.length
-    div(class="props" hx-trigger="htmx:afterRequest" hx-get=`/properties/list/${parentId}` hx-target=".props" hx-swap="outerHTML")
+    section.property-section
         h3 Properties
-        | +materialIconButton('add', 'togglePropForm()')
+            button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
+        article(hx-get=`/properties/add/${parentId}` hx-target=".add-property" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-property.hidden
         ul
             each prop in props
-                li
-                    a(href=`/tad${prop.slug}` hx-get=`/tad${prop.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= prop.name
-                    if admin
-                        form(method="PUT" hx-put=`/tad/${prop.id}?refertype=class&id=${parentId}`)
-                            input(type="text" name="short_description" value=prop.short_description onkeydown="augment_textarea(event)")
-                    else        
-                        span=` - ${prop.short_description}`
+                +editableLi(prop)
 else
     if admin
-        h3 Properties
-        p No properties found.
-
-if admin
-    script.
-        function togglePropForm() {
-            const form = document.getElementById('add-prop-form');
-            if (form.style.display === 'none' || form.style.display === '') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
-        }
+        section.property-section
+            h3 Properties
+            article(hx-get=`/properties/add/${parentId}` hx-target=".add-property" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-property.hidden
+            button( title="Add Property" onclick="toggleAddItem(event)").add-button Add property

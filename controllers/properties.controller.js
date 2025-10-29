@@ -40,12 +40,18 @@ class Properties {
         return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
     }
 
+    async addPropForm(req, res) {
+        if(!authCheck(req,res)) return;
+        if(!req.params.parentId) return res.status(404).send("No classId provided");
+        res.render("./pages/property/add.pug", {  admin: req.isAdmin, parentId: req.params.parentId });
+    }
+
     async createProp(req, res) {
         if(!authCheck(req,res)) return;
-        if (!req.params.pageId) return res.status(404).send("No pageId provided");
-        let prop = await createPropForModule(req.params.pageId, req.body);
+        if (!req.body.parent_id) return res.status(404).send("No parent_id provided");
+        let prop = await createPropForModule(req.body);
         if(!prop) return res.status(500).send("Error creating property");
-        return res.status(200).set('HX-Trigger', {"load": {"target": ".type-details"}})
+        return res.status(200).set('HX-Trigger', "propertyReload").send()
     }
 
     async deleteProp(req, res) {
@@ -54,8 +60,10 @@ class Properties {
         
         const result = await deletePropById(req.params.propId);
         if(result){
-            let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
-            if(!(req.query.referrer === undefined) && req.query.referrer === "page"){
+            if(req.query.referrer === "parent"){
+                res.status(200).set("HX-Trigger", "methodReload").send();
+            }else if(req.query.referrer === "page"){
+                let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
                 console.log("Redirecting to:", redir);
                 if(req.get("HX-Request")) {
                     res.status(204).set('HX-Redirect', redir).send();

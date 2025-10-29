@@ -91,26 +91,34 @@ export async function deletePropById(id) {
 export async function createPropForModule(pageId, data) {
     const t = await sequelize.transaction();
     try {
-        const propClass = await Class.findByPk(pageId, { transaction: t });
-        if(!propClass) throw new Error("Class not found");
-        const propPage = await Page.create({
-            name: data.name || "New Property",
-            slug: data.slug,
-            short_description: data.short_description || "",
-            long_description: data.long_description || "",
-            type: "property",
-        })
-        if(!propPage) throw new Error("Failed to create property page");
+        const { name, page_type, parent_id } = data
 
-        let prop = propPage.createMainProperty({
-            type: data.type || "string",
-            default_value: data.default_value || "",
-            classId: propClass.id
-        })
-        if(!prop) throw new Error("Failed to create property");
+        const page = await Page.create({
+            name: name,
+            page_type: page_type,
+        }, { transaction: t });
+        if(!page) throw new Error("Failed to create page");
 
-        await t.commit();
-        return prop;
+        if(data.slug) page.slug = data.slug;
+        else { 
+            let parent = await Page.findByPk(parent_id);
+            if(!parent) throw new Error("Parent page not found");
+            
+            page.slug = parseSlug(name, name, parent);
+        }
+
+        if(data.short_desc) page.short_description = data.short_desc;
+        if(data.long_desc) page.long_description = data.long_desc;
+        await page.save({ transaction: t });
+
+        const model = await page.createMainProperty({ class_id: parent_id }, { transaction: t });
+        if(data.prop_type) model.type = data.prop_type;
+        if(data.default_value) model.default_value = data.default_value;
+
+        await model.save({ transaction: t });
+
+        await t.commit()
+        return page;
     } catch (err) {
         console.error("Error in createPropForModule:", err);
         await t.rollback();

@@ -1,26 +1,50 @@
-div(id="type-details" hx-trigger="typeReload" hx-get=`/methods/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML" preload)
+div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/methods/view/${methodId}` hx-target="#type-details" hx-swap="outerHTML")
+    div.viewTypeDetails
+        h4 Arguments
+            if admin
+                i(role="button" class="material-symbols-outlined" onclick="toggleEditTypeDetails(event)") edit
+                i(role="button" class="material-symbols-outlined add-arg-button" onclick="toggleAddArg(event)") add_circle
+    form(hx-post=`/methods/${methodId}/args/add`).add-arg.hidden
+        fieldset.argument-input
+            input(type="hidden" name="method_id" value=`${methodId}`)
+            fieldset(role="group")
+                input(type="text" name="name" placeholder="Name" required)
+                input(type="text" name="type" placeholder="Type" required)
+                button(type="button" class="material-symbols-outlined secondary" onclick="toggleAddArg(event)") cancel
+            input(type="text" name="description" placeholder="Description")
+        button(type="submit") Add Argument
     if args.length
-        h3 Arguments
-    each arg in args
-        if admin
-            form(method="PUT" hx-put=`/methods/${methodId}/args/${arg.id}?refertype=method` hx-target=".type-details" hx-swap="outerHTML")
-                fieldset(class="grid grid-3col113")
-                    input(type="text" placeholder="Name" name="name" value=arg.name onkeydown="augment_textarea(event)")
-                    input(type="text" placeholder="Type" name="type" value=arg.type onkeydown="augment_textarea(event)")
-                    input(type="text" placeholder="Description" name="description" value=arg.description onkeydown="augment_textarea(event)")
-        else
+        each arg in args
             if arg.type 
                 span= arg.name
-                |  - 
+                | "-"
                 span= arg.type
-                if arg.description
-                    |  : 
-                    span= arg.description
-            br
-    if admin
+                |  : 
+                span= arg.description
+    if !(returns === undefined || returns === null)
+        h5 Returns:
+        span= pageMethod.return_type
+    
+    div.editTypeDetails.hidden
+        h4 Arguments
+            i(role="button" class="material-symbols-outlined" onclick="toggleEditTypeDetails(event)") cancel
+        each arg, index in args
+            form(method="PUT" hx-put=`/methods/argument/${arg.id}?refertype=method` hx-target=".type-details" hx-swap="outerHTML" class="mb-2")
+                input(type="text" placeholder="Argument Name" name="name" value=`${arg.name}` onkeydown="augment_textarea(event)")
+                input(type="text" placeholder="Argument Type" name="type" value=`${arg.type}` onkeydown="augment_textarea(event)")
+                input(type="text" placeholder="Argument Description" name="description" value=`${arg.description}` onkeydown="augment_textarea(event)")
+                button(type="submit").material-symbols-outlined.save-button save
+                button(type="button" role="button" onclick="toggleEditTypeDetails(event)").material-symbols-outlined.cancel-button cancel    
+
         form(method="PUT" hx-put=`/methods/${methodId}?refertype=method` hx-target=".type-details" hx-swap="outerHTML")
             input(type="text" placeholder="Return Type" name="return_type" value=`${returns ? returns : ""}` onkeydown="augment_textarea(event)")
-    else
-        if !(returns === undefined || returns === null)
-            h5 Returns:
-            span= pageMethod.return_type
+
+script.
+    function toggleAddArg(event){
+        event.preventDefault();
+        const item = event.target.closest('#type-details')
+        const form = item.querySelector('.add-arg')
+        form.classList.toggle('hidden');
+        form.reset()
+        item.querySelector('.add-arg-button').classList.toggle('hidden');
+    }

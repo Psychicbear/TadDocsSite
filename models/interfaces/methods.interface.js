@@ -1,6 +1,7 @@
 import { Class, Method, Argument, Page } from '../index.models.js';
 import { sequelize } from '../db/sqlConfig.js';
 import { parseSlug } from './pages.interface.js';
+import { type } from 'os';
 
 export async function listMethodsById(parentId){
     try {
@@ -8,10 +9,10 @@ export async function listMethodsById(parentId){
             attributes: [],
             include: [{
                     association: "Methods",
-                    attributes: ['page_id', 'return_type'],
+                    attributes: ['return_type'],
                     include: [{
                         association: "MainPage", 
-                        attributes: ['name', 'page_type', 'short_description', 'slug']
+                        attributes: ['id', 'name', 'page_type', 'short_description', 'slug']
                     }]
                 },
             ],
@@ -21,20 +22,16 @@ export async function listMethodsById(parentId){
 
         let methods = parent.Methods.map(async method => {
             let args = await Argument.findAll({
-                where: { method_id: method.page_id },
+                where: { method_id: method.MainPage.id },
                 attributes: ['id', 'name', 'type', 'description', 'arg_index'],
                 order: [['arg_index', 'ASC']],
                 raw: true,
                 rejectOnEmpty: false,
             })
-            let newMethod = {
-                page_id: method.page_id,
-                name: method.MainPage.name,
-                short_description: method.MainPage.short_description,
-                slug: method.MainPage.slug,
-                returns: method.return_type,
-                args: args
-            }
+
+            let newMethod = method.MainPage
+            newMethod.returns = method.return_type,
+            newMethod.args = args
             return newMethod;
         })
         methods = await Promise.all(methods);
@@ -105,7 +102,36 @@ export async function editMethodArgById(argId, data){
     }
 }
 
-export async function createMethod(data) {
+export async function createArgFromReq(data) {
+    const t = await sequelize.transaction();
+    try {
+        const { method_id, name, type, description } = data;
+
+        const argCount = await Argument.count({
+            where: { method_id: method_id },
+            transaction: t
+        });
+
+        const arg = await Argument.create({
+            method_id: method_id,
+            name: name,
+            type: type,
+            description: description,
+            arg_index: argCount
+        }, { transaction: t });
+
+        if(!arg) throw new Error("Failed to create argument");
+
+        await t.commit();
+        return arg;
+    } catch (err) {
+        console.error("Error in createArgFromReq:", err);
+        await t.rollback();
+        return null;
+    }
+}
+
+export async function createMethodFromReq(data) {
     const t = await sequelize.transaction();
     try {
         const { name, page_type, parent_id } = data
@@ -117,7 +143,12 @@ export async function createMethod(data) {
         if(!page) throw new Error("Failed to create page");
 
         if(data.slug) page.slug = data.slug;
-        else page.slug = parseSlug(name, name, parent);
+        else { 
+            let parent = await Page.findByPk(parent_id);
+            if(!parent) throw new Error("Parent page not found");
+            
+            page.slug = parseSlug(name, name, parent);
+        }
 
         if(data.short_desc) page.short_description = data.short_desc;
         if(data.long_desc) page.long_description = data.long_desc;

@@ -1,5 +1,6 @@
 import utils from "../utils/utils.js";
-import { listSubById, deleteClassById } from "../models/interfaces/classes.interface.js";
+import { listSubById, deleteClassById, createClass } from "../models/interfaces/classes.interface.js";
+import { authCheck } from "../utils/utils.auth.js";
 
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
@@ -25,14 +26,32 @@ class Classes {
         res.render("./pages/class/view.pug", { parentId: req.params.classId, admin: req.isAdmin });
     }
 
+    async addClassForm(req, res) {
+        if(!authCheck(req,res)) return;
+        if(!req.params.parentId) return res.status(404).send("No classId provided");
+        res.render("./pages/class/add.pug", {  admin: req.isAdmin, parentId: req.params.parentId });
+    }
+
+    async createClass(req, res) {
+        if(!authCheck(req,res)) return;
+        console.log(req.body)
+        if (!req.body.parent_id) return res.status(404).send("No parentId provided");
+        let added = await createClass(req.body);
+        if(!added) return  res.status(500).send("Error creating class");
+        return res.status(200).set('HX-Trigger', "classReload").send()
+    }
+
     async deleteClass(req, res){
+        if(!authCheck(req,res)) return;
         const classId = req.params.classId;
         if(!classId) return res.status(400).send("No classId provided");
 
         const result = await deleteClassById(classId);
         if(result){
-            let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
-            if(!(req.query.referrer === undefined) && req.query.referrer === "page"){
+            if(req.query.referrer === "parent"){
+                res.status(200).set("HX-Trigger", "classReload").send();
+            } else if(req.query.referrer === "page"){
+                let redir = utils.str.getPrevUrl(req.get("HX-Current-URL") || null)
                 console.log("Redirecting to:", redir);
                 if(req.get("HX-Request")) {
                     res.status(204).set('HX-Redirect', redir).send();

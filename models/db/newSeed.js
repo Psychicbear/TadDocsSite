@@ -2,7 +2,7 @@ import { sequelize } from "./sqlConfig.js";
 import { Page, Class, Property, Method, Argument, Example } from "../index.models.js";
 import { createProp } from "../interfaces/properties.interface.js";
 import { createClass } from "../interfaces/classes.interface.js";
-import { createMethod } from "../interfaces/methods.interface.js";
+import { createMethodFromReq } from "../interfaces/methods.interface.js";
 import {parseFile, parseCode } from "../../utils/utils.parse-lib.mjs";
 import path from 'path';
 import { fileURLToPath } from 'node:url';
@@ -42,7 +42,7 @@ async function seed() {
     })
 
     const classPage = await Page.create({
-        name: "$",
+        name: "tad",
         slug: "/",
         short_description: "$ is the core of Teach and Draw. Through the $ we can access all of the libraries functionality.",
         long_description: "$ is the core of Teach and Draw. Through the $ we can access all of the libraries functionality.",
@@ -83,7 +83,7 @@ async function seed() {
                             created = await createProp(data);
                             break;
                         case "method":
-                            created = await createMethod(data);
+                            created = await createMethodFromReq(data);
                             break;
                         default:
                             console.warn(`Unknown type ${data.type} in file ${file}`);

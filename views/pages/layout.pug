@@ -44,7 +44,8 @@ block content
     div(class="flex" style="justify-content: space-between; align-items: center;")
         +breadcrumbs(page.slug)
         if admin
-        div(class="flex1" aria-label="Admin Actions")
+        div(role="group" class="flex1" aria-label="Admin Actions")
+            i(role="button" hx-get=`/tad/create` hx-target="#dialog-container" hx-swap="innerHTML" class="material-symbols-outlined")="add_circle"
             label.btn(for="fileinput" role="button") Upload JS
             input#fileinput(type="file" role="button" name="file" style="display:none;" class="clickable" accept=".js,.ts")
             form(id="upload" method="POST" action="/tad/upload"  hx-post="/tad/upload" hx-target="#dialog-container" hx-swap="innerHTML" style="display:inline")
@@ -104,18 +105,31 @@ block content
             }
         }
 
-        function toggleEdit(event){
+        function toggleEditItem(event){
             event.preventDefault();
-            console.log(event.target)
             const item = event.target.closest('.item')
-            console.log(item)
             item.querySelector('.viewItem').classList.toggle('hidden');
             item.querySelector('.editItem').classList.toggle('hidden');
         }
 
-        function submitEdit(event){
+        function toggleEditPage(event){
             event.preventDefault();
-            const form = event.target.closest('form');
-            form.requestSubmit();
+            const item = event.target.closest('#page-details')
+            item.querySelector('.viewPage').classList.toggle('hidden');
+            item.querySelector('.editPage').classList.toggle('hidden');
+        }
+
+        function toggleAddItem(event){
+            event.preventDefault();
+            const section = event.target.closest('section');
+            section.querySelector('.add-item').classList.toggle('hidden');
+            section.querySelector('.add-button').classList.toggle('hidden');
+        }
+
+        function toggleEditTypeDetails(event){
+            event.preventDefault();
+            const item = event.target.closest('#type-details')
+            item.querySelector('.viewTypeDetails').classList.toggle('hidden');
+            item.querySelector('.editTypeDetails').classList.toggle('hidden');
         }
 

@@ -16,9 +16,14 @@ methods.get(
     expressAsyncHandler(controller.viewMethod)
 )
 
+methods.get(
+    "/add/:parentId",
+    expressAsyncHandler(controller.addMethodForm)
+)
+
 
 methods.post(
-    "/:methodId",
+    "/",
     expressAsyncHandler(controller.createMethod)
 )
 

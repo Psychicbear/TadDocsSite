@@ -16,7 +16,7 @@ class Page extends Model {
 
   // Get the root "$." page
   static async getRoot() {
-    let page = await this.findOne({ where: { name: "$", page_type: "class" }, raw: true });
+    let page = await this.findOne({ where: { name: "tad", page_type: "class" }, raw: true });
     return await this.findWithDetails(page);
   }
 

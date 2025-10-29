@@ -1,5 +1,6 @@
 node_modules/
 .env
 models/db/database.sqlite
+models/db/backups/
 .github/
 license.key

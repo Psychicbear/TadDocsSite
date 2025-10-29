@@ -1,0 +1,24 @@
+article.add-item.add-module
+    form(
+        id="class_form"
+        action="/classes"
+        hx-post="/classes"
+        hx-on::after-request="if(event.detail.successful) this.reset(); this.closest('.add-item').classList.toggle('hidden'); this.closest('section').querySelector('.add-button').classList.toggle('hidden');"
+    )
+        section
+            input(type="hidden" name="page_type" value="class")
+            input(type="hidden" name="parent_id" value=parentId)
+            label(for="name") Page Name
+            input(type="text" pattern="^[a-zA-Z_$][a-zA-Z0-9_$]*$" name="name" placeholder="Name of page" value="Pixel" required)
+            label(for="short_desc") Short Description
+            input(type="text" name="short_desc" placeholder="Short description" value="pixel short desc" required)
+            label(for="long_desc") Long Description
+            textarea(name="long_desc" placeholder="Long description" rows="4" value="pixel long desc" required)
+        footer
+            fieldset(role="group")
+                button(type="submit") Create
+                button(type="button" onClick="toggleAddItem(event)") Cancel
+        hr
+
+script.
+    

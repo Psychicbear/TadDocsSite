@@ -1,22 +1,15 @@
+include ../mixins.pug
 if methods.length
-    h3 Methods
-    ul
-        each method in methods
-            li
-                a(href=`/tad${method.slug}` hx-get=`/tad${method.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= method.name
-                |&#40; 
-                if method.args.length
-                each arg, index in method.args
-                    span(data-tooltip=`${arg.type}: ${arg.description}` data-placement="right" class="clickable")=`${arg.name}` 
-                    if index < method.args.length - 1
-                        |, 
-                | &#41;
-                if admin
-                    form(method="PUT" hx-put=`/tad/${method.page_id}?refertype=class&id=${parentId}` hx-target=".type-details" hx-swap="outerHTML")
-                        input(type="text" name="short_description" value=method.short_description onkeydown="augment_textarea(event)")
-                else        
-                    span=` - ${method.short_description}`
+    section.method-section
+        h3 Methods
+            button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
+        article(hx-get=`/methods/add/${parentId}` hx-target=".add-method" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-method.hidden
+        ul
+            each method in methods
+                +editableLi(method)
 else
     if admin
-        h3 Methods
-        p No methods found. You can add methods to this class.
+        section.method-section
+            h3 Methods
+            article(hx-get=`/methods/add/${parentId}` hx-target=".add-method" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-method.hidden
+            button( title="Add Method" onclick="toggleAddItem(event)").add-button Add method
