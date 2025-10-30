@@ -2,7 +2,8 @@ include ../mixins.pug
 if subClasses.length
     section.module-section
         h3 Modules
-            button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
+            if admin
+                button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
         article(hx-get=`/classes/add/${parentId}` hx-target=".add-module" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-module.hidden
         ul
             each sub, index in subClasses

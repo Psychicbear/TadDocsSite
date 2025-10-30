@@ -2,7 +2,8 @@ include ../mixins.pug
 if methods.length
     section.method-section
         h3 Methods
-            button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
+            if admin
+                button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
         article(hx-get=`/methods/add/${parentId}` hx-target=".add-method" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-method.hidden
         ul
             each method in methods

@@ -2,7 +2,8 @@ include ../mixins.pug
 if props.length
     section.property-section
         h3 Properties
-            button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
+            if admin 
+                button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
         article(hx-get=`/properties/add/${parentId}` hx-target=".add-property" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-property.hidden
         ul
             each prop in props
