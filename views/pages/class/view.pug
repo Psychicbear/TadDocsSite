@@ -1,11 +1,12 @@
+include ../../snippets/mixins/splitExample.pug
 div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/classes/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML" preload)
     div(class="class-list", hx-trigger="load, classReload from:body" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".class-list" )
         h3 Modules
         p="Loading modules..."
-    div(class="method-list", hx-trigger="load, methodReload from:body" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".method-list" )
-        h3 Methods
-        p="Loading methods..."
-    div(class="property-list", hx-trigger="load, propertyReload from:body" hx-get=`/properties/list/${parentId}` hx-swap="innerHTML" hx-target=".property-list" )
-        h3 Properties
-        p="Loading methods..."
-                
+    +splitExample('snippetExample2', 'Methods', 'Properties')
+        div(class="method-list", hx-trigger="load, methodReload from:body" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".method-list" ).tab1
+            h3 Methods
+            p="Loading methods..."
+        div(class="property-list", hx-trigger="load, propertyReload from:body" hx-get=`/properties/list/${parentId}` hx-swap="innerHTML" hx-target=".property-list" ).tab2
+            h3 Properties
+            p="Loading properties..."

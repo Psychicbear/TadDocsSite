@@ -62,5 +62,5 @@ mixin editableLi(page)
                         i(style="grid-column: 12;" role="button" title="Cancel Edit" onclick="toggleEditItem(event)").material-symbols-outlined.flex1 cancel
         else
             div.flex
-                a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= page.name
-                span=` - ${page.short_description}`
+                a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true").flex1= page.name
+                span.comment.right-text.fs08=`${page.short_description}`

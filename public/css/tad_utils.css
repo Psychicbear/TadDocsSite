@@ -1,0 +1,9 @@
+.comment {
+    opacity:0.5;
+}
+.comment:before {
+    content:"//";
+    display:inline-block;    
+    font-size: 0.8rem;
+    opacity: 0.5;
+}

@@ -3,7 +3,7 @@ li.item
         div.viewItem.flex
             div.flex3
                 a(href=`/tad${sub.slug}` hx-get=`/tad${sub.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= sub.name
-                span=` - ${sub.short_description}`
+                span.comment=` - ${sub.short_description}`
             div(role="group").flex1.text-right
                 i(role="button" title="Edit Module" onclick=`toggleEdit(event)`).material-symbols-outlined edit
                 i(role="button" title="Delete Module" onclick="cancelEdit(event)").material-symbols-outlined delete 
@@ -18,4 +18,4 @@ li.item
     else
         div.flex
             a(href=`/tad${sub.slug}` hx-get=`/tad${sub.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= sub.name
-            span=` - ${sub.short_description}`
+            span.comment=`${sub.short_description}`
