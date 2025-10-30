@@ -77,59 +77,60 @@ block content
 
 
     div#dialog-container
-    script.
-        let uploadForm = document.querySelector('#fileinput');
-        uploadForm.addEventListener('change', (event) => {
-        console.log('file selected, submitting form');
-        const file = event.target.files[0];
-        if(file){
-            const reader = new FileReader();
-            reader.onload = function(e) {
-            const content = e.target.result;
-            document.querySelector('input[name="filecontent"]').value = content;
-            document.querySelector('#upload').requestSubmit();
-            };
-        
-            reader.readAsText(file);
-        }
-        });
-
-        function augment_textarea(event) { 
-            const target = event.target || event.srcElement;
-            const form = target.closest && target.closest('form') || document.querySelector("#notes_form");
-            if (event.key === 'Enter' && !event.shiftKey) {
-                console.log("Submitting form via augment_textarea");
-                event.preventDefault();
-                form.requestSubmit();  
-                //we give a touch of time for the form to have pulled data.
+    if admin
+        script.
+            let uploadForm = document.querySelector('#fileinput');
+            uploadForm.addEventListener('change', (event) => {
+            console.log('file selected, submitting form');
+            const file = event.target.files[0];
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                const content = e.target.result;
+                document.querySelector('input[name="filecontent"]').value = content;
+                document.querySelector('#upload').requestSubmit();
+                };
+            
+                reader.readAsText(file);
             }
-        }
+            });
 
-        function toggleEditItem(event){
-            event.preventDefault();
-            const item = event.target.closest('.item')
-            item.querySelector('.viewItem').classList.toggle('hidden');
-            item.querySelector('.editItem').classList.toggle('hidden');
-        }
+            function augment_textarea(event) { 
+                const target = event.target || event.srcElement;
+                const form = target.closest && target.closest('form') || document.querySelector("#notes_form");
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    console.log("Submitting form via augment_textarea");
+                    event.preventDefault();
+                    form.requestSubmit();  
+                    //we give a touch of time for the form to have pulled data.
+                }
+            }
 
-        function toggleEditPage(event){
-            event.preventDefault();
-            const item = event.target.closest('#page-details')
-            item.querySelector('.viewPage').classList.toggle('hidden');
-            item.querySelector('.editPage').classList.toggle('hidden');
-        }
+            function toggleEditItem(event){
+                event.preventDefault();
+                const item = event.target.closest('.item')
+                item.querySelector('.viewItem').classList.toggle('hidden');
+                item.querySelector('.editItem').classList.toggle('hidden');
+            }
 
-        function toggleAddItem(event){
-            event.preventDefault();
-            const section = event.target.closest('section');
-            section.querySelector('.add-item').classList.toggle('hidden');
-            section.querySelector('.add-button').classList.toggle('hidden');
-        }
+            function toggleEditPage(event){
+                event.preventDefault();
+                const item = event.target.closest('#page-details')
+                item.querySelector('.viewPage').classList.toggle('hidden');
+                item.querySelector('.editPage').classList.toggle('hidden');
+            }
 
-        function toggleEditTypeDetails(event){
-            event.preventDefault();
-            const item = event.target.closest('#type-details')
-            item.querySelector('.viewTypeDetails').classList.toggle('hidden');
-            item.querySelector('.editTypeDetails').classList.toggle('hidden');
-        }
+            function toggleAddItem(event){
+                event.preventDefault();
+                const section = event.target.closest('section');
+                section.querySelector('.add-item').classList.toggle('hidden');
+                section.querySelector('.add-button').classList.toggle('hidden');
+            }
+
+            function toggleEditTypeDetails(event){
+                event.preventDefault();
+                const item = event.target.closest('#type-details')
+                item.querySelector('.viewTypeDetails').classList.toggle('hidden');
+                item.querySelector('.editTypeDetails').classList.toggle('hidden');
+            }
 
