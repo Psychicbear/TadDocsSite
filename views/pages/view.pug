@@ -20,7 +20,7 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
       if(page.slug != '/')
         - let parts = page.slug.split('/').filter(part => part.length > 0).join('.');
         if parts.length > 0
-          sub.lineh05="$." + parts
+          sub.lineh05="tad." + parts
     if admin
       - let delSlug = "/"
       case page.page_type
