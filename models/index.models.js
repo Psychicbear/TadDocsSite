@@ -34,16 +34,33 @@ Method.hasMany(Argument, { foreignKey: "method_id", as: "Arguments", onDelete: "
 Example.hasMany(Page, { foreignKey: "code_example_id", as: "CodeExample" });
 Page.belongsTo(Example, { foreignKey: "code_example_id", as: "CodeExample" });
 
-// Class.addHook("beforeDestroy", async (cls, options) => {
-//   console.log("Class beforeDestroy hook triggered");
-//   await Property.destroy({ where: { class_id: cls.id }, transaction: options.transaction, force: true });
-//   await Method.destroy({ where: { class_id: cls.id }, transaction: options.transaction, force: true });
-// })
+Page.addHook('afterUpdate', async (page, options) => {
+    if(!page.changed('slug')) return;
+    console.log(`Page slug changed for Page ID ${page.id}, updating associated Class, Property, and Method slugs if applicable.`);
+    let props = await Property.findAll({ where: { class_id: page.id }, include: [{association: "MainPage"}], transaction: options.transaction });
+    for(const prop of props) {
+        let propPage = prop.MainPage;
+        if(propPage) propPage.slug = `${page.slug}/${propPage.name}`;
+        await propPage.save({ transaction: options.transaction });
+        console.log(`Updated Property Page slug to ${propPage.slug}`);
+    }
 
-// Method.addHook("beforeDestroy", async (method, options) => {
-//   console.log("Destroying Arguments for Method ID:", method.id);
-//   await Argument.destroy({ where: { method_id: method.id }, transaction: options.transaction, force: true });
-// });
+    let methods = await Method.findAll({ where: { class_id: page.id }, include: [{association: "MainPage"}], transaction: options.transaction });
+    for(const method of methods) {
+        let methodPage = method.MainPage;
+        if(methodPage) methodPage.slug = `${page.slug}/${methodPage.name}`;
+        await methodPage.save({ transaction: options.transaction });
+        console.log(`Updated Method Page slug to ${methodPage.slug}`);
+    }
+
+    let subClasses = await Class.findAll({ where: { parent_class_id: page.id }, include: [{association: "MainPage"}], transaction: options.transaction });
+    for(const subClass of subClasses) {
+        let subClassPage = subClass.MainPage;
+        if(subClassPage) subClassPage.slug = `${page.slug}/${subClassPage.name}`;
+        await subClassPage.save({ transaction: options.transaction });
+        console.log(`Updated SubClass Page slug to ${subClassPage.slug}`);
+    }
+})
 
 // Hooks to enable deleting page that owns Class, Property, or Method when they are deleted
 Class.addHook("afterDestroy", async (cls, options) => {

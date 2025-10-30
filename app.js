@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
+import pug from 'pug';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import util from './utils/utils.js';
@@ -39,6 +40,10 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 app.set('trust proxy', process.env.PROXY_TRUSTED === 'true');
+app.locals.mdLinks = function(text) {
+    if(text === null || text === undefined) return text;
+    return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g,(match, label, url) => `<a href="${url}" hx-get="${url}" hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true">${label}</a>`);
+}
 
 console.log(`Static files served from ${path.join(__dirname, 'public')}`);
 app.use(express.static(path.join(__dirname, 'public')));

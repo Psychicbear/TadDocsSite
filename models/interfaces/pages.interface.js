@@ -174,7 +174,23 @@ export async function editPageById(id, data) {
         const page = await Page.findByPk(id, { transaction: t });
         if(!page) throw new Error("Page not found");
 
-        const update = await page.update(data, { transaction: t });
+        if(data.short_description) page.short_description = data.short_description;
+        if(data.long_description) page.long_description = data.long_description;
+        if(data.name && data.name != page.name){
+            console.log("Updating name from", page.name, "to", data.name);
+            page.name = data.name;
+            let intermediateClass = await page.getMainClass({include: [{association: "ParentClass"}], transaction: t });
+            if(intermediateClass && intermediateClass.ParentClass){
+                console.log("Found intermediate class with parent, updating slug accordingly.");
+                let parentPage = intermediateClass.ParentClass;
+                if(parentPage){
+                    console.log("Updating slug based on new name and parent page slug:", parentPage.slug);
+                    page.slug = parentPage.slug == "/" ? parentPage.slug + data.name: `${parentPage.slug}/${data.name}`;
+                }
+            }
+        } 
+
+        const update = await page.save({ transaction: t });
         if(!update) throw new Error("Failed to update page");
 
         await t.commit();

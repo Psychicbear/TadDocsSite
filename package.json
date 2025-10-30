@@ -16,6 +16,7 @@
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
+    "jstransformer-markdown-it": "^3.0.0",
     "multer": "^2.0.2",
     "nanoid": "^5.1.5",
     "pug": "^3.0.3",
