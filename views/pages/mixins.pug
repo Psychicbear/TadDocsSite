@@ -75,8 +75,13 @@ mixin editableLi(page, method=false)
                         |&#40; 
                         if page.args.length
                             each arg, index in page.args
-                                span(data-tooltip=`${arg.type}: ${arg.description}` data-placement="right" class="clickable")=`${arg.name}` 
+                                - let type_class=""
+                                if(arg.type.toLowerCase()==="string")
+                                    - type_class = "string"
+                                if(arg.type.toLowerCase()==="number")
+                                    - type_class = "number"
+                                span(data-tooltip=`${arg.type}: ${arg.description}` data-placement="right" class=`clickable ${type_class}`)=`${arg.name}` 
                                 if index < page.args.length - 1
-                                    |, 
+                                    span(class=`${type_class}`) , 
                         | &#41;
                 span.comment.right-text.fs08=`${page.short_description}`

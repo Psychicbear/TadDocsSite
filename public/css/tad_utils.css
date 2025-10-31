@@ -9,3 +9,13 @@
     padding-right: 0.25rem;
     color: rgb(1, 114, 173);
 }
+
+.string {
+    color: #ce834d;
+    border:none !important;
+}
+
+.number {
+    color: #89c370;
+    border:none !important;
+}
