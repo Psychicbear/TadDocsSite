@@ -7,7 +7,7 @@ if methods.length
         article(hx-get=`/methods/add/${parentId}` hx-target=".add-method" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-method.hidden
         ul
             each method in methods
-                +editableLi(method)
+                +editableLi(method, true)
 else
     if admin
         section.method-section

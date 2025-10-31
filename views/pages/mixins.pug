@@ -36,7 +36,7 @@ mixin materialIconButton(iconName, onClick)
     i(class=`material-icons material-icon-button` role="button" onClick=`${onClick}`)= iconName
 
 
-mixin editableLi(page)
+mixin editableLi(page, method=false)
     li(id=page.id hx-swap="innerHTML").item
         if admin
             - let delSlug = "/"
@@ -48,6 +48,14 @@ mixin editableLi(page)
             div.viewItem.flex
                 div.flex3
                     a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= page.name
+                    if method
+                        |&#40; 
+                        if page.args.length
+                            each arg, index in page.args
+                                span(data-tooltip=`${arg.type}: ${arg.description}` data-placement="right" class="clickable")=`${arg.name}` 
+                                if index < page.args.length - 1
+                                    |, 
+                        | &#41;
                     span=` - ${page.short_description}`
                 div(role="group").flex1.text-right
                     i(role="button" title="Edit Module" onclick=`toggleEditItem(event)`).material-symbols-outlined edit
