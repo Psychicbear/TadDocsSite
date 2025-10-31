@@ -1,9 +1,11 @@
 .comment {
-    opacity:0.5;
+    opacity: 0.75;
+    color: rgb(1, 114, 173);
 }
 .comment:before {
-    content:"//";
-    display:inline-block;    
+    content: "//";
+    display: inline-block;
     font-size: 0.8rem;
-    opacity: 0.5;
+    padding-right: 0.25rem;
+    color: rgb(1, 114, 173);
 }
