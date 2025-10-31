@@ -1,16 +1,16 @@
 include ../mixins.pug
 if props.length
-    section.property-section
+    section.property-section.wfull
         h3 Properties
             if admin 
                 button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
         article(hx-get=`/properties/add/${parentId}` hx-target=".add-property" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-property.hidden
-        ul
+        ul.p05
             each prop in props
                 +editableLi(prop)
 else
     if admin
-        section.property-section
+        section.property-section.wfull
             h3 Properties
             article(hx-get=`/properties/add/${parentId}` hx-target=".add-property" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-property.hidden
             button( title="Add Property" onclick="toggleAddItem(event)").add-button Add property

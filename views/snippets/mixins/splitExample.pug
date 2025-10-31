@@ -4,18 +4,18 @@ mixin splitExample(blockId, tab1Label, tab2Label)
         header
             form.flex.gap05
                 label(role="button").flex1
-                    | #{tab1Label}
+                    h3 #{tab1Label}
                     input(
                         type="radio"
                         name=`tabs-${blockId}`
                         checked
                     ).hidden(class=`${blockId}_tab1_tab`)
                 label(role="button").flex1
-                    | #{tab2Label}
+                    h3 #{tab2Label}
                     input(
                         type="radio"
                         name=`tabs-${blockId}`
                     ).hidden(class=`${blockId}_tab2_tab`)
         //- caller must provide the tabs
-        main.minw10 
+        main.minw10.p05 
             block

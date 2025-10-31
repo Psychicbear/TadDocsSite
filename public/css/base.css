@@ -662,7 +662,9 @@ html body .inlinemargin1 {
 .monospace {
     font-family: monospace;
 }
-
+.notextdecoration {
+    text-decoration: none;
+}
 /* 7.0 SIZE - size utils */
 
 /* height utils */

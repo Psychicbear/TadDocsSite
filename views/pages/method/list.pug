@@ -5,7 +5,7 @@ if methods.length
             if admin
                 button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
         article(hx-get=`/methods/add/${parentId}` hx-target=".add-method" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-method.hidden
-        ul
+        ul.p05
             each method in methods
                 +editableLi(method, true)
 else

@@ -1,6 +1,9 @@
 .comment {
     opacity: 0.75;
     color: rgb(1, 114, 173);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .comment:before {
     content: "//";
@@ -12,10 +15,10 @@
 
 .string {
     color: #ce834d;
-    border:none !important;
+    border: none !important;
 }
 
 .number {
     color: #89c370;
-    border:none !important;
+    border: none !important;
 }

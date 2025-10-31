@@ -5,6 +5,14 @@
     min-height: 400px;
 }
 
+.example .property-section h3 {
+    display: none;
+}
+
+.example .method-section h3 {
+    display: none;
+}
+
 .example header {
     margin: 0;
     padding: 0;
@@ -71,6 +79,13 @@ code.minh15 {
 
 /* --- desktop / wider screens --------------------- */
 @media (min-width: 576px) {
+    .example .property-section h3 {
+        display: block;
+    }
+
+    .example .method-section h3 {
+        display: block;
+    }
     /* hide the tab header — no tabs on desktop */
     .example header {
         display: none;
