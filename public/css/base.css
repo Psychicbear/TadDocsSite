@@ -820,6 +820,10 @@ html body .minh15 {
     min-height: 15rem;
 }
 
+html body .minh20 {
+    min-height: 20rem;
+}
+
 /*Max Size utils*/
 
 /* max height utils */
@@ -1141,6 +1145,9 @@ html body .hover-wiggle:focus-within,
     animation: slidein 0.5s ease-in 0s 1 normal none;
 }
 
+.fadein025 {
+    animation: fadein 0.25s ease-out 0s 1 normal none;
+}
 .fadein05 {
     animation: fadein 0.5s ease-out 0s 1 normal none;
 }
