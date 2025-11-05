@@ -37,6 +37,18 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
 if loadPageType 
   +breadcrumbs(page.slug, "true")
 
+if page.code_example_id
+  section(id="example-section" hx-trigger="load" hx-get=`/examples/${page.code_example_id}?pageId=${page.id}` hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true" preload)
+    h2 Examples
+    p Loading Example...
+else
+  section(id="example-section" hx-swap-oob="true")
+    h2 Examples
+    p No examples available.
+    if admin
+      i(role="button" onClick="this.classList.add('hidden'); document.querySelector('.add-example').classList.remove('hidden');" class="material-symbols-outlined add-example-button")="add_circle"
+      article(hx-get=`/examples/add?pageId=${page.id}` hx-trigger="intersect once" hx-target=".add-example" hx-swap="outerHTML").add-example.hidden
+
 block typeDetails
   if loadPageType
     case page.page_type

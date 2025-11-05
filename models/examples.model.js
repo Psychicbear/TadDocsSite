@@ -23,11 +23,15 @@ const ExampleModel = Example.init(
         type: DataTypes.STRING,
         allowNull: false,
     },
-    public: {
+    description: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    private: {
+    publicCode: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    privateCode: {
       type: DataTypes.TEXT,
       allowNull: true,
     }

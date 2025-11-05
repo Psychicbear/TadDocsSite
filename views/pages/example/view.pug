@@ -1,0 +1,40 @@
+include ../../snippets/mixins/splitExample.pug
+section(id="example-section" hx-get=`/examples/${snippet.id}` hx-trigger="reloadExample from:body" hx-target="#example-section" hx-swap="outerHTML")
+    div.flex
+        h2.flex3 #{snippet.name} Example
+        if admin
+            fieldset(role="group").flex1
+                button(class="button" hx-trigger="click" hx-put=`/examples/remove?pageId=${page_id}`) Remove
+                i(role="button" class="material-symbols-outlined" hx-trigger="click" hx-delete=`/examples/${snippet.id}`) delete
+                i(role="button" class="material-symbols-outlined" onclick="toggleEditExample(event)") edit
+    p= snippet.description || 'No description provided.'
+    div.viewExample
+        +splitExample('example', 'Code', 'Demo')
+            // tab1 pane
+            div.tab1.wfull(class=`${'example'}_tab1`)
+                pre.minh15
+                    code.hljs.language-javascript.minh15= snippet.publicCode
+            // tab2 pane
+            div.tab2(class=`${'example'}_tab2`)
+                iframe(src=`/examples/${snippet.id}/run` width=280 height=280)
+    div(class="editExample hidden")
+        h2 Edit Example
+        form(id="example-edit" method="PUT" hx-put=`/examples/${snippet.id}` hx-on:htmx:before-send="toggleEditExample(event)" hx-target="#example-section" hx-swap="outerHTML").grid.grid-2col13.mtop1
+            input(type="hidden" name="id" value=snippet.id)
+            input(type="text" placeholder="Name" name="name" value=snippet.name onkeydown="augment_textarea(event)")
+            input(type="text" placeholder="Short Description" name="description" value=snippet.description onkeydown="augment_textarea(event)")
+            textarea(class="hljs language-javascript minh15" name="publicCode" placeholder="Code" onkeydown="augment_textarea(event)" rows="10" style="grid-column: span 2;")= snippet.publicCode
+            textarea(class="hljs language-javascript minh15" name="privateCode" placeholder="Code" onkeydown="augment_textarea(event)" rows="10" style="grid-column: span 2;")= snippet.privateCode
+            footer
+                fieldset(role="group" style="grid-column: span 2;")
+                    button(type="submit") Save
+                    button(type="button" onClick="toggleEditExample(event)") Cancel
+script(defer).
+    hljs.highlightAll();
+script.
+    function toggleEditExample(event) {
+        let editDiv = document.querySelector('.editExample');
+        let viewDiv = document.querySelector('.viewExample');
+        editDiv.classList.toggle('hidden');
+        viewDiv.classList.toggle('hidden');
+    }

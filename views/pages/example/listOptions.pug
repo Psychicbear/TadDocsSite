@@ -1,0 +1,4 @@
+select(id="exampleSelector" name="example_id" onChange="loadPreview(event)" required)
+    option(value="" disabled selected) -- Select an Example --
+    each example in examples
+        option(value=example.id) #{example.name}: #{example.description || 'No description provided'}

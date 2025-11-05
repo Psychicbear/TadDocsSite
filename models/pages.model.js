@@ -38,8 +38,13 @@ class Page extends Model {
         query = this.includeClassDetails();
     }
     query.include.push({ model: Example, as: "CodeExample" });
-    let hydratedPage = await this.findByPk(page.id, query);
-    return hydratedPage;
+    try {
+      let hydratedPage = await this.findByPk(page.id, query);
+      return hydratedPage;
+    } catch(err) {
+      console.error("Error in findWithDetails:", err);
+      return null;
+    }
   }
 
   /*

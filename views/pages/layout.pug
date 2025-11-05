@@ -38,6 +38,9 @@ block append styles
             list-style-type: none;
         }
 
+block append scripts
+    link(href="/css/lib/jshighlight-atom-one-dark-min.css" type="text/css" rel="stylesheet")
+    script(src="/js/highlight.min.js")
 
 
 block content
@@ -65,14 +68,9 @@ block content
             when 'method'
                 div(id="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" preload)="Loading method details..."
 
-    h2 Examples
-    if page.CodeExample
-        div.border.rounded.p-4.mb-4
-            h3= page.CodeExample.name
-            pre.bg-gray-100.p-2.rounded
-            code= page.CodeExample.public
-    else
-        p No examples available.
+    section(id="example-section" hx-trigger="load" hx-get=`/examples/${page.code_example_id}` hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true" preload)
+        h2 Examples
+        p Loading Example...
 
 
 

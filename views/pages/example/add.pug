@@ -1,0 +1,71 @@
+article.add-example
+    fieldset
+        legend Add Example To Page
+        input(type="radio" name="add_example" id="add_existing_selection" onClick="selectAddMode(event)")
+        label(for="add_existing_example") Add Existing Example
+        input(type="radio" name="add_example" id="add_new_selection" onClick="selectAddMode(event)" checked)
+        label(for="add_new_example") Create New Example
+    form(
+        class="add-new-example"
+        id="example_form"
+        action="/examples/addNew"
+        hx-post="/examples/addNew"
+        hx-on::after-request="if(event.detail.successful) this.reset(); this.closest('.add-item').classList.toggle('hidden'); this.closest('section').querySelector('.add-button').classList.toggle('hidden');"
+    )
+        section
+            input(type="hidden" name="page_id" value=page_id)
+            label(for="name") Example Name
+            input(type="text" pattern="^[a-zA-Z_$][a-zA-Z0-9_$]*$" name="name" placeholder="Name of page" value="" required)
+            label(for="description") Short Description
+            input(type="text" name="description" placeholder="Short description" value="")
+            label(for="publicCode") Public Code 
+            textarea(name="publicCode" placeholder="Tad.JS code here. This is what students will read" rows="4" value="" required)
+            label(for="privateCode") Private Code 
+            textarea(name="privateCode" placeholder="Tad.JS code here. This is what will be rendered by tad" rows="4" value="" required)
+        footer
+            fieldset(role="group")
+                button(type="submit") Create
+                button(type="button" onClick="hideAddMode()") Cancel
+        hr
+    
+    form(
+        class="add-existing-example hidden"
+        id="example_form"
+        action="/examples"
+        hx-post="/examples/addExisting"
+        hx-on::after-request="if(event.detail.successful) this.reset(); this.closest('.add-example').classList.toggle('hidden'); this.closest('section').querySelector('.add-example-button').classList.toggle('hidden');"
+    )
+        section
+            input(type="hidden" name="page_id" value=page_id)
+            label(for="example_id") Select Example
+            select(id="exampleSelector" name="example_id" hx-trigger="intersect once" hx-get="/examples/list-options" hx-target="#exampleSelector" hx-swap="outerHTML" required)
+                option(value="" disabled selected) -- Select an Example --
+            
+            div#example-preview.mt-2
+                p Select an example to preview it here.
+
+
+        footer
+            fieldset(role="group")
+                button(type="submit") Create
+                button(type="button" onClick="hideAddMode()") Cancel
+        hr
+script.
+    function selectAddMode(event){
+        let newExample = document.querySelector(".add-new-example");
+        let existingExample = document.querySelector(".add-existing-example");
+        newExample.classList.toggle("hidden");
+        existingExample.classList.toggle("hidden");
+    }
+    
+    function hideAddMode(){
+        document.querySelector(".add-new-example").reset()
+        document.querySelector(".add-existing-example").reset()
+        document.querySelector(".add-example").classList.add("hidden");
+        document.querySelector(".add-example-button").classList.remove("hidden");
+    }
+
+    async function loadPreview(event){
+        await htmx.ajax('GET', `/examples/preview/${event.target.value}`, {target: '#example-preview', swap: 'outerHTML'});
+    }
+    

@@ -1,0 +1,20 @@
+include ../../snippets/mixins/splitExample.pug
+section.example-preview(
+    id="example-preview"
+    hx-trigger="reloadPreview from:body"
+    hx-get=`/examples/preview/${example_id || ''}`
+    hx-swap="outerHTML"
+    preload
+)
+    h2 #{snippet.name} Preview
+    p= snippet.description || 'No description provided.'
+    +splitExample('snippetExample2', 'Code', 'Demo')
+            // tab1 pane
+            div.tab1.wfull(class=`${'example'}_tab1`)
+                pre.minh15
+                    code.hljs.language-javascript.minh15= snippet.publicCode
+            // tab2 pane
+            div.tab2(class=`${'example'}_tab2`)
+                iframe(src=`/examples/${snippet.id}/run/` width=280 height=280)          
+script(defer).
+    hljs.highlightAll();

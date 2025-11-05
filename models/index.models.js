@@ -62,6 +62,16 @@ Page.addHook('afterUpdate', async (page, options) => {
     }
 })
 
+Example.addHook('afterDestroy', async (example, options) => {
+    console.log(`Example with ID ${example.id} destroyed. Removing code_example_id from associated Pages.`);
+    let pages = await Page.findAll({ where: { code_example_id: example.id }, transaction: options.transaction });
+    for(const page of pages) {
+        page.code_example_id = null;
+        await page.save({ transaction: options.transaction });
+        console.log(`Removed code_example_id from Page ${page.name}`);
+    }
+});
+
 // Hooks to enable deleting page that owns Class, Property, or Method when they are deleted
 Class.addHook("afterDestroy", async (cls, options) => {
   console.log("Destroyed Class: ", cls.id);
