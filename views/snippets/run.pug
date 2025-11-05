@@ -2,7 +2,7 @@
 body(style="overflow:hidden; margin:0px; padding:0px;")
     script(defer src="/js/components/tad-shell.js" type="module")
     script(type="module").
-        !{snippet.private}
+        !{snippet.privateCode}
     tad-shell(id="shell" debug="off" cursor="none")
         <!-- You can let the component create these automatically, OR provide your own: -->
         div(id="tad-wrapper" slot="stage" class="wrapper")
