@@ -1,5 +1,5 @@
 include mixins.pug
-div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-target="#page-details" hx-swap="outerHTML" preload)
+div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-target="#page-details" hx-swap="outerHTML" hx-swap-oob="true")
   if admin 
     div.mb-4.editPage.hidden
       div.flex.justify-between.mb-2
@@ -34,15 +34,14 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
         i(role="button" id="page-delete" hx-delete=`${delSlug}` hx-confirm="Are you sure you want to delete" class="material-symbols-outlined" hx-swap="outerHTML")="delete"
   p!= mdLinks(page.long_description)
 
-if loadPageType 
-  +breadcrumbs(page.slug, "true")
++breadcrumbs(page.slug, "true")
 
 if page.code_example_id
-  section(id="example-section" hx-trigger="load" hx-get=`/examples/${page.code_example_id}?pageId=${page.id}` hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true" preload)
+  section(id="example-section" hx-trigger="load" hx-get=`/examples/${page.code_example_id}?pageId=${page.id}` hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true")
     h2 Examples
     p Loading Example...
 else
-  section(id="example-section" hx-swap-oob="true")
+  section(id="example-section" hx-target="#example-section" hx-swap-oob="true")
     h2 Examples
     p No examples available.
     if admin
@@ -53,10 +52,10 @@ block typeDetails
   if loadPageType
     case page.page_type
         when 'class'
-            div(id="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" hx-swap-oob="true" preload)="Loading module details..."
+            div(id="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" hx-swap-oob="true")="Loading module details..."
         when 'property'
-            div(id="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" hx-swap-oob="true" preload)="Loading property details..."
+            div(id="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" hx-swap-oob="true")="Loading property details..."
         when 'method'
-            div(id="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" hx-swap-oob="true" preload)="Loading method details..."
+            div(id="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML" hx-swap-oob="true")="Loading method details..."
         default
           - break

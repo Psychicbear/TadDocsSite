@@ -20,14 +20,12 @@ class Index {
      * Renders the top level of the Tad documentation
      */
     async home(req, res) {
-        let edit = false
-        if(req.isAdmin && req.query.editmode) edit = true
         const root = await Page.getRoot();
 
         if(req.get('HX-Request')) {
-            return res.render("./pages/view.pug", { page: root, admin: req.isAdmin, edit, loadPageType: true });
+            return res.render("./pages/home.pug", { page: root, admin: req.isAdmin });
         } else {
-            res.render("./pages/layout.pug", { page: root, admin: req.isAdmin, edit, loadPageType: false } );
+            res.render("./pages/layout.pug", { page: root, admin: req.isAdmin, loadPageType: false, loadTadPage: true } )
         }
     }
 
@@ -106,8 +104,6 @@ class Index {
         * Renders 404 if page not found.
     */
     async viewPageBySlug(req, res) {
-        let edit = false
-        if(req.isAdmin && req.query.editmode) edit = true
         let slug = ''
         slug += req.params.slug1 ? `/${req.params.slug1}` : ''
         slug += req.params.slug2 ? `/${req.params.slug2}` : ''
@@ -117,9 +113,13 @@ class Index {
         const page = await Page.getBySlug(slug);
         if (!page) return res.status(404).send("Page not found");
         if(req.get('HX-Request')) {
-            return res.render("./pages/view.pug", { page, admin: req.isAdmin, edit, loadPageType: true });
+            if(req.query.type && req.query.type == 'list-item'){
+                return res.render("./pages/listItem.pug", { page, admin: req.isAdmin });
+            } else {
+                return res.render("./pages/view.pug", { page, admin: req.isAdmin, loadPageType: true });
+            }
         } else {
-            res.render("./pages/layout.pug", { page, admin: req.isAdmin, edit, loadPageType: false } );
+            res.render("./pages/layout.pug", { page, admin: req.isAdmin, loadPageType: false } );
         }
     }
 
@@ -137,9 +137,9 @@ class Index {
         if(req.query.referrer == 'class'){
             let trigger = `${req.query.type}Reload`
             console.log("Triggering reload:", trigger)
-            return res.status(206).set('HX-Trigger', trigger).send()
+            return res.status(206).set({'HX-Trigger': trigger}).send()
         } else{
-            return res.render("./pages/view.pug", { page: newdata, admin: req.isAdmin });
+            return res.set({'HX-Push-Url': `/tad${newdata.slug}`}).render("./pages/view.pug", { page: newdata, admin: req.isAdmin});
         }
     }
 

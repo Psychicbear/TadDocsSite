@@ -1,6 +1,6 @@
 
 mixin breadcrumbs(slug, oob="false")
-    div(id="docs-breadcrumb" class="flex2" hx-swap-oob=`${oob}`)
+    div(id="docs-breadcrumb" class="flex2" hx-target="#docs-breadcrumb" hx-swap-oob=oob)
         - const parts = slug.split('/').filter(part => part.length > 0);
         - let path = '';
         nav(aria-label="breadcrumb" style="--pico-nav-breadcrumb-divider: '.';")
@@ -86,3 +86,6 @@ mixin editableLi(page, method=false)
                                         span(class=`${type_class}`) , 
                             span.p025 &#41;
                 span.comment.right-text.fs08.flex2=`${page.short_description}`
+
+mixin loadLi(id, slug)
+    li(id=id hx-trigger="load" hx-get=`${slug}?type=list-item` hx-target="closest .item" hx-swap="outerHTML").item
