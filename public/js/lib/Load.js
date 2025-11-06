@@ -3,7 +3,7 @@ import { Img, Stamp } from "./Img.js";
 import { MovingStamp } from "./Animation.js";
 //assets
 import { AssetManager, AssetJob } from "./AssetManager.js";
-import { TextFileAsset } from "./TextFileAsset.js";
+import { TextFile } from "./TextFileAsset.js";
 import { JsonFileAsset } from "./JsonFileAsset.js";
 import { SoundFileAsset } from "./SoundFileAsset.js";
 import { FontFileAsset } from "./FontFileAsset.js";
@@ -58,7 +58,7 @@ export class Load {
                 `Filepath is not a string! You gave: ${filepath}|${typeof filepath}.`
             );
         }
-        if (this.tad.frameCount >= 0) {
+        if (this.tad.time.frames >= 0) {
             throw new Error(
                 "You can't load after draw has started, load assets before hand and store the result in a variable, object property or group!"
             );
@@ -67,7 +67,7 @@ export class Load {
             if (file.filepath === filepath) {
                 //check if the filepath is already being loaded!
                 // @ts-ignore
-                const nuStamp = new Stamp(this, x, y, file.asset);
+                const nuStamp = new Stamp(this.tad, x, y, file.asset);
                 // @ts-ignore
                 file.asset.wrapper.push(nuStamp);
                 return nuStamp;
@@ -86,7 +86,7 @@ export class Load {
      * Loads a text file from the specified filepath. If the file is already in the process of loading or has been loaded, it returns the existing TextFileAsset instance; otherwise, it starts a new load process.
      *
      * @param {string} filepath - The path to the text file to load.
-     * @returns {TextFileAsset} The TextFileAsset instance for the loaded text file.
+     * @returns {TextFile} The TextFileAsset instance for the loaded text file.
      * @throws {Error} If the filepath argument is not a string.
      */
     text(filepath) {
@@ -95,7 +95,7 @@ export class Load {
                 `Filepath is not a string! You gave: ${filepath}|${typeof filepath}.`
             );
         }
-        if (this.tad.frameCount >= 0) {
+        if (this.tad.time.frames >= 0) {
             throw new Error(
                 "You can't load after draw has started, load assets before hand and store the result in a variable, object property or group!"
             );
@@ -108,7 +108,7 @@ export class Load {
         }
 
         const job = new AssetJob(filepath);
-        const text = new TextFileAsset(filepath, job);
+        const text = new TextFile(filepath, job);
         // @ts-ignore
         job.asset = text;
         this.#assets.jobs.push(job);
@@ -225,7 +225,7 @@ export class Load {
                 "no images provided! animations need photos! photos of spiderman!"
             );
         }
-        if (this.tad.frameCount >= 0) {
+        if (this.tad.time.frames >= 0) {
             throw new Error(
                 `You can't load after draw has started, load assets before hand and store the result in a variable, object property or group!\n
                 ---------------------
@@ -263,7 +263,7 @@ ${Video.loading.title} | ${Video.loading.url}
                 `Filepath is not a string! You gave: ${filepath}|${typeof filepath}.`
             );
         }
-        if (this.tad.frameCount >= 0) {
+        if (this.tad.time.frames >= 0) {
             throw new Error(
                 "You can't load after draw has started, load assets before hand and store the result in a variable, object property or group!"
             );
@@ -293,7 +293,7 @@ ${Video.loading.title} | ${Video.loading.url}
                 `Filepath is not a string! You gave: ${filepath}|${typeof filepath}.`
             );
         }
-        if (this.tad.frameCount >= 0) {
+        if (this.tad.time.frames >= 0) {
             throw new Error(
                 "You can't load after draw has started, load assets before hand and store the result in a variable, object property or group!"
             );

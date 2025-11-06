@@ -9,17 +9,8 @@ import { Paint } from "./Paint.js";
 
 /**
  * @typedef {import("./TeachAndDraw.js").Tad} Tad
- */
-
-/**
  * @typedef {import("./Group.js").Group} Group
- */
-
-/**
  * @typedef {import("./Img.js").Stamp} Stamp
- */
-
-/**
  * @typedef {import("./Animation.js").MovingStamp} MovingStamp
  */
 
@@ -90,8 +81,9 @@ export class Entity {
         this.#extra = makeExtra();
         this.velocity = new Velocity(0, 0);
         this.movedByCamera = true;
-        this.#direction = this.#tad.math.adjustDegressSoTopIsZero(0);
-        this.#rotation = this.#tad.math.adjustDegressSoTopIsZero(0);
+        if(tad.math.adjustDegressSoTopIsZero === undefined) {throw new Error()}
+        this.#direction = tad.math.adjustDegressSoTopIsZero(0);
+        this.#rotation = tad.math.adjustDegressSoTopIsZero(0);
         this.rotationalVelocity = 0;
         this.#maxSpeed = 1000;
         // this.#collider = null;
@@ -362,7 +354,7 @@ export class Entity {
         this.#tad.shape.colour = this.colour;
         this.#tad.shape.border = "white";
         this.#tad.shape.strokeDash = 3;
-        this.#tad.shape.oval(this.x, this.y, 10);
+        this.#tad.shape.circle(this.x, this.y, 10);
 
         if (this.hasAsset()) {
             this.drawAssets();
