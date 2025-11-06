@@ -19,9 +19,11 @@ article.add-example
             label(for="description") Short Description
             input(type="text" name="description" placeholder="Short description" value="")
             label(for="publicCode") Public Code 
-            textarea(name="publicCode" placeholder="Tad.JS code here. This is what students will read" rows="4" value="" required)
+            code-input(template="syntax-highlighted" language="JavaScript" name="publicCode" placeholder="Tad.JS code here. This is what students will read" rows="4" value="" required)
+                textarea(data-code-input-fallback name="publicCode" required)
             label(for="privateCode") Private Code 
-            textarea(name="privateCode" placeholder="Tad.JS code here. This is what will be rendered by tad" rows="4" value="" required)
+            code-input(template="syntax-highlighted" language="JavaScript" name="privateCode" placeholder="Tad.JS code here. This is what will be rendered by tad" rows="4" value="" required)
+                textarea(data-code-input-fallback name="privateCode" required)
         footer
             fieldset(role="group")
                 button(type="submit") Create

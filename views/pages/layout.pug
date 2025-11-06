@@ -41,7 +41,23 @@ block append styles
 block append scripts
     link(href="/css/lib/jshighlight-atom-one-dark-min.css" type="text/css" rel="stylesheet")
     script(src="/js/highlight.min.js")
-
+    if admin
+        script(src="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@2.7/code-input.min.js")
+        link(rel="stylesheet" href="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@2.7/code-input.min.css")
+        script(src="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@2.7/plugins/indent.min.js")
+        script.
+            codeInput.registerTemplate("syntax-highlighted",
+                new codeInput.templates.Hljs(
+                    hljs,
+                    [
+                        // You can add or remove plugins in this list from https://code-input-js.org/plugins.
+                        // All plugins used must be imported above.
+                        new codeInput.plugins.Indent()
+                    ]
+                )
+            );
+            
+        
 
 block content
     div(class="flex" style="justify-content: space-between; align-items: center;")

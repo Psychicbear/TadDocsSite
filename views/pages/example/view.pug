@@ -23,8 +23,12 @@ section(id="example-section" hx-get=`/examples/${snippet.id}` hx-trigger="reload
             input(type="hidden" name="id" value=snippet.id)
             input(type="text" placeholder="Name" name="name" value=snippet.name onkeydown="augment_textarea(event)")
             input(type="text" placeholder="Short Description" name="description" value=snippet.description onkeydown="augment_textarea(event)")
-            textarea(class="hljs language-javascript minh15" name="publicCode" placeholder="Code" onkeydown="augment_textarea(event)" rows="10" style="grid-column: span 2;")= snippet.publicCode
-            textarea(class="hljs language-javascript minh15" name="privateCode" placeholder="Code" onkeydown="augment_textarea(event)" rows="10" style="grid-column: span 2;")= snippet.privateCode
+            label(for="publicCode") Public Code 
+            code-input(style="grid-column: span 2;" template="syntax-highlighted" language="JavaScript" name="publicCode" placeholder="Tad.JS code here. This is what students will read" rows="4" value="" required)
+                textarea(data-code-input-fallback name="publicCode" required)= snippet.publicCode
+            label(for="privateCode") Private Code 
+            code-input(style="grid-column: span 2;" template="syntax-highlighted" language="JavaScript" name="privateCode" placeholder="Tad.JS code here. This is what will be rendered by tad" rows="4" value="" required)
+                textarea(data-code-input-fallback name="privateCode" required)= snippet.privateCode
             footer
                 fieldset(role="group" style="grid-column: span 2;")
                     button(type="submit") Save
