@@ -39,6 +39,20 @@ block append styles
         }
 
 block append scripts
+    script.
+        window.onload = function () {
+            // Enables opening hx-get links in new tabs with ctrl+click
+            htmx.on('htmx:configRequest', (evt) => {
+                const requestType = evt.detail.verb;
+                const ctrlKey = evt.detail.triggeringEvent?.ctrlKey;
+                const pushUrl = evt.target.attributes['hx-push-url']?.value;
+
+                if (requestType === 'get' && ctrlKey && pushUrl) {
+                    evt.preventDefault();
+                    window.open(evt.detail.headers["HX-Current-URL"], '_blank');
+                }
+            })
+        }
     link(href="/css/lib/jshighlight-atom-one-dark-min.css" type="text/css" rel="stylesheet")
     script(src="/js/highlight.min.js")
     if admin
@@ -94,19 +108,6 @@ block content
     div#dialog-container
     if admin
         script.
-            window.onload = function () {
-                // Enables opening hx-get links in new tabs with ctrl+click
-                htmx.on('htmx:configRequest', (evt) => {
-                    const requestType = evt.detail.verb;
-                    const ctrlKey = evt.detail.triggeringEvent?.ctrlKey;
-                    const pushUrl = evt.target.attributes['hx-push-url']?.value;
-
-                    if (requestType === 'get' && ctrlKey && pushUrl) {
-                        evt.preventDefault();
-                        window.open(evt.detail.headers["HX-Current-URL"], '_blank');
-                    }
-                })
-            }
             let uploadForm = document.querySelector('#fileinput');
             uploadForm.addEventListener('change', (event) => {
             console.log('file selected, submitting form');
