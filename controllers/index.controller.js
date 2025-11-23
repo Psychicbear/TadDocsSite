@@ -1,5 +1,4 @@
 import utils from "../utils/utils.js";
-import { Note } from "../models/notes.model.js";
 
 /**
  * @typedef {import('../utils/types.mjs').OurRequest} Request
@@ -23,7 +22,6 @@ class Index {
 
         res.render("./index.pug", {
             user: user,
-            notes: await Note.findTop(),
         });
     }
 }
