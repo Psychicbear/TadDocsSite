@@ -1,6 +1,6 @@
-import { $ } from "./lib/TeachAndDraw.js";
-import { AssetJob } from './lib/AssetManager.js';
-import { Stamp } from './lib/Img.js';
+import { $ } from "./TeachAndDraw.js";
+import { AssetJob } from './AssetManager.js';
+import { Stamp } from './Img.js';
 
 /**
  * @typedef {import("./lib/TeachAndDraw.js).Tad} Tad

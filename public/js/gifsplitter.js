@@ -1,4 +1,4 @@
-const worker = new Worker('/js/sprite-worker.js');
+const worker = new Worker('/js/toolslib/sprite-worker.js');
 class GifSplitter extends HTMLElement {
     #outputFrames = []
     constructor() {

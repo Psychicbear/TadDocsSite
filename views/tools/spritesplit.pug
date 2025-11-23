@@ -37,10 +37,10 @@ block append styles
         font-size: 24px; /* Icon size */
         }
 
-block scripts
-    script(src="/js/jszip.js" defer)
-    script(src="/js/FileSaver.js" defer)
+block append scripts
+    script(src="/js/toolslib/jszip.js" defer)
+    script(src="/js/toolslib/FileSaver.js" defer)
     script(src="/js/spritesheetsplitter.js" type="module" defer)
 
-block append content
+block content
     spritesheet-slicer

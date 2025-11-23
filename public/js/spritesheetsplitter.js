@@ -7,13 +7,13 @@
  * It then loads the CSS for the component and defines the web component class
  * Finally it registers the web component with the browser
  */
-import { setupTad } from './setupTad.js';
-import { slicerTemplate, errorDialog, largeFileDialog, formTemplate} from "./templates.js"
-const worker = new Worker('/js/sprite-worker.js');
+import { setupTad } from '/js/toolslib/setupTad.js';
+import { slicerTemplate, errorDialog, largeFileDialog, formTemplate} from "./toolslib/templates.js"
+const worker = new Worker('/js/toolslib/sprite-worker.js');
 
 const style = document.createElement('link');
 style.rel = 'stylesheet';
-style.href = '/assets/spritesheet.css';
+style.href = '/css/spritesheet.css';
 style.type = 'text/css';
 style.media = 'all';
 document.head.appendChild(style);
