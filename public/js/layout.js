@@ -1,15 +1,27 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const menuToggle = document.querySelector(".menu-toggle");
-    const sideMenu = document.getElementById("side-menu");
-    const closeBtn = document.querySelector("#side-menu .close");
+// document.addEventListener("DOMContentLoaded", function () {
+//     const menuToggle = document.querySelector(".menu-toggle");
+//     const sideMenu = document.getElementById("side-menu");
+//     const closeBtn = document.querySelector("#side-menu .close");
 
-    menuToggle.addEventListener("click", function (e) {
-        e.preventDefault();
-        sideMenu.classList.toggle("open");
-    });
+//     menuToggle.addEventListener("click", function (e) {
+//         e.preventDefault();
+//         sideMenu.classList.toggle("open");
+//     });
 
-    closeBtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        sideMenu.classList.remove("open");
-    });
-});
+//     closeBtn.addEventListener("click", function (e) {
+//         e.preventDefault();
+//         sideMenu.classList.remove("open");
+//     });
+// });
+
+function openMenu(event) {
+  const sideMenu = document.getElementById("side-menu");
+  event.preventDefault();
+  sideMenu.classList.toggle("open");
+}
+
+function closeMenu(event) {
+  const sideMenu = document.getElementById("side-menu");
+  event.preventDefault();
+  sideMenu.classList.remove("open");
+}

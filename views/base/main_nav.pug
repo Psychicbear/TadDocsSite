@@ -94,11 +94,11 @@ header
                         //- img(src="/images/logo.svg")
         ul.fixed.top0.right0
             li
-                a(href="#" class="secondary menu-toggle" style="background:#13171f")   ☰
+                a(href="#" onclick="openMenu(event)" class="secondary menu-toggle" style="background:#13171f")   ☰
 
 //- Side Navigation
 aside#side-menu
-    a.close(href="#" aria-label="Close Menu") ×
+    a.close(href="#" aria-label="Close Menu" onclick="closeMenu(event)") ×
     nav
         ul
             li
