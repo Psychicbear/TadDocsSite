@@ -13,6 +13,10 @@
     display: none;
 }
 
+.desc {
+    display: none;
+}
+
 .example header {
     margin: 0;
     padding: 0;
@@ -86,6 +90,11 @@ code.minh15 {
     .example .method-section h3 {
         display: block;
     }
+
+    .desc {
+        display: block;
+    }
+    
     /* hide the tab header — no tabs on desktop */
     .example header {
         display: none;

@@ -85,7 +85,7 @@ mixin editableLi(page, method=false)
                                     if index < page.args.length - 1
                                         span(class=`${type_class}`) , 
                             span.p025 &#41;
-                span.comment.right-text.fs08.flex2=`${page.short_description}`
+                span.comment.right-text.fs08.flex2.desc=`${page.short_description}`
 
 mixin loadLi(id, slug)
     li(id=id hx-trigger="load" hx-get=`${slug}?type=list-item` hx-target="closest .item" hx-swap="outerHTML").item

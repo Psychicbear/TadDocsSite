@@ -38,11 +38,11 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
 
 if page.code_example_id
   section(id="example-section" hx-trigger="load" hx-get=`/examples/${page.code_example_id}?pageId=${page.id}` hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true")
-    h2 Examples
+    h3 Examples
     p Loading Example...
 else
   section(id="example-section" hx-target="#example-section" hx-swap-oob="true")
-    h2 Examples
+    h3 Examples
     p No examples available.
     if admin
       i(role="button" onClick="this.classList.add('hidden'); document.querySelector('.add-example').classList.remove('hidden');" class="material-symbols-outlined add-example-button")="add_circle"

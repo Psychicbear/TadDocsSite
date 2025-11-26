@@ -4,26 +4,27 @@ div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/methods/view/${
             if admin
                 i(role="button" class="material-symbols-outlined" onclick="toggleEditTypeDetails(event)") edit
                 i(role="button" class="material-symbols-outlined add-arg-button" onclick="toggleAddArg(event)") add_circle
-    form(hx-post=`/methods/${methodId}/args/add`).add-arg.hidden
-        fieldset.argument-input
-            input(type="hidden" name="method_id" value=`${methodId}`)
-            fieldset(role="group")
-                input(type="text" name="name" placeholder="Name" required)
-                input(type="text" name="type" placeholder="Type" required)
-                button(type="button" class="material-symbols-outlined secondary" onclick="toggleAddArg(event)") cancel
-            input(type="text" name="description" placeholder="Description")
-        button(type="submit") Add Argument
-    if args.length
-        each arg in args
-            div.argument-item
-                h5
-                    span= arg.name
-                    | : 
-                    span= arg.type
-                    |  -  
-                    span= arg.description
-    if !(returns === undefined || returns === null)
-        h5 Returns: 
+        form(hx-post=`/methods/${methodId}/args/add`).add-arg.hidden
+            fieldset.argument-input
+                input(type="hidden" name="method_id" value=`${methodId}`)
+                fieldset(role="group")
+                    input(type="text" name="name" placeholder="Name" required)
+                    input(type="text" name="type" placeholder="Type" required)
+                    button(type="button" class="material-symbols-outlined secondary" onclick="toggleAddArg(event)") cancel
+                input(type="text" name="description" placeholder="Description")
+            button(type="submit") Add Argument
+        if args.length
+            div.argument-list.mb-4
+                each arg in args
+                    div.argument-item.flex
+                        div.flex1
+                            span= arg.name
+                        div.flex3
+                            span= arg.type
+                            |  :  
+                            span= arg.description
+        if !(returns === undefined || returns === null)
+            h5 Returns: 
             span= returns
     
     div.editTypeDetails.hidden

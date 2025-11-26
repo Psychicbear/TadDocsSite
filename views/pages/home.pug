@@ -23,6 +23,7 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
                 if parts.length > 0
                 sub.lineh05="tad." + parts
         if admin
+
             - let delSlug = "/"
             case page.page_type
                 when 'class': - delSlug += "classes/"
@@ -36,6 +37,9 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
     p!= mdLinks(page.long_description)
     
     section.tadlinks
+            if admin
+                button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
+                article(hx-get=`/classes/add/${parentId}` hx-target=".add-module" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-module.hidden
             h3 Drawing
             ul
                 +loadLi('tad-text', '/tad/text')
@@ -50,11 +54,13 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
                 +loadLi('tad-slider', '/tad/slider')
                 +loadLi('tad-checkbox', '/tad/checkbox')
                 +loadLi('tad-dropdown', '/tad/dropdown')
+                +loadLi('tad-textArea', '/tad/textArea')
 
             h3 Input
             ul
                 +loadLi('tad-keyboard', '/tad/keys')
                 +loadLi('tad-mouse', '/tad/mouse')
+                +loadLi('tad-touch', '/tad/touch')
 
             h3 Data
             ul
