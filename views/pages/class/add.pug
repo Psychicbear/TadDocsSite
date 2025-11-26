@@ -7,7 +7,7 @@ article.add-item.add-module
     )
         section
             input(type="hidden" name="page_type" value="class")
-            input(type="hidden" name="parent_id" value=parentId)
+            input(type="hidden" name="parent_id" value=parentId ?? '')
             label(for="name") Page Name
             input(type="text" pattern="^[a-zA-Z_$][a-zA-Z0-9_$]*$" name="name" placeholder="Name of page" value="Pixel" required)
             label(for="short_desc") Short Description

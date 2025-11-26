@@ -39,7 +39,7 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
     section.tadlinks
             if admin
                 button( title="Add Module" onclick="toggleAddItem(event)").material-symbols-outlined.add-button add_circle
-                article(hx-get=`/classes/add/${parentId}` hx-target=".add-module" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-module.hidden
+                article(hx-get=`/classes/add/${page.id}` hx-target=".add-module" hx-swap:="outerHTML" hx-trigger="intersect once").add-item.add-module.hidden
             h3 Drawing
             ul
                 +loadLi('tad-text', '/tad/text')
