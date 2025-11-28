@@ -17,10 +17,6 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
   div.flex.justify-between.mb-4.viewPage
     div.lineh05.pbottom1.flex3
       h1.lineh05= page.name
-      if(page.slug != '/')
-        - let parts = page.slug.split('/').filter(part => part.length > 0).join('.');
-        if parts.length > 0
-          sub.lineh05="tad." + parts
     if admin
       - let delSlug = "/"
       case page.page_type
