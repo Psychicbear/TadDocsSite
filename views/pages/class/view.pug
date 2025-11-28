@@ -7,7 +7,7 @@ block append style
         .single-list-view .method-list,
         .single-list-view .property-list { width: 100%; }
 
-div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/classes/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML").fadein01.minh20
+article(id="type-details" hx-trigger="typeReload from:body" hx-get=`/classes/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML").fadein01.minh20
     div(class="class-list", hx-trigger="load, classReload from:body" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".class-list" ).fadein02
     
     //- Split view (hidden when one list is empty)

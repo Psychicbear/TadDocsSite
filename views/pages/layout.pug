@@ -61,6 +61,7 @@ block append scripts
         
 
 block content
+    //- article
     div(class="flex" style="justify-content: space-between; align-items: center;")
         +breadcrumbs(page.slug)
         if admin
@@ -80,11 +81,11 @@ block content
     block typeDetails 
         case page.page_type
             when 'class'
-                div(id="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML")="Loading module details..."
+                article(id="type-details" hx-trigger="load" hx-get=`/classes/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML")="Loading module details..."
             when 'property'
-                div(id="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML")="Loading property details..."
+                article(id="type-details" hx-trigger="load" hx-get=`/properties/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML")="Loading property details..."
             when 'method'
-                div(id="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML")="Loading method details..."
+                article(id="type-details" hx-trigger="load" hx-get=`/methods/view/${page.id}` hx-target="#type-details" hx-swap="outerHTML")="Loading method details..."
 
     article(id="example-section" hx-trigger="load" hx-get=`/examples/${page.code_example_id}` hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true")
         h2 Examples

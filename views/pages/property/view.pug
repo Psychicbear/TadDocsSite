@@ -1,4 +1,4 @@
-div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/properties/view/${propId}` hx-target="#type-details" hx-swap="outerHTML")
+article(id="type-details" hx-trigger="typeReload from:body" hx-get=`/properties/view/${propId}` hx-target="#type-details" hx-swap="outerHTML")
     div.editTypeDetails.hidden
         h4 Type Details
             i(role="button" class="material-symbols-outlined" onclick="toggleEditTypeDetails(event)") cancel    
@@ -9,6 +9,10 @@ div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/properties/view
     div.viewTypeDetails
         if admin 
             i(role="button" class="material-symbols-outlined" onclick="toggleEditTypeDetails(event)") edit
-        h5=`Type: ${prop.type}`
+        div.flex
+            span.flex1="Type: "
+            span.flex3=prop.type
         if prop.default_value
-            h5=`Default Value: ${prop.default_value}`
+            div.flex
+                span.flex1="Default Value: "
+                prop.flex3=prop.default_value
