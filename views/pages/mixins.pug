@@ -70,8 +70,9 @@ mixin editableLi(page, method=false)
                         i(style="grid-column: 12;" role="button" title="Cancel Edit" onclick="toggleEditItem(event)").material-symbols-outlined.flex1 cancel
         else
             div.flex
-                a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true").flex1.notextdecoration= page.name
+                a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true").flex1.notextdecoration
                     if method
+                        span(data-tooltip=`${page.short_description}` data-placement="right").clickable=page.name
                         span.noborder
                             |&#40; 
                             if page.args.length
@@ -85,7 +86,10 @@ mixin editableLi(page, method=false)
                                     if index < page.args.length - 1
                                         span(class=`${type_class}`) , 
                             span.p025 &#41;
-                span.comment.right-text.fs08.flex2.desc=`${page.short_description}`
+                    else
+                        =page.name
+                if !method
+                    span.comment.right-text.fs08.flex2.desc=`${page.short_description}`
 
 mixin loadLi(id, slug)
     li(id=id hx-trigger="load" hx-get=`${slug}?type=list-item` hx-target="closest .item" hx-swap="outerHTML").item

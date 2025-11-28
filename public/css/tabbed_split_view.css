@@ -5,15 +5,12 @@
     min-height: 400px;
 }
 
-.example .property-section h3 {
-    display: none;
-}
 
 .example .method-section h3 {
     display: none;
 }
 
-.desc {
+.method-section .desc {
     display: none;
 }
 

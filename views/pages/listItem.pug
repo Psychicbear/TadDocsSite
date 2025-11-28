@@ -8,7 +8,7 @@ li(id=page.id hx-get=`/tad${page.slug}` hx-target=`closest .item` hx-swap="outer
         - delSlug += page.id + "?referrer=parent"
         div.viewItem.flex
             div.flex3
-                a(href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")= page.name
+                a(data-tooltip=`${page.description}` data-placement="right" class="clickable" href=`/tad${page.slug}` hx-get=`/tad${page.slug}` hx-target="#page-details" hx-swap="outerHTML" hx-push-url="true")=page.name
                 if method
                     |&#40; 
                     if page.args.length
