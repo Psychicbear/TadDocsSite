@@ -46,7 +46,7 @@ article.container h1 {
 }
 
 body > main {
-    padding: 0;
+    padding: 1rem;
 }
 
 textarea {
