@@ -46,8 +46,12 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
                 +loadLi('tad-shape', '/tad/shape')
                 +loadLi('tad-image', '/tad/image')
                 +loadLi('tad-animation', '/tad/animation')
+
+            h3 Math
+            ul
+                +loadLi('tad-math', '/tad/math')  
             
-            h3 Gui
+            h3 GUI
             ul
                 +loadLi('tad-make', '/tad/make')
                 +loadLi('tad-button', '/tad/button')
@@ -73,12 +77,7 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
                 +loadLi('tad-make', '/tad/make')
                 +loadLi('tad-collider', '/tad/collider')
                 +loadLi('tad-sound', '/tad/sound')
-                +loadLi('tad-time', '/tad/time')
-
-            h3 Misc
-            ul
-                +loadLi('tad-math', '/tad/math')
-                +loadLi('tad-make', '/tad/make')      
+                +loadLi('tad-time', '/tad/time')   
 +breadcrumbs(page.slug, "true")
 div(id="type-details" hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true")
 section(id="example-section" hx-target="#example-section" hx-swap="outerHTML" hx-swap-oob="true")
