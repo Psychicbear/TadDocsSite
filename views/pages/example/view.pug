@@ -1,5 +1,5 @@
 include ../../snippets/mixins/splitExample.pug
-section(id="example-section" hx-get=`/examples/${snippet.id}` hx-trigger="reloadExample from:body" hx-target="#example-section" hx-swap="outerHTML")
+article(id="example-section" hx-get=`/examples/${snippet.id}` hx-trigger="reloadExample from:body" hx-target="#example-section" hx-swap="outerHTML")
     div.flex
         h2.flex3 #{snippet.name} Example
         if admin
