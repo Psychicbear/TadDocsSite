@@ -35,12 +35,12 @@ article.add-example
         id="example_form"
         action="/examples"
         hx-post="/examples/addExisting"
-        hx-on::after-request="if(event.detail.successful) this.reset(); this.closest('.add-example').classList.toggle('hidden'); this.closest('section').querySelector('.add-example-button').classList.toggle('hidden');"
+        hx-on::after-request="// if(event.detail.successful) this.reset(); this.closest('.add-example').classList.toggle('hidden'); this.closest('section').querySelector('.add-example-button').classList.toggle('hidden');"
     )
         section
             input(type="hidden" name="page_id" value=page_id)
             label(for="example_id") Select Example
-            select(id="exampleSelector" name="example_id" hx-trigger="intersect once" hx-get="/examples/list-options" hx-target="#exampleSelector" hx-swap="outerHTML" required)
+            select(id="exampleSelector" name="example_id" hx-trigger="load" hx-get="/examples/list-options" hx-target="#exampleSelector" hx-swap="outerHTML" required)
                 option(value="" disabled selected) -- Select an Example --
             
             div#example-preview.mt-2
