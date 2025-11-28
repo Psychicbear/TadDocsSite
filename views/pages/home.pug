@@ -57,6 +57,12 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
                 +loadLi('tad-group', '/tad/group')
                 +loadLi('tad-load', '/tad/load')
             
+            h3 Input
+            ul
+                +loadLi('tad-keyboard', '/tad/keys')
+                +loadLi('tad-mouse', '/tad/mouse')
+                +loadLi('tad-touch', '/tad/touch')
+            
             h3 GUI
             ul
                 +loadLi('tad-make', '/tad/make')
@@ -65,12 +71,6 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
                 +loadLi('tad-checkbox', '/tad/checkbox')
                 +loadLi('tad-dropdown', '/tad/dropdown')
                 +loadLi('tad-textArea', '/tad/textArea')
-
-            h3 Input
-            ul
-                +loadLi('tad-keyboard', '/tad/keys')
-                +loadLi('tad-mouse', '/tad/mouse')
-                +loadLi('tad-touch', '/tad/touch')
 
             h3 Games
             ul
