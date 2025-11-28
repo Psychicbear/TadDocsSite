@@ -2,14 +2,69 @@ include ../../snippets/mixins/splitExample.pug
 
 block append style
     style.
-        tab1:has(method-list:empty){
-            display: none;
-        }
-        tab2:has(property-list:empty){
-            display: none;
-        }
+        .split-hidden { display: none !important; }
+        .single-list-view { display: block; }
+        .single-list-view .method-list,
+        .single-list-view .property-list { width: 100%; }
+
 div(id="type-details" hx-trigger="typeReload from:body" hx-get=`/classes/view/${parentId}` hx-target="#type-details" hx-swap="outerHTML").fadein01.minh20
     div(class="class-list", hx-trigger="load, classReload from:body" hx-get=`/classes/list/${parentId}` hx-swap="innerHTML" hx-target=".class-list" ).fadein02
-    +splitExample('snippetExample2', 'Methods', 'Properties')
-        div(class="method-list", hx-trigger="load, methodReload from:body" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".method-list" ).tab1.fadein01
-        div(class="property-list", hx-trigger="load, propertyReload from:body" hx-get=`/properties/list/${parentId}` hx-swap="innerHTML" hx-target=".property-list" ).tab2.fadein01
+    
+    //- Split view (hidden when one list is empty)
+    div(id="split-container")
+        +splitExample('snippetExample2', 'Methods', 'Properties')
+            div(class="method-list", hx-trigger="load, methodReload from:body" hx-get=`/methods/list/${parentId}` hx-swap="innerHTML" hx-target=".method-list" ).tab1.fadein01
+            div(class="property-list", hx-trigger="load, propertyReload from:body" hx-get=`/properties/list/${parentId}` hx-swap="innerHTML" hx-target=".property-list" ).tab2.fadein01
+    
+    //- Single list fallback (shown when one list is empty)
+    article(id="single-list-fallback").single-list-view.split-hidden
+
+    script.
+        (function() {
+            let methodsLoaded = false, propsLoaded = false;
+            let methodsEmpty = true, propsEmpty = true;
+
+            function checkAndSwap() {
+                if (!methodsLoaded || !propsLoaded) return;
+                
+                const splitContainer = document.getElementById('split-container');
+                const fallback = document.getElementById('single-list-fallback');
+                const methodList = document.querySelector('.method-list');
+                const propList = document.querySelector('.property-list');
+
+                if (methodsEmpty && propsEmpty) {
+                    // Both empty - hide split, show nothing or a message
+                    splitContainer.classList.add('split-hidden');
+                    fallback.classList.remove('split-hidden');
+                } else if (methodsEmpty && !propsEmpty) {
+                    // Only properties exist
+                    splitContainer.classList.add('split-hidden');
+                    fallback.innerHTML = propList.outerHTML;
+                    fallback.classList.remove('split-hidden');
+                } else if (!methodsEmpty && propsEmpty) {
+                    // Only methods exist
+                    splitContainer.classList.add('split-hidden');
+                    fallback.innerHTML = methodList.outerHTML;
+                    fallback.classList.remove('split-hidden');
+                } else {
+                    // Both have content - keep split view
+                    splitContainer.classList.remove('split-hidden');
+                    fallback.classList.add('split-hidden');
+                }
+            }
+
+            document.body.addEventListener('htmx:afterSwap', function(evt) {
+                const target = evt.detail.target;
+                if (target.classList.contains('method-list')) {
+                    methodsLoaded = true;
+                    methodsEmpty = target.children.length === 0 || target.innerHTML.trim() === '';
+                    checkAndSwap();
+                }
+                if (target.classList.contains('property-list')) {
+                    propsLoaded = true;
+                    propsEmpty = target.children.length === 0 || target.innerHTML.trim() === '';
+                    checkAndSwap();
+                }
+            });
+        })();
+
