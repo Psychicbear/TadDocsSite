@@ -21,6 +21,7 @@ export class Load {
      */
     #overallStyle = "";
     #soundsLoaded = 0;
+    #fontCounter = 1; //used to iterate
 
     /**
      * @param {Tad} tad
@@ -116,23 +117,18 @@ export class Load {
     }
     /**
      * Used to load a custom font for use in the program. Must be file type ttf, otf, woff or woff2.
-     * If the custom font doesn't work, you will see symbols (Webdings) instead of your font, or an error.
-     * @param {string} name - The desired name for the font. Try to use the official font name (case sensitive)
+     * If the custom font doesn't work, it will fall back to a serif font instead of your font, or an error.
      * @param {string} filepath - The local filepath to the font file.
      * @returns {string} - The name of the font, given successful.
      */
-    font(name, filepath) {
-        if (typeof name !== "string") {
-            throw new Error(
-                `Name is not a string! You gave: ${name}|${typeof name}.`
-            );
-        }
+    font(filepath) {
         if (typeof filepath !== "string") {
             throw new Error(
                 `Filepath is not a string! You gave: ${filepath}|${typeof filepath}.`
             );
         }
 
+        let name = `font${(this.#fontCounter += 1)}`;
         //Check whether file path is local
         const filepathStart = filepath.split(":")[0];
         if (filepathStart === "http" || filepathStart === "https") {
@@ -141,27 +137,7 @@ export class Load {
                     `folder structure. You gave ${filepath}, which is trying to access an online resource.`
             );
         }
-
-        // Check whether a common font type is being overwritten
-        const commonFonts = [
-            "Arial",
-            "Verdana",
-            "Tahoma",
-            "Trebuchet MS",
-            "Times New Roman",
-            "Georgia",
-            "Garamond",
-            "Courier New",
-            "Brush Script MT",
-        ];
-        if (commonFonts.includes(name)) {
-            throw new Error(
-                `${name} cannot be used as a custom font name, as it is already the name of a common web font. ` +
-                    `Either change the name, or if you're trying to use the common font called ${name}, then you don't ` +
-                    `need to load the font.`
-            );
-        }
-
+        
         for (let file of this.#assets.jobs) {
             if (file.filepath === filepath) {
                 return name;

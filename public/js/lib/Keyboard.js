@@ -1,4 +1,3 @@
-
 import { InputDevice } from "./InputDevice.js";
 import { Debug } from "./Debug.js";
 
@@ -10,8 +9,8 @@ export class Keyboard extends InputDevice {
     #tad;
     #active;
     /**
-     * 
-     * @param {Tad} tad 
+     *
+     * @param {Tad} tad
      */
     constructor(tad) {
         super(tad);
@@ -49,13 +48,28 @@ export class Keyboard extends InputDevice {
     /**
      * internal
      * private_internal
-     * @param {string} key 
+     * @param {string} key
      */
     static processKey(key) {
         let nuKey = key.toLowerCase();
         switch (nuKey) {
+            case "spacebar":
+                nuKey = " ";
+                return nuKey;
             case "space":
                 nuKey = " ";
+                return nuKey;
+            case "up":
+                nuKey = "uparrow";
+                return nuKey;
+            case "down":
+                nuKey = "downarrow";
+                return nuKey;
+            case "left":
+                nuKey = "leftarrow";
+                return nuKey;
+            case "right":
+                nuKey = "rightarrow";
                 return nuKey;
             case "arrowup":
                 nuKey = "uparrow";
@@ -68,6 +82,12 @@ export class Keyboard extends InputDevice {
                 return nuKey;
             case "arrowright":
                 nuKey = "rightarrow";
+                return nuKey;
+            case "space":
+                nuKey = " ";
+                return nuKey;
+            case "spacebar":
+                nuKey = " ";
                 return nuKey;
             default:
                 break;
@@ -110,7 +130,6 @@ export class Keyboard extends InputDevice {
     }
 
     draw() {
-
         this.endOfFrame();
     }
 
@@ -124,12 +143,16 @@ export class Keyboard extends InputDevice {
             this.keys = {};
         }
     }
+
     /**
      * Returns if the given key has just been released.
-     * @param {String} key 
-     * @returns 
+     * @param {String} key
+     * @returns
      */
     released(key) {
+        if (key.length === 0) {
+            throw new Error("uh oh! you gave keys.released a empty string!");
+        }
         key = key.toLowerCase();
         const keys = Object.entries(this.keys);
         if (keys.length < 1) {
@@ -139,20 +162,27 @@ export class Keyboard extends InputDevice {
             return keys.length > 0;
         }
         if (this.#tad.debug && key === "alt") {
-            console.warn("alt isn't tracked for the keys object because it causes unpredictable behaviour");
+            console.warn(
+                "alt isn't tracked for the keys object because it causes unpredictable behaviour"
+            );
         }
         if (this.#tad.debug && key === "tab") {
-            console.warn("tab isn't tracked for the keys object because it causes unpredictable behaviour");
+            console.warn(
+                "tab isn't tracked for the keys object because it causes unpredictable behaviour"
+            );
         }
         return this.keys[key] && this.keys[key].up;
     }
 
     /**
      * Returns if the given key is currently being held down.
-     * @param {string} key 
-     * @returns 
+     * @param {string} key
+     * @returns
      */
     down(key) {
+        if (key.length === 0) {
+            throw new Error("uh oh! you gave keys.released a empty string!");
+        }
         key = key.toLowerCase();
         const keys = Object.entries(this.keys);
         if (keys.length < 1) {
@@ -174,7 +204,7 @@ export class Keyboard extends InputDevice {
     }
     /**
      * Returns how many frames the given key has been held down for.
-     * @param {string} key 
+     * @param {string} key
      * @returns {number}
      */
     durationDown(key) {
@@ -207,10 +237,10 @@ export class Keyboard extends InputDevice {
 
 class Key {
     /**
-     * @param {string} value 
-     * @param {boolean} down 
-     * @param {boolean} up 
-     * @param {number} frames 
+     * @param {string} value
+     * @param {boolean} down
+     * @param {boolean} up
+     * @param {number} frames
      */
     constructor(value, down = false, up = false, frames = 0) {
         this.value = value;

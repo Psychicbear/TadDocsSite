@@ -174,7 +174,7 @@ export class Debug {
                         tad.shape.alignment.x
                     }</strong> |  alignment.y:<strong>${
             tad.shape.alignment.y
-        }</strong> StrokeWidth:<strong>${tad.shape.strokeWidth}</strong>
+        }</strong> StrokeWidth:<strong>${tad.shape.borderWidth}</strong>
                     <hr>
                     <strong>Text</strong>
                     <br>
@@ -250,52 +250,33 @@ export class Debug {
         const y = collider.y;
 
         tad.shape.border = Paint.paleaqua;
-        tad.shape.strokeWidth = 3;
+        tad.shape.borderWidth = 3;
 
         tad.shape.colour = `rgba(20,250,250,0.1)`;
 
         if (collider.shape === "box" && collider.vertices != null) {
             tad.shape.movedByCamera = collider.movedByCamera;
 
-            tad.shape.circle(
-                collider.vertices[0].x,
-                collider.vertices[0].y,
-                2,
-                2
-            );
-            tad.shape.circle(
-                collider.vertices[1].x,
-                collider.vertices[1].y,
-                2,
-                2
-            );
-            tad.shape.circle(
-                collider.vertices[2].x,
-                collider.vertices[2].y,
-                2,
-                2
-            );
-            tad.shape.circle(
-                collider.vertices[3].x,
-                collider.vertices[3].y,
-                2,
-                2
+            tad.shape.oval(
+                collider.x,
+                collider.y,
+                collider.radius
             );
             tad.shape.polygon(
-                collider.vertices[0].x,
-                collider.vertices[0].y,
-                collider.vertices[1].x,
-                collider.vertices[1].y,
-                collider.vertices[2].x,
-                collider.vertices[2].y
+                collider.collisionShape.getPoint(0).x,
+                collider.collisionShape.getPoint(0).y,
+                collider.collisionShape.getPoint(1).x,
+                collider.collisionShape.getPoint(1).y,
+                collider.collisionShape.getPoint(2).x,
+                collider.collisionShape.getPoint(2).y
             );
             tad.shape.polygon(
-                collider.vertices[1].x,
-                collider.vertices[1].y,
-                collider.vertices[3].x,
-                collider.vertices[3].y,
-                collider.vertices[2].x,
-                collider.vertices[2].y
+                collider.collisionShape.getPoint(0).x,
+                collider.collisionShape.getPoint(0).y,
+                collider.collisionShape.getPoint(2).x,
+                collider.collisionShape.getPoint(2).y,
+                collider.collisionShape.getPoint(3).x,
+                collider.collisionShape.getPoint(3).y
             );
         } else {
             tad.shape.circle(x, y, collider.radius, collider.radius);
@@ -382,7 +363,7 @@ export class Debug {
         const centerY = (top + bottom) / 2;
         tad.shape.colour = Paint.green;
         tad.shape.border = "grey";
-        tad.shape.strokeDash = 2;
+        tad.shape.borderDash = 2;
         tad.shape.rectangle(centerX, centerY, width, height);
 
         const totalHeight = height * numLines;
@@ -396,7 +377,7 @@ export class Debug {
         // Draw debug for when multiline
         if (maxWidth > 0) {
             tad.shape.border = "red";
-            tad.shape.strokeDash = 1;
+            tad.shape.borderDash = 1;
             let x = centerX;
             if (tad.context.textAlign === "right") {
                 x = right - maxWidth / 2;
@@ -406,7 +387,7 @@ export class Debug {
             tad.shape.rectangle(x, centerY - height / 2 + yAdjustment, maxWidth, totalHeight);
         }
 
-        tad.shape.strokeDash = 0;
+        tad.shape.borderDash = 0;
         tad.state.load();
     }
 
@@ -660,7 +641,7 @@ export class Debug {
      */
     static cross(tad, x, y, colour = "rgba(255,255,0,0.3)") {
         tad.shape.border = colour;
-        tad.shape.strokeWidth = 1;
+        tad.shape.borderWidth = 1;
         tad.shape.line(x - 5, y, x + 5, y);
         tad.shape.line(x, y - 5, x, y + 5);
     }
@@ -684,7 +665,7 @@ export class Debug {
         tad.shape.alignment.x = "center";
         tad.shape.alignment.y = "center";
         tad.shape.circle(tad.camera.x, tad.camera.y, 15);
-        tad.shape.strokeWidth = 1;
+        tad.shape.borderWidth = 1;
         tad.shape.border = Paint.white;
         tad.shape.colour = Paint.clear;
         tad.shape.rectangle(
@@ -694,7 +675,7 @@ export class Debug {
             tad.h
         );
         tad.shape.colour = Paint.white;
-        tad.shape.strokeDash = 2;
+        tad.shape.borderDash = 2;
         tad.shape.line(
             center.x,
             center.y,

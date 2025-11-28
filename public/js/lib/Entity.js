@@ -31,7 +31,6 @@ export class Entity {
     #rotation;
     #assetOffset;
     #extra;
-    #direction;
     // #collider;
     #tad;
     #colour;
@@ -65,8 +64,8 @@ export class Entity {
      * @constructor
      */
     constructor(tad, x, y) {
-        if(Number.isFinite(tad)){
-            throw new Error("sjkhdfs")
+        if (Number.isFinite(tad)) {
+            throw new Error("sjkhdfs");
         }
         this.id = Id.getId();
         this.#tad = tad;
@@ -75,14 +74,15 @@ export class Entity {
         this.exists = true;
         this.position = new Point(tad, x, y);
         this.#assetOffset = {
-            x:0,
-            y:0
+            x: 0,
+            y: 0,
         };
-        this.#extra = makeExtra();
+        this.#extra = {}; //makeExtra();
         this.velocity = new Velocity(0, 0);
         this.movedByCamera = true;
-        if(tad.math.adjustDegressSoTopIsZero === undefined) {throw new Error()}
-        this.#direction = tad.math.adjustDegressSoTopIsZero(0);
+        if (tad.math.adjustDegressSoTopIsZero === undefined) {
+            throw new Error();
+        }
         this.#rotation = tad.math.adjustDegressSoTopIsZero(0);
         this.rotationalVelocity = 0;
         this.#maxSpeed = 1000;
@@ -148,12 +148,12 @@ export class Entity {
                 )
             );
         }
-        this.#assetOffset.x=value;
+        this.#assetOffset.x = value;
     }
     get xOffset() {
         return this.#assetOffset.x;
     }
-    
+
     set yOffset(value) {
         if (!Number.isFinite(value)) {
             throw new Error(
@@ -163,7 +163,7 @@ export class Entity {
                 )
             );
         }
-        this.#assetOffset.y=value;
+        this.#assetOffset.y = value;
     }
     get yOffset() {
         return this.#assetOffset.y;
@@ -216,8 +216,7 @@ export class Entity {
                 )
             );
         }
-        this.velocity.x = this.#tad.math.cos(this.#direction) * value;
-        this.velocity.y = this.#tad.math.sin(this.#direction) * value;
+        this.velocity.speed = value;
     }
 
     /**
@@ -226,7 +225,7 @@ export class Entity {
      */
     get speed() {
         // calculate the speed back from the current velocity x and y
-        return Math.hypot(this.velocity.x, this.velocity.y);
+        return this.velocity.speed;
     }
 
     /**
@@ -243,12 +242,7 @@ export class Entity {
                 )
             );
         }
-        this.#direction = this.#tad.math.adjustDegressSoTopIsZero(value);
-
-        const adjustedDegree = this.#direction;
-        const speed = this.speed;
-        this.velocity.x = this.#tad.math.cos(adjustedDegree) * speed;
-        this.velocity.y = this.#tad.math.sin(adjustedDegree) * speed;
+        this.velocity.direction = value;
     }
 
     /**
@@ -256,7 +250,7 @@ export class Entity {
      * @returns {number} The direction of the entity.
      */
     get direction() {
-        return this.#tad.math.unadjustDegreesFromZero(this.#direction);
+        return this.velocity.direction;
     }
 
     get lifespan() {
@@ -288,7 +282,7 @@ export class Entity {
      * @param {number} y - The y-coordinate of the point.
      * @returns {number} The angle between the entity and the point.
      */
-    getAngleToPoint(x, y) {
+    directionToPoint(x, y) {
         const angle = this.#tad.math.atan2(this.y - y, this.x - x);
         return this.#tad.math.adjustDegressSoTopIsZero(angle);
     }
@@ -309,7 +303,11 @@ export class Entity {
         for (let i = 0; i < this.#assets.length; i++) {
             this.#assets[i].x = this.x;
             this.#assets[i].y = this.y;
-            this.#assets[i]._draw(this.x+this.xOffset, this.y+this.yOffset, this.rotation);
+            this.#assets[i]._draw(
+                this.x + this.xOffset,
+                this.y + this.yOffset,
+                this.rotation
+            );
         }
     }
 
@@ -317,7 +315,7 @@ export class Entity {
      * Update the entity. Called once each frame.
      */
     update() {
-        this.#frameLastUpdated=this.#tad.frameCount;
+        this.#frameLastUpdated = this.#tad.time.frames;
         if (this.exists === false) {
             return;
         }
@@ -325,13 +323,13 @@ export class Entity {
         this.#enforceMaxSpeed();
     }
 
-    #updateLifespan(){
+    #updateLifespan() {
         if (this.lifespan === null) {
             return;
         }
         if (this.lifespan > 0) {
-            this.lifespan -= (this.#tad.time.msElapsed / 1000.0);
-        } else if(this.lifespan<=0) {
+            this.lifespan -= this.#tad.time.msElapsed / 1000.0;
+        } else if (this.lifespan <= 0) {
             this.remove();
         }
     }
@@ -353,7 +351,7 @@ export class Entity {
 
         this.#tad.shape.colour = this.colour;
         this.#tad.shape.border = "white";
-        this.#tad.shape.strokeDash = 3;
+        this.#tad.shape.borderDash = 3;
         this.#tad.shape.circle(this.x, this.y, 10);
 
         if (this.hasAsset()) {
@@ -365,7 +363,7 @@ export class Entity {
      * Attach a given image as an asset of this collider.
      * @param {Stamp | MovingStamp} value - The image to attach.
      */
-    set asset(value) {
+    set image(value) {
         if (value === undefined) {
             throw Error(
                 `You need to provide an Image or an Animation! You provided undefined :(`
@@ -384,10 +382,10 @@ export class Entity {
     }
 
     /**
-     * Returns the asset of the entity.
-     * @returns {Stamp} The asset of the entity.
+     * Returns the image or animation assigned to this entity.
+     * @returns {Stamp|MovingStamp} The image or animation of the entity.
      */
-    get asset() {
+    get image() {
         return this.#assets[0]; //currently hardcoded using an array for future extensibility
     }
 
@@ -525,7 +523,7 @@ export class Entity {
     }
 
     /**
-     * @param {number} value 
+     * @param {number} value
      */
     set maxSpeed(value) {
         if (Number.isFinite(value)) {
@@ -545,8 +543,16 @@ export class Entity {
     }
 
     #enforceMaxSpeed() {
-        this.velocity.x = this.#tad.math.clamp(this.velocity.x, -this.#maxSpeed, this.#maxSpeed);
-        this.velocity.y = this.#tad.math.clamp(this.velocity.y, -this.#maxSpeed, this.#maxSpeed);
+        this.velocity.x = this.#tad.math.clamp(
+            this.velocity.x,
+            -this.#maxSpeed,
+            this.#maxSpeed
+        );
+        this.velocity.y = this.#tad.math.clamp(
+            this.velocity.y,
+            -this.#maxSpeed,
+            this.#maxSpeed
+        );
     }
 
     /**
@@ -555,19 +561,20 @@ export class Entity {
      */
     move() {
         if (this.rotationalVelocity != 0) {
-            this.rotation += this.rotationalVelocity * this.#tad.time.timeMultiplier
+            this.rotation +=
+                this.rotationalVelocity * this.#tad.time.timeMultiplier;
         }
     }
 
     moveX() {
         if (this.velocity.x != 0) {
-            this.x += this.velocity.x * this.#tad.time.timeMultiplier
+            this.x += this.velocity.x * this.#tad.time.timeMultiplier;
         }
     }
 
     moveY() {
         if (this.velocity.y != 0) {
-            this.y += this.velocity.y * this.#tad.time.timeMultiplier
+            this.y += this.velocity.y * this.#tad.time.timeMultiplier;
         }
     }
 }
@@ -595,7 +602,7 @@ export class ShapedAssetEntity extends Entity {
      */
     constructor(tad, x, y, w, h) {
         super(tad, x, y);
-        this.radius = 0;
+        this.#radius = 0;
         this.#w = w;
         this.#h = h;
         this.updateRadius(this.#w, this.#h);
@@ -612,7 +619,7 @@ export class ShapedAssetEntity extends Entity {
             this.#w = value;
             this.updateRadius(this.#w, this.#h);
             if (this.#assets) {
-                //@ts-expect-error 
+                //@ts-expect-error
                 this.#assets.w = value;
             }
             return;
@@ -644,7 +651,7 @@ export class ShapedAssetEntity extends Entity {
             this.#h = value;
             this.#radius = this.updateRadius(this.#w, this.#h);
             if (this.#assets) {
-                //@ts-expect-error 
+                //@ts-expect-error
                 this.#assets.h = value;
             }
             return;
@@ -697,6 +704,14 @@ export class ShapedAssetEntity extends Entity {
         return this.x + this.#w / 2;
     }
 
+    get radius() {
+        return this.#radius;
+    }
+
+    set radius(value) {
+        this.#radius = value;
+    }
+
     /**
      * Updates the radius of the entity.
      * @param {number} width
@@ -728,8 +743,5 @@ export class ShapedAssetEntity extends Entity {
         super.update();
     }
 
-    draw() {
-
-    }
-
+    draw() {}
 }
