@@ -50,6 +50,12 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
             h3 Math
             ul
                 +loadLi('tad-math', '/tad/math')  
+
+            h3 Data
+            ul
+                +loadLi('tad-storage', '/tad/storage')
+                +loadLi('tad-group', '/tad/group')
+                +loadLi('tad-load', '/tad/load')
             
             h3 GUI
             ul
@@ -65,12 +71,6 @@ div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-t
                 +loadLi('tad-keyboard', '/tad/keys')
                 +loadLi('tad-mouse', '/tad/mouse')
                 +loadLi('tad-touch', '/tad/touch')
-
-            h3 Data
-            ul
-                +loadLi('tad-storage', '/tad/storage')
-                +loadLi('tad-group', '/tad/group')
-                +loadLi('tad-load', '/tad/load')
 
             h3 Games
             ul
