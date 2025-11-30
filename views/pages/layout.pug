@@ -1,6 +1,9 @@
 extends ../base/layout
 include mixins.pug
 
+block title
+    title TadDocs | #{page.name}
+
 block append styles
     - icons = ['delete','edit','add_circle','file_upload', 'check', 'add', 'cancel'].sort()
     link(

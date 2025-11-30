@@ -1,5 +1,8 @@
 include mixins.pug
 
+block title 
+    title TadDocs | Home
+
 div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-target="#page-details" hx-swap="outerHTML")
     if admin 
         div.mb-4.editPage.hidden
