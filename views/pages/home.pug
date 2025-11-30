@@ -1,7 +1,7 @@
 include mixins.pug
 
 block title 
-    title TadDocs | Home
+    title TaD | Home
 
 div(id="page-details" hx-trigger="pageReload" hx-get=`/tad/view/${page.id}` hx-target="#page-details" hx-swap="outerHTML")
     if admin 
