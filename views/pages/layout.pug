@@ -154,3 +154,23 @@ block content
                 item.querySelector('.editTypeDetails').classList.toggle('hidden');
             }
 
+    script.
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log(window.location);
+            document.body.addEventListener('htmx:afterSwap', function(event) {
+                console.log("htmx afterSwap event:", event);
+                if(!window.location.pathname){
+                    return;
+                }
+                let location = window.location.pathname.split('/');
+                let slug = location[location.length -1];
+                if(slug === 'tad' || slug === ''){
+                    slug = 'home';
+                }
+
+                slug = slug.charAt(0).toUpperCase() + slug.slice(1);
+                let title = "TaD | " + slug;
+                document.title = title;
+            });
+        });
+
