@@ -60,14 +60,14 @@ export class Debug {
      * @static
      */
     static constructMemoryPane() {
-        if (performance && performance.memory) {
-            return `<strong>Memory</strong>
-                <ul>
-                    <li><strong>Total HeapSize:</strong>${performance.memory.totalJSHeapSize} Bytes </li>
-                    <li><strong>Used HeapSize:</strong>${performance.memory.usedJSHeapSize} Bytes </li>
-                    <li><strong>HeapSize Limit:</strong>${performance.memory.jsHeapSizeLimit} Bytes </li>
-                </ul>`;
-        }
+        // if (performance && performance.memory) {
+        //     return `<span>Memory</span>
+        //         <ul>
+        //             <li><span>Total HeapSize:</span>${performance.memory.totalJSHeapSize} Bytes </li>
+        //             <li><span>Used HeapSize:</span>${performance.memory.usedJSHeapSize} Bytes </li>
+        //             <li><span>HeapSize Limit:</span>${performance.memory.jsHeapSizeLimit} Bytes </li>
+        //         </ul>`;
+        // }
         return ""; //the browser being used doesn't support memory
     }
 
@@ -79,12 +79,11 @@ export class Debug {
     static constructGroupPane() {
         let html = `<strong>Group: ${Group.all.length} groups</strong>
             <ul id="groups">`;
-        for(let i=0; i<Group.all.length; i++){
+        for (let i = 0; i < Group.all.length; i++) {
             const value = Group.all[i].deref();
-            if(value){
-                html += `<li>${value.name || ""} Group(${value.length}):${
-                    value.type
-                }</li>`;
+            if (value) {
+                html += `<li>${value.name || ""} Group(${value.length}):${value.type
+                    }</li>`;
             }
         }
         html += "</ul>";
@@ -99,10 +98,12 @@ export class Debug {
      */
     static constructCameraInfoPane(camera) {
         let html = `
-            <strong>Camera:</strong>
-            <br/>
-            <hr>
-            <strong>Center</strong><br>x:<strong>${camera.x}</strong> |  y:<strong>${camera.y}</strong>
+            <strong>Camera</strong>
+            <br>
+            <div style="display:flex;">
+            <span style="flex:1;">x ${camera.x}</span><span style="flex:1;">y ${camera.y}</span></div>
+            <div style="display:flex;"><span style="flex:1;">rotation ${camera.rotation}</span><span style="flex:1;">zoom ${camera.zoom}</span>
+            </div>
             <hr>
         `;
         return html;
@@ -148,39 +149,58 @@ export class Debug {
         let html = `                    
             <strong>Canvas</strong> w:${tad.w} h:${tad.h}
             <hr>
-                    <div><strong>Paused:</strong> ${tad.paused}</div>
+                    <strong>Time</strong><br>
+                      averageFps (${Math.floor(tad.time.averageFps) || "--"
+            }/${tad.fps})<br>
+                    frames ${tad.time.frames}<br>
+        seconds ${tad.time.seconds}s
                     <hr>
-                    <strong>Fps</strong> count:${tad.frameCount}  actual:(${
-            Math.floor(tad.time.running) || "nope"
-        }/${tad.fps})
-                    <hr>
-                    <strong>MsElapsed</strong>:(${Math.floor(
-                        tad.time.msElapsed
-                    )})
-                    <hr>
-                    <strong>Shape Colour</strong><br>Colour:
-                    <div class='prev' style='background:${tad.shape.colour}'>
-                        <strong style='color:${
-                            tad.shape.colour
-                        }; filter: invert(100%);'>${tad.shape.colour}</strong>
-                    </div>Stroke:
-                    <div class='prev' style='background:${tad.shape.border};'>
-                        <strong style='color:${
-                            tad.shape.border
-                        }; filter: invert(100%);'>${tad.shape.border}</strong>
+                    <strong>Shape</strong>
+                    <div style="display:flex;">
+                    <span style="flex:1;"><span>colour</span>
+                    <span class='prev' style='background:${tad.shape.colour}'>
+                        <span style='color:${tad.shape.colour
+            }; filter: invert(100%);'>${tad.shape.colour}</span>
+                    </span></span><span style="flex:1;"><span>border</span>
+                    <span class='prev' style='background:${tad.shape.border};'>
+                        <span style='color:${tad.shape.border
+            }; filter: invert(100%);'>${tad.shape.border}</span>
+                    </span>
+                    </span>
                     </div>
-                    <hr>
-                    <strong>Shape</strong><br>alignment.x:<strong>${
-                        tad.shape.alignment.x
-                    }</strong> |  alignment.y:<strong>${
-            tad.shape.alignment.y
-        }</strong> StrokeWidth:<strong>${tad.shape.borderWidth}</strong>
+                    <div style="display:flex;">
+                    <span style="flex:1;"><span>borderWidth</span> ${tad.shape.borderWidth}</span><span style="flex:1;"><span>borderDash</span> ${tad.shape.borderDash}</span>
+                    </div>
+                    <div style="display:flex;">
+                    <span style="flex:1;">
+                    <span>
+                    alignment.x </span>"${tad.shape.alignment.x
+            }"</span><span style="flex:1;"><span>alignment.y </span>"${tad.shape.alignment.y
+            }"</span></div>
+        <div style='display:flex;'> 
+            <span style="flex:1;"><span>rotation </span> ${tad.shape.rotation}</span>
+            <span style="flex:1;"><span>rounding </span> ${tad.shape.rounding}</span>
+        </div>
                     <hr>
                     <strong>Text</strong>
                     <br>
-                        <div>${tad.text.font} | ${tad.text.size}px </div>
-                        <strong>alignment.x</strong> ${tad.text.alignment.x} | 
-                        <strong>alignment.y</strong> ${tad.text.alignment.y}
+
+        <div style='display:flex;'> 
+        <span style="flex:1; text-align:left;"> 
+            <span class='prev' style='background:${tad.text.colour}'>
+                        <span style='color:${tad.text.colour
+            }; filter: invert(100%);'>${tad.text.colour}</span>
+                    </span>
+        </span>
+        <span style="flex:1; text-align:center;">${tad.text.font}</span><span style="flex:1; text-align:center;">${tad.text.size}px</span></div>
+        <div style="display:flex;">
+        <span style="flex:1;">
+                        <span>alignment.x</span> "${tad.text.alignment.x}"
+        </span>
+        <span style="flex:1;">
+                        <span>alignment.y</span> "${tad.text.alignment.y}"
+        </span>
+        </div>
                     <hr>
         `;
         html += Debug.constructCameraInfoPane(tad.camera);
@@ -218,8 +238,8 @@ export class Debug {
      * @static
      */
     static applyDebugGrid(tad) {
-        const element = document.querySelector(".wrapper");
-        element.classList.add("grid-overlay");
+        // const element = document.querySelector(".wrapper");
+        // element.classList.add("grid-overlay");
     }
 
     /**
@@ -228,8 +248,8 @@ export class Debug {
      * @static
      */
     static removeDebugGrid(tad) {
-        const element = document.querySelector(".wrapper");
-        element.classList.remove("grid-overlay");
+        // const element = document.querySelector(".wrapper");
+        // element.classList.remove("grid-overlay");
     }
 
     /**
@@ -329,7 +349,7 @@ export class Debug {
         tad.shape.rectangle(LEFT, TOP, BAR_WIDTH, BAR_HEIGHT);
 
         tad.text.colour = COLOURS.GREEN;
-        tad.text.print(2, 10, `frame:${tad.frameCount}`);
+        tad.text.print(2, 10, `frame:${tad.time.frames}`);
 
         tad.state.load();
     }
@@ -410,7 +430,7 @@ export class Debug {
         if (keys.keys[key].down) {
             tad.state.save();
             // tad.state.reset();
-            
+
             //setup
             tad.text.alignment.x = "left";
             tad.text.alignment.y = "center";
@@ -446,7 +466,7 @@ export class Debug {
         tad.state.save();
         // tad.state.reset();
         tad.shape.movedByCamera = false;
-        tad.text.movedByCamera  = false;
+        tad.text.movedByCamera = false;
 
         const BOX_WIDTH = 50;
         const BOX_HEIGHT = 30;
@@ -658,8 +678,8 @@ export class Debug {
         // }
         tad.state.save();
         tad.shape.movedByCamera = true;
-        tad.text.movedByCamera  = false;
-        const center = Vector.temp(tad.w/2, tad.h/2);
+        tad.text.movedByCamera = false;
+        const center = Vector.temp(tad.w / 2, tad.h / 2);
 
         //center point.
         tad.shape.alignment.x = "center";
@@ -697,51 +717,76 @@ export class Debug {
      * @static
      */
     static drawGrid(tad) {
-        // Constants
         const INCREMENT = 50;
         const LABELWIDTH = 30;
         const LABELHEIGHT = 20;
         const PADDING_OFFSET = 10;
 
-        // Colours
         const DULL_GREEN = "rgba(0,55,0,1)";
+        const BRIGHT_GREEN = "rgba(0,155,0,0.5)";
         const WHITE_05_OPACITY = "rgba(255,255,255,0.5)";
 
-        // Text setup
         tad.text.alignment.x = "center";
         tad.text.alignment.y = "center";
-        tad.text.size = 8;
+        tad.text.size = 12;
+        tad.text.colour = "black";
 
         tad.shape.alignment.x = "center";
         tad.shape.alignment.y = "center";
         tad.shape.border = "rgba(0,0,0,0)";
-        // Drawing vertical tags
+
+        // vertical tags + lines
         for (let i = 0; i < tad.w / INCREMENT; i++) {
-            tad.shape.colour = WHITE_05_OPACITY;
+            const x = i * INCREMENT;
+            tad.text.alignment.x = "left"
+            tad.text.alignment.y = "top"
+            tad.shape.alignment.x = "left"
+            tad.shape.alignment.y = "top"
+
+            tad.shape.colour = "white";
             tad.shape.rectangle(
-                i * INCREMENT,
-                INCREMENT - PADDING_OFFSET,
+                x,
+                INCREMENT,
                 LABELWIDTH,
                 LABELHEIGHT
             );
 
-            tad.shape.colour = DULL_GREEN;
-            tad.text.print(i * INCREMENT, INCREMENT - 5, `${i * INCREMENT}`);
+            tad.shape.colour = BRIGHT_GREEN;
+            tad.text.print(x, INCREMENT, `${x}`);
+
+            // vertical line at x
+            tad.shape.line(
+                x,
+                0,      // or 0 if you want it behind the label too
+                x,
+                tad.h
+            );
         }
 
-        // Drawing horizontal tags
+        // horizontal tags + lines
         for (let y = 0; y < tad.h / INCREMENT; y++) {
-            if (y * INCREMENT !== 50) {
-                //prevent overlapping tag
-                tad.shape.colour = WHITE_05_OPACITY;
+            const grid_y = y * INCREMENT;
+            tad.shape.line(
+                0,
+                grid_y,
+                tad.w,
+                grid_y
+            );
+            if (grid_y !== 50) { // prevent overlapping tag
+                tad.shape.colour = "white";
+                tad.shape.alignment.x = "left"
                 tad.shape.rectangle(
                     INCREMENT,
-                    INCREMENT * y - PADDING_OFFSET,
+                    grid_y,
                     LABELWIDTH,
                     LABELHEIGHT
                 );
-                tad.shape.colour = DULL_GREEN;
-                tad.text.print(INCREMENT, INCREMENT * y - 5, `${y * INCREMENT}`);
+
+                tad.shape.colour = BRIGHT_GREEN;
+                tad.text.alignment.x = "left"
+                tad.text.alignment.y = "top"
+                tad.text.print(INCREMENT, grid_y, `${grid_y}`);
+
             }
         }
     }
@@ -934,5 +979,6 @@ export class Debug {
 
         tad.state.load();
     }
-    static draw(tad) {}
+    static draw(tad) {
+    }
 }
